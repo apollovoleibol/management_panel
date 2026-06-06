@@ -147,9 +147,19 @@
     .chat-bubble.user { background: #EE4036; color: white; border-bottom-right-radius: 4px; align-self: flex-end; box-shadow: 0 2px 8px rgba(238,64,54,0.3); }
     .chat-time { font-size: 10px; opacity: 0.55; margin-top: 4px; text-align: right; }
 
-    #debug-panel { display: none; position: fixed; bottom: 70px; left: 16px; z-index: 9998; width: min(420px, calc(100vw - 32px)); max-height: 300px; background: rgba(10,14,27,0.97); color: #4ade80; font-family: monospace; font-size: 11px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); overflow-y: auto; padding: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.5); }
-    #debug-panel.open { display: block; }
-    .dbg-line { padding: 2px 0; border-bottom: 1px solid rgba(255,255,255,0.05); } .dbg-line.err { color: #f87171; } .dbg-line.warn { color: #fbbf24; } .dbg-line.info { color: #60a5fa; } .dbg-line.ok { color: #4ade80; }
+    /* ============================================
+       DEBUG PANEL AVANÇADO
+    =========================================== */
+    #debug-panel { display: none; position: fixed; bottom: 70px; left: 16px; z-index: 9998; width: min(600px, calc(100vw - 32px)); max-height: 400px; background: rgba(10,14,27,0.97); color: #4ade80; font-family: monospace; font-size: 11px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); overflow-y: hidden; box-shadow: 0 8px 32px rgba(0,0,0,0.5); flex-direction: column; }
+    #debug-panel.open { display: flex; }
+    .dbg-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 12px; font-weight: 700; color: #f8fafc; font-size: 12px; background: rgba(10,14,27,0.97); flex-shrink: 0; }
+    .dbg-actions { display: flex; gap: 8px; }
+    .dbg-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #e2e8f0; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-size: 10px; font-weight: bold; transition: all 0.2s; }
+    .dbg-btn:hover { background: rgba(255,255,255,0.2); }
+    #debug-content { flex: 1; overflow-y: auto; padding: 0 12px 12px 12px; }
+    .dbg-line { padding: 6px 0; border-bottom: 1px dashed rgba(255,255,255,0.05); word-wrap: break-word; white-space: pre-wrap; }
+    .dbg-time { color: #94a3b8; margin-right: 8px; font-size: 10px; }
+    .dbg-line.err { color: #f87171; } .dbg-line.warn { color: #fbbf24; } .dbg-line.info { color: #60a5fa; } .dbg-line.ok { color: #4ade80; }
   </style>
 </head>
 <body class="flex h-[100dvh] overflow-hidden selection:bg-red-200 selection:text-red-900">
@@ -622,17 +632,72 @@
   </div>
 
   <button id="debug-toggle" title="Painel de debug" onclick="document.getElementById('debug-panel').classList.toggle('open')" class="fixed bottom-6 left-6 z-[9999] w-9 h-9 rounded-full bg-black/50 text-white flex items-center justify-center text-base cursor-pointer border-none shadow-md opacity-50 hover:opacity-100 transition-opacity">🐛</button>
+  
   <div id="debug-panel">
-    <div style="font-weight:700;color:#f8fafc;margin-bottom:8px;font-size:12px;">
-      🐛 Debug Log — Apollo
-      <button onclick="document.getElementById('debug-panel').innerHTML='<div style=\'font-weight:700;color:#f8fafc;margin-bottom:8px;font-size:12px;\'>🐛 Debug Log — Apollo</div>'; appLog('Log limpo','info')" style="float:right;background:none;border:1px solid rgba(255,255,255,0.2);color:#9ca3af;border-radius:4px;padding:1px 6px;cursor:pointer;font-size:10px;">limpar</button>
+    <div class="dbg-header">
+      <span>🐛 Debug Log — Apollo</span>
+      <div class="dbg-actions">
+        <button class="dbg-btn" onclick="copyDebugLog()">Copiar Log</button>
+        <button class="dbg-btn" onclick="clearDebugLog()">Limpar</button>
+      </div>
     </div>
+    <div id="debug-content"></div>
   </div>
 
   <script>
     /* ============================================
-       CONFIGURAÇÕES SUPABASE
+       SISTEMA DE LOG AVANÇADO
     =========================================== */
+    let debugHistory = [];
+
+    function appLog(msg, level = 'ok', details = null) {
+      const d = new Date();
+      const ts = d.toLocaleTimeString('pt-BR', { hour12: false }) + '.' + String(d.getMilliseconds()).padStart(3, '0');
+      
+      let logStr = `[${ts}] [${level.toUpperCase()}] ${msg}`;
+      let detailHtml = '';
+
+      if (details) {
+        try {
+          const detailStr = typeof details === 'object' ? JSON.stringify(details, null, 2) : String(details);
+          logStr += `\nDetalhes:\n${detailStr}`;
+          detailHtml = `<pre style="margin-top:6px; padding:6px; background:rgba(0,0,0,0.3); border-radius:6px; color:#cbd5e1; font-size:10px; max-height:150px; overflow:auto;">${detailStr.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>`;
+        } catch(e) { 
+          logStr += `\nDetalhes: [Erro ao serializar detalhes]`; 
+        }
+      }
+      
+      console[level === 'err' ? 'error' : level === 'warn' ? 'warn' : 'log'](logStr);
+      debugHistory.push(logStr);
+      
+      const content = document.getElementById('debug-content');
+      if (content) {
+        const div = document.createElement('div');
+        div.className = `dbg-line ${level}`;
+        div.innerHTML = `<span class="dbg-time">[${ts}]</span><span>${msg}</span>${detailHtml}`;
+        content.appendChild(div);
+        content.scrollTop = content.scrollHeight;
+      }
+    }
+
+    function clearDebugLog() {
+      const content = document.getElementById('debug-content');
+      if (content) content.innerHTML = '';
+      debugHistory = [];
+      appLog('Log limpo', 'info');
+    }
+
+    function copyDebugLog() {
+      navigator.clipboard.writeText(debugHistory.join('\n\n')).then(() => {
+        appLog('Log copiado para a área de transferência', 'ok');
+      }).catch(err => {
+        appLog('Erro ao copiar log', 'err', err);
+      });
+    }
+
+    /* ============================================
+       CONFIGURAÇÕES SUPABASE
+    ============================================ */
     const SUPABASE_URL = 'https://hrakdydodcmllwnkmrkg.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhyYWtkeWRvZGNtbGx3bmttcmtnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1MDEwNTAsImV4cCI6MjA5MTA3NzA1MH0.LFDcJNf2_uWzmj6zRyc7xUSww7G7mIpgta-1ro4oPFc';
     let tokenAcesso = null;
@@ -652,26 +717,17 @@
       };
     }
 
-    function appLog(msg, level) {
-      level = level || 'ok';
-      var ts = new Date().toLocaleTimeString('pt-BR');
-      var line = '[' + ts + '] ' + msg;
-      console[level === 'err' ? 'error' : level === 'warn' ? 'warn' : 'log'](line);
-      var panel = document.getElementById('debug-panel');
-      if (panel) {
-        var div = document.createElement('div'); div.className = 'dbg-line ' + level; div.textContent = line;
-        panel.appendChild(div); panel.scrollTop = panel.scrollHeight;
-      }
-    }
-
+    /* ============================================
+       AJUSTE 2: REDIMENSIONAMENTO DO MENU LATERAL
+    ============================================ */
     function toggleSidebar() {
       const sidebar = document.getElementById('sidebar');
       sidebar.classList.toggle('collapsed');
-      // A remoção do width inline garante que o main receba o novo espaço flex-1.
     }
 
     const themeToggle = document.getElementById('themeToggle');
     themeToggle.addEventListener('click', toggleTheme);
+
     function toggleTheme() {
       document.documentElement.classList.toggle('dark');
       if (dadosOriginais && dadosOriginais.length > 0) { try { atualizarKPIs(dadosOriginais); } catch(e) {} }
@@ -716,6 +772,9 @@
       });
     });
 
+    /* ============================================
+       REQUISIÇÕES COM INTERCEPTAÇÃO BRUTA
+    ============================================ */
     async function realizarLogin(event) {
       event.preventDefault();
       const email = document.getElementById('loginEmail').value;
@@ -726,6 +785,8 @@
       btn.innerHTML = '<div class="loader w-5 h-5 border-2 border-t-white m-0"></div> Aguarde...';
       btn.disabled = true;
       errorMsg.classList.add('hidden');
+      
+      appLog(`Iniciando tentativa de login para: ${email}`, 'info');
 
       try {
         const response = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
@@ -734,21 +795,36 @@
           body: JSON.stringify({ email, password: senha })
         });
         
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.error_description || 'Erro ao fazer login');
+        const rawText = await response.text();
+        
+        let data;
+        try {
+          data = JSON.parse(rawText);
+        } catch (e) {
+          appLog('Falha no JSON.parse do Login (Resposta HTML/Inesperada)', 'err', {
+            status: response.status,
+            statusText: response.statusText,
+            url: response.url,
+            corpo: rawText
+          });
+          throw new Error('Servidor retornou resposta não-JSON (verifique o log)');
+        }
+        
+        if (!response.ok) throw new Error(data.error_description || data.msg || 'Erro ao fazer login');
         
         tokenAcesso = data.access_token;
         document.getElementById('userEmailDisplay').innerText = data.user.email;
         sessionStorage.setItem('apolloToken', tokenAcesso);
         sessionStorage.setItem('apolloUserEmail', data.user.email);
         
+        appLog('Login realizado com sucesso', 'ok');
         const overlay = document.getElementById('login-overlay');
         overlay.classList.add('animate__fadeOut');
         setTimeout(() => { overlay.style.display = 'none'; initApp(); }, 500);
         
       } catch (error) {
-        appLog('Erro de login: ' + error.message, 'err');
-        errorMsg.innerText = 'E-mail ou senha incorretos.';
+        appLog('Exceção capturada no processo de login', 'err', error.message);
+        errorMsg.innerText = 'Credenciais inválidas ou erro de conexão.';
         errorMsg.classList.remove('hidden');
         btn.innerHTML = 'Acessar Painel'; btn.disabled = false;
       }
@@ -791,9 +867,23 @@
       document.getElementById('loading').classList.remove('hidden');
       try {
         const res = await fetch(`${SUPABASE_URL}/rest/v1/tryouts?select=*&order=created_at.desc`, { method: 'GET', headers: getSupabaseHeaders() });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
-        appLog('Sucesso. Total: ' + data.length, 'ok');
+        const rawText = await res.text();
+        
+        let data;
+        try {
+          data = JSON.parse(rawText);
+        } catch (e) {
+          appLog('Erro ao interpretar resposta de agendamentos', 'err', {
+            status: res.status,
+            url: res.url,
+            corpo: rawText
+          });
+          throw new Error('Resposta não-JSON ao buscar agendamentos.');
+        }
+
+        if (!res.ok) throw new Error(`HTTP ${res.status}: ${JSON.stringify(data)}`);
+        
+        appLog('Sucesso. Total agendamentos: ' + data.length, 'ok');
         processarDados(data);
       } catch (e) { TratarErro('Falha ao carregar dados: ' + e.message); }
     }
@@ -803,7 +893,11 @@
       const method = id ? 'PATCH' : 'POST';
       try {
         const res = await fetch(url, { method, headers: getSupabaseHeaders(), body: JSON.stringify(payload) });
-        if (!res.ok) throw new Error(await res.text());
+        const rawText = await res.text();
+        let data;
+        try { data = JSON.parse(rawText); } catch(e) { throw new Error('HTML inesperado: ' + rawText.substring(0, 100)); }
+        
+        if (!res.ok) throw new Error(JSON.stringify(data));
         salvoSucesso();
       } catch (e) { SalvoErro(e.message); }
     }
@@ -811,7 +905,12 @@
     async function excluirNoSupabase(id) {
       try {
         const res = await fetch(`${SUPABASE_URL}/rest/v1/tryouts?id=eq.${id}`, { method: 'DELETE', headers: getSupabaseHeaders() });
-        if (!res.ok) throw new Error(await res.text());
+        const rawText = await res.text();
+        if (rawText.length > 0 && !res.ok) {
+           try { const data = JSON.parse(rawText); throw new Error(JSON.stringify(data)); } 
+           catch(e) { throw new Error('HTML inesperado: ' + rawText.substring(0, 100)); }
+        }
+        if (!res.ok) throw new Error('HTTP ' + res.status);
         salvoSucesso();
       } catch (e) { SalvoErro(e.message); }
     }
@@ -820,8 +919,11 @@
       const wppLimpo = String(wpp).replace(/\D/g, '');
       try {
         const res = await fetch(`${SUPABASE_URL}/rest/v1/chatlogs?select=*`, { method: 'GET', headers: getSupabaseHeaders() });
-        if (!res.ok) throw new Error(await res.text());
-        const data = await res.json();
+        const rawText = await res.text();
+        let data;
+        try { data = JSON.parse(rawText); } catch(e) { throw new Error('Resposta HTML recebida'); }
+        if (!res.ok) throw new Error(JSON.stringify(data));
+        
         const chatlog = data.find(c => String(c.whatsapp).replace(/\D/g, '') === wppLimpo);
         renderChatlog({ status: 'success', data: chatlog || null });
       } catch (e) { renderChatlog({ status: 'error', message: e.message }); }
@@ -854,7 +956,7 @@
     }
 
     function TratarErro(err) {
-      appLog('TratarErro: ' + String(err), 'err');
+      appLog('TratarErro acionado: ' + String(err), 'err');
       const loaderDiv = document.getElementById('loading');
       loaderDiv.classList.remove('hidden');
       loaderDiv.innerHTML = `<div style="background:white;padding:24px;border-radius:16px;text-align:center;max-width:360px;margin:0 16px;"><h3 style="color:#EE4036;font-weight:800;font-size:18px;margin-bottom:8px;">Erro ao carregar</h3><p style="font-size:13px;color:#4b5563;margin-bottom:16px;">${err}</p><button onclick="window.location.reload()" style="width:100%;padding:10px;background:#0F1332;color:white;border:none;border-radius:10px;font-weight:700;cursor:pointer;">Recarregar</button></div>`;
@@ -1336,18 +1438,18 @@
       <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 17L9 21h6l-.75-4M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
     </div>`;
 
-
     /* ============================================
        SUPABASE GESTÃO DE ATLETAS
     =========================================== */
     let atletasDB = [];
     let defaultTeamId = null;
 
-    // A tabela athletes exige team_id (not null). Vamos buscar a primeira equipe disponível como fallback.
     async function carregarTeamPadrao() {
       try {
         const res = await fetch(`${SUPABASE_URL}/rest/v1/teams?select=id&limit=1`, { headers: getSupabaseHeaders() });
-        const data = await res.json();
+        const rawText = await res.text();
+        let data;
+        try { data = JSON.parse(rawText); } catch(e) { throw new Error('Resposta HTML recebida'); }
         if(data && data.length > 0) defaultTeamId = data[0].id;
       } catch(e) { appLog('Erro buscando team default: ' + e, 'warn'); }
     }
@@ -1356,12 +1458,26 @@
       document.getElementById('loadingAtletas').classList.remove('hidden');
       try {
         const res = await fetch(`${SUPABASE_URL}/rest/v1/athletes?select=*&order=full_name.asc`, { method: 'GET', headers: getSupabaseHeaders() });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        atletasDB = await res.json();
+        const rawText = await res.text();
+        let data;
+        try {
+          data = JSON.parse(rawText);
+        } catch (e) {
+          appLog('Erro no JSON.parse ao carregar atletas', 'err', {
+            status: res.status,
+            url: res.url,
+            corpo: rawText
+          });
+          throw new Error('Servidor retornou resposta não-JSON (verifique o log)');
+        }
+
+        if (!res.ok) throw new Error(`HTTP ${res.status}: ${JSON.stringify(data)}`);
+        
+        atletasDB = data;
         appLog('Sucesso Atletas. Total: ' + atletasDB.length, 'ok');
         renderTabelaAtletas(atletasDB);
       } catch (e) {
-        appLog('Falha ao carregar atletas: ' + e.message, 'err');
+        appLog('Falha ao carregar atletas', 'err', e.message);
       } finally {
         document.getElementById('loadingAtletas').classList.add('hidden');
       }
@@ -1492,7 +1608,11 @@
 
       try {
         const res = await fetch(url, { method, headers: getSupabaseHeaders(), body: JSON.stringify(payload) });
-        if (!res.ok) throw new Error(await res.text());
+        const rawText = await res.text();
+        let data;
+        try { data = JSON.parse(rawText); } catch(e) { throw new Error('HTML inesperado: ' + rawText.substring(0,100)); }
+        
+        if (!res.ok) throw new Error(JSON.stringify(data));
         closeAtletaModal();
         carregarAtletasDoSupabase();
       } catch (e) {
@@ -1513,7 +1633,12 @@
 
         try {
           const res = await fetch(`${SUPABASE_URL}/rest/v1/athletes?id=eq.${id}`, { method: 'DELETE', headers: getSupabaseHeaders() });
-          if (!res.ok) throw new Error(await res.text());
+          const rawText = await res.text();
+          if (rawText.length > 0 && !res.ok) {
+             try { const data = JSON.parse(rawText); throw new Error(JSON.stringify(data)); } 
+             catch(e) { throw new Error('HTML inesperado: ' + rawText.substring(0,100)); }
+          }
+          if (!res.ok) throw new Error('HTTP ' + res.status);
           closeAtletaModal();
           carregarAtletasDoSupabase();
         } catch (e) {
