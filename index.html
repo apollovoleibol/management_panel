@@ -41,7 +41,7 @@
        SHAPES DE FUNDO: OPACIDADE SUTIL
     ============================================ */
     .bg-shape { position: fixed; border-radius: 50%; filter: blur(100px); opacity: 0.2; animation: float 15s infinite alternate ease-in-out; pointer-events: none; z-index: 0; }
-    .dark .bg-shape { opacity: 0.05; }
+    .dark .bg-shape { opacity: 0.15; }
     .shape-1 { top: -10%; left: -10%; width: 60vw; height: 60vw; background: #EE4036; }
     .shape-2 { bottom: -15%; right: -10%; width: 70vw; height: 70vw; background: #4F46E5; animation-delay: -5s; }
     .shape-3 { top: 30%; left: 20%; width: 50vw; height: 50vw; background: #c026d3; animation-delay: -2s; }
@@ -1131,9 +1131,13 @@
         else if (sUp === 'TECNOFIT') uiStatus = 'Tecnofit';
         else if (sUp === 'PENDING') uiStatus = 'Pendente';
         else uiStatus = rawStat;
+
+        let rawDate = d.scheduled_at || d.data_agendamento;
+        let cleanDate = rawDate ? String(rawDate).replace(/\+00(:00)?|Z/g, '').replace(' ', 'T') : null;
+
         return {
           id: d.id, nome: d.name || d.nome, nome_menor: d.minor_name !== undefined ? d.minor_name : d.nome_menor,
-          whatsapp: d.whatsapp_phone || d.whatsapp, data_agendamento: d.scheduled_at || d.data_agendamento,
+          whatsapp: d.whatsapp_phone || d.whatsapp, data_agendamento: cleanDate,
           equipe: d.target_team || d.equipe, local: d.target_location || d.local, status: uiStatus, raw_status: rawStat,
           qtd_reagendamentos: d.reschedule_count || 0, created_at: d.created_at
         };
@@ -1217,7 +1221,11 @@
 
     function formatarDataSimples(dStr) {
       if (!dStr) return '—';
-      try { const d = new Date(dStr); return isNaN(d.getTime()) ? dStr : d.toLocaleDateString('pt-BR') + ' às ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }); } catch(e) { return dStr; }
+      try { 
+        let cleanStr = String(dStr).replace(/\+00(:00)?|Z/g, '').replace(' ', 'T');
+        const d = new Date(cleanStr); 
+        return isNaN(d.getTime()) ? dStr : d.toLocaleDateString('pt-BR') + ' às ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }); 
+      } catch(e) { return dStr; }
     }
 
     function getBadgeClass(s) {
@@ -1233,7 +1241,11 @@
     function actionContato(nome, dStr, local, tel, isTom, ev) {
       ev.preventDefault(); ev.stopPropagation();
       let dFormat = '', hFormat = '';
-      try { const d = new Date(dStr); if (!isNaN(d.getTime())) { dFormat = d.toLocaleDateString('pt-BR'); hFormat = d.toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'}); } } catch(e) {}
+      try { 
+        let cleanStr = String(dStr).replace(/\+00(:00)?|Z/g, '').replace(' ', 'T');
+        const d = new Date(cleanStr); 
+        if (!isNaN(d.getTime())) { dFormat = d.toLocaleDateString('pt-BR'); hFormat = d.toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'}); } 
+      } catch(e) {}
       let text = isTom
         ? `Olá, ${nome}! Estou passando pra te lembrar que o seu agendamento está marcado para amanhã, às ${hFormat}. O endereço é ${local}. Até breve! 👋`
         : `Olá, ${nome}, tudo bem? Espero que sim! O seu agendamento para fazer parte da nossa equipe está marcado para o dia ${dFormat}, às ${hFormat}. Relembro que o endereço é ${local}. Te aguardamos! Até breve 👋`;
@@ -1253,13 +1265,16 @@
       const limite48h = new Date(Date.now() + 48 * 60 * 60 * 1000);
       const futuros = [], passados = [];
       dados.forEach(row => {
-        const d = row.data_agendamento ? new Date(row.data_agendamento) : new Date(0);
-        const dOnly = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+        let cleanStr = row.data_agendamento ? String(row.data_agendamento).replace(/\+00(:00)?|Z/g, '').replace(' ', 'T') : null;
+        const dEvento = cleanStr ? new Date(cleanStr) : new Date(0);
+        const agora = new Date();
+        const dOnly = new Date(dEvento.getFullYear(), dEvento.getMonth(), dEvento.getDate());
         if (dOnly.getTime() < hoje.getTime()) passados.push(row); else futuros.push(row);
       });
       const renderRowArr = (arr) => {
         arr.forEach(row => {
-          const dEvento = row.data_agendamento ? new Date(row.data_agendamento) : new Date(0);
+          let cleanStr = row.data_agendamento ? String(row.data_agendamento).replace(/\+00(:00)?|Z/g, '').replace(' ', 'T') : null;
+          const dEvento = cleanStr ? new Date(cleanStr) : new Date(0);
           const agora = new Date();
           /* Destaque se o evento está dentro das próximas 48h */
           const is48h = dEvento > agora && dEvento <= limite48h;
@@ -1312,7 +1327,12 @@
       dadosOriginais.sort((a, b) => {
         let vA, vB;
         if (column==='nome') { vA=String(a.nome_menor||a.nome||'').toLowerCase(); vB=String(b.nome_menor||b.nome||'').toLowerCase(); }
-        if (column==='data') { vA=a.data_agendamento?new Date(a.data_agendamento):new Date(0); vB=b.data_agendamento?new Date(b.data_agendamento):new Date(0); }
+        if (column==='data') { 
+          let cleanA = a.data_agendamento ? String(a.data_agendamento).replace(/\+00(:00)?|Z/g, '').replace(' ', 'T') : null;
+          let cleanB = b.data_agendamento ? String(b.data_agendamento).replace(/\+00(:00)?|Z/g, '').replace(' ', 'T') : null;
+          vA=cleanA?new Date(cleanA):new Date(0); 
+          vB=cleanB?new Date(cleanB):new Date(0); 
+        }
         if (column==='equipe') { vA=String(a.equipe||'').toLowerCase(); vB=String(b.equipe||'').toLowerCase(); }
         if (vA<vB) return dir==='asc'?-1:1; if (vA>vB) return dir==='asc'?1:-1; return 0;
       }); aplicarFiltros();
@@ -1341,10 +1361,14 @@
       if (document.getElementById('formNomeMenor')) document.getElementById('formNomeMenor').value = selectedRowData.nome_menor || '';
       document.getElementById('formWpp').value = formatarWhatsApp(selectedRowData.whatsapp || '');
       if (selectedRowData.data_agendamento) {
-        try { const d = new Date(selectedRowData.data_agendamento); if (!isNaN(d.getTime())) {
-          document.getElementById('formData').value = String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear()+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
-          currentCalDate = d;
-        }} catch(e) {}
+        try { 
+          let cleanStr = String(selectedRowData.data_agendamento).replace(/\+00(:00)?|Z/g, '').replace(' ', 'T');
+          const d = new Date(cleanStr); 
+          if (!isNaN(d.getTime())) {
+            document.getElementById('formData').value = String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear()+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+            currentCalDate = d;
+          }
+        } catch(e) {}
       }
       document.getElementById('containerStatus').classList.remove('hidden'); document.getElementById('btnExcluirModal').classList.remove('hidden');
       const cStat = selectedRowData.status || 'Agendado'; const fStat = document.getElementById('formStatus');
