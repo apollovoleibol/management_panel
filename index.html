@@ -1221,11 +1221,11 @@
 
     function formatarDataSimples(dStr) {
       if (!dStr) return '—';
-      try { 
-        let cleanStr = String(dStr).replace(/\+00(:00)?|Z/g, '').replace(' ', 'T');
-        const d = new Date(cleanStr); 
-        return isNaN(d.getTime()) ? dStr : d.toLocaleDateString('pt-BR') + ' às ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }); 
-      } catch(e) { return dStr; }
+      try {
+        let parts = String(dStr).match(/(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/);
+        if (parts) return `${parts[3]}/${parts[2]}/${parts[1]} às ${parts[4]}:${parts[5]}`;
+      } catch(e) {}
+      return dStr;
     }
 
     function getBadgeClass(s) {
@@ -1242,9 +1242,11 @@
       ev.preventDefault(); ev.stopPropagation();
       let dFormat = '', hFormat = '';
       try { 
-        let cleanStr = String(dStr).replace(/\+00(:00)?|Z/g, '').replace(' ', 'T');
-        const d = new Date(cleanStr); 
-        if (!isNaN(d.getTime())) { dFormat = d.toLocaleDateString('pt-BR'); hFormat = d.toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'}); } 
+        let parts = String(dStr).match(/(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/);
+        if (parts) {
+            dFormat = `${parts[3]}/${parts[2]}/${parts[1]}`;
+            hFormat = `${parts[4]}:${parts[5]}`;
+        }
       } catch(e) {}
       let text = isTom
         ? `Olá, ${nome}! Estou passando pra te lembrar que o seu agendamento está marcado para amanhã, às ${hFormat}. O endereço é ${local}. Até breve! 👋`
@@ -1360,16 +1362,18 @@
       document.getElementById('formNome').value = selectedRowData.nome || '';
       if (document.getElementById('formNomeMenor')) document.getElementById('formNomeMenor').value = selectedRowData.nome_menor || '';
       document.getElementById('formWpp').value = formatarWhatsApp(selectedRowData.whatsapp || '');
+      
+      // BLOCO CORRIGIDO: ignorando o fuso horário automático do navegador extraindo os números da string
       if (selectedRowData.data_agendamento) {
         try { 
-          let cleanStr = String(selectedRowData.data_agendamento).replace(/\+00(:00)?|Z/g, '').replace(' ', 'T');
-          const d = new Date(cleanStr); 
-          if (!isNaN(d.getTime())) {
-            document.getElementById('formData').value = String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear()+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
-            currentCalDate = d;
+          let parts = String(selectedRowData.data_agendamento).match(/(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/);
+          if (parts) {
+            document.getElementById('formData').value = `${parts[3]}/${parts[2]}/${parts[1]} ${parts[4]}:${parts[5]}`;
+            currentCalDate = new Date(parts[1], parts[2]-1, parts[3], parts[4], parts[5]);
           }
         } catch(e) {}
       }
+      
       document.getElementById('containerStatus').classList.remove('hidden'); document.getElementById('btnExcluirModal').classList.remove('hidden');
       const cStat = selectedRowData.status || 'Agendado'; const fStat = document.getElementById('formStatus');
       fStat.innerHTML = '<option value="Agendado">Agendado</option><option value="Cancelado">Cancelado</option>';
