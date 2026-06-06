@@ -34,13 +34,13 @@
     }
     .dark body, .dark html {
       background: linear-gradient(135deg, #0a0e1b 0%, #0f132e 100%);
-      color: #e2e8f0 selection:bg-red-200 selection:text-red-900 selection:text-red-900;
+      color: #e2e8f0;
     }
 
     /* ============================================
        SHAPES DE FUNDO: OPACIDADE SUTIL
     ============================================ */
-    .bg-shape { position: fixed; border-radius: 50%; filter: blur(80px); opacity: 0.3; animation: float 15s infinite alternate ease-in-out; pointer-events: none; z-index: 0; }
+    .bg-shape { position: fixed; border-radius: 50%; filter: blur(100px); opacity: 0.2; animation: float 15s infinite alternate ease-in-out; pointer-events: none; z-index: 0; }
     .dark .bg-shape { opacity: 0.15; }
     .shape-1 { top: -10%; left: -10%; width: 60vw; height: 60vw; background: #EE4036; }
     .shape-2 { bottom: -15%; right: -10%; width: 70vw; height: 70vw; background: #4F46E5; animation-delay: -5s; }
@@ -715,9 +715,15 @@
             <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">Nome Completo do Atleta *</label>
             <input type="text" id="formAtletaNome" required class="glass-input w-full h-[46px] px-4 rounded-[14px] font-sans">
           </div>
-          <div>
-            <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">Nome do Responsável (se menor)</label>
-            <input type="text" id="formAtletaResp" placeholder="Opcional se for adulto" class="glass-input w-full h-[46px] px-4 rounded-[14px] font-sans">
+          <div class="flex gap-4">
+            <div class="flex-1">
+              <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">Data de Nascimento</label>
+              <input type="date" id="formAtletaNascimento" class="glass-input w-full h-[46px] px-4 rounded-[14px] font-sans">
+            </div>
+            <div class="flex-1">
+              <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">E-mail</label>
+              <input type="email" id="formAtletaEmail" class="glass-input w-full h-[46px] px-4 rounded-[14px] font-sans">
+            </div>
           </div>
           <div class="flex gap-4">
             <div class="flex-1">
@@ -725,13 +731,36 @@
               <input type="text" id="formAtletaCpf" required placeholder="000.000.000-00" class="glass-input w-full h-[46px] px-4 rounded-[14px] font-sans">
             </div>
             <div class="flex-1">
-              <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">WhatsApp *</label>
-              <input type="text" id="formAtletaWpp" required placeholder="(XX) XXXXX-XXXX" class="glass-input w-full h-[46px] px-4 rounded-[14px] font-sans">
+              <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">RG</label>
+              <input type="text" id="formAtletaRg" placeholder="00.000.000-0" class="glass-input w-full h-[46px] px-4 rounded-[14px] font-sans">
             </div>
           </div>
           <div>
-            <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">Plano / Categoria *</label>
-            <input type="text" id="formAtletaPlano" required placeholder="Ex: 1x semana - R$ 98,90 (Equipe Borman)" class="glass-input w-full h-[46px] px-4 rounded-[14px] font-sans">
+            <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">WhatsApp (Atleta) *</label>
+            <input type="text" id="formAtletaWpp" required placeholder="(XX) XXXXX-XXXX" class="glass-input w-full h-[46px] px-4 rounded-[14px] font-sans">
+          </div>
+          
+          <div class="p-4 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 space-y-4">
+            <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Dados do Responsável (se menor)</p>
+            <div>
+              <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">Nome do Responsável</label>
+              <input type="text" id="formAtletaResp" class="glass-input w-full h-[46px] px-4 rounded-[14px] font-sans">
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">WhatsApp do Responsável</label>
+              <input type="text" id="formAtletaRespWpp" placeholder="(XX) XXXXX-XXXX" class="glass-input w-full h-[46px] px-4 rounded-[14px] font-sans">
+            </div>
+          </div>
+
+          <div class="flex gap-4">
+            <div class="flex-1">
+              <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">Plano / Mensalidade *</label>
+              <input type="text" id="formAtletaPlano" required placeholder="Ex: 1x semana - R$ 98,90" class="glass-input w-full h-[46px] px-4 rounded-[14px] font-sans">
+            </div>
+            <div class="flex-1">
+              <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">Equipe / Categoria</label>
+              <input type="text" id="formAtletaPosicao" placeholder="Ex: Equipe Borman" class="glass-input w-full h-[46px] px-4 rounded-[14px] font-sans">
+            </div>
           </div>
           <div>
             <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">Status</label>
@@ -882,11 +911,16 @@
         document.getElementById('login-overlay').style.display = 'none';
         initApp();
       }
+      
       document.getElementById('formAtletaCpf').addEventListener('input', function(e) {
         let v = e.target.value.replace(/\D/g, ''); if (v.length > 11) v = v.slice(0, 11);
         v = v.replace(/(\d{3})(\d)/, '$1.$2'); v = v.replace(/(\d{3})(\d)/, '$1.$2'); v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2'); e.target.value = v;
       });
       document.getElementById('formAtletaWpp').addEventListener('input', function(e) {
+        let v = e.target.value.replace(/\D/g, ''); if (v.length > 11) v = v.slice(0, 11);
+        v = v.replace(/^(\d{2})(\d)/g, '($1) $2'); v = v.replace(/(\d)(\d{4})$/, '$1-$2'); e.target.value = v;
+      });
+      document.getElementById('formAtletaRespWpp').addEventListener('input', function(e) {
         let v = e.target.value.replace(/\D/g, ''); if (v.length > 11) v = v.slice(0, 11);
         v = v.replace(/^(\d{2})(\d)/g, '($1) $2'); v = v.replace(/(\d)(\d{4})$/, '$1-$2'); e.target.value = v;
       });
@@ -1561,11 +1595,18 @@
       document.getElementById('modal-atleta-title').innerText = 'Editar Atleta';
       
       document.getElementById('formAtletaNome').value = atl.full_name || '';
+      document.getElementById('formAtletaNascimento').value = atl.birth_date || '';
+      document.getElementById('formAtletaEmail').value = atl.email || '';
       document.getElementById('formAtletaResp').value = atl.parent_name || '';
       
+      let wppResp = document.getElementById('formAtletaRespWpp'); 
+      wppResp.value = atl.parent_phone || ''; wppResp.dispatchEvent(new Event('input'));
+
       let cInp = document.getElementById('formAtletaCpf'); 
       cInp.value = atl.cpf || ''; cInp.dispatchEvent(new Event('input'));
       
+      document.getElementById('formAtletaRg').value = atl.rg || '';
+
       let wInp = document.getElementById('formAtletaWpp'); 
       wInp.value = atl.phone || ''; wInp.dispatchEvent(new Event('input'));
       
@@ -1592,8 +1633,12 @@
 
       const payload = {
         full_name: document.getElementById('formAtletaNome').value,
+        birth_date: document.getElementById('formAtletaNascimento').value || null,
+        email: document.getElementById('formAtletaEmail').value || null,
         parent_name: document.getElementById('formAtletaResp').value || null,
+        parent_phone: document.getElementById('formAtletaRespWpp').value.replace(/\D/g,'') || null,
         cpf: document.getElementById('formAtletaCpf').value.replace(/\D/g,''),
+        rg: document.getElementById('formAtletaRg').value || null,
         phone: document.getElementById('formAtletaWpp').value.replace(/\D/g,''),
         payment_plan: document.getElementById('formAtletaPlano').value,
         position: pos ? pos.value : null,
@@ -1602,7 +1647,7 @@
 
       if (!id) {
           if (!defaultTeamId) {
-              alert("Erro: Não foi possível obter um team_id. Crie ao menos uma equipe no banco primeiro.");
+              alert("Erro: Não foi possível obter um team_id padrão. Crie ao menos uma equipe no banco primeiro.");
               btn.innerHTML = textoOriginal; btn.disabled = false;
               return;
           }
