@@ -238,14 +238,19 @@
 
     .cf-content-panel { border-radius: 0 0 24px 24px; border-top: none; }
 
-    /* Day Selector: Sem bolinha, apenas cor */
-    .day-btn { width: 46px; height: 46px; border-radius: 12px; font-size: 12px; font-weight: 700; transition: all 0.2s; border: 2px solid transparent; flex-shrink: 0; }
+    /* Day Selector: expandido com nome completo e prévia de horário */
+    .day-btn { min-width: 100px; border-radius: 12px; font-size: 11px; font-weight: 700; transition: all 0.2s; border: 2px solid transparent; flex-shrink: 0; padding: 10px 8px; display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; position: relative; }
     .day-btn.selected { background: #EE4036; color: white; box-shadow: 0 4px 12px rgba(238,64,54,0.35); border-color: #EE4036; }
     .day-btn.editing { background: #facc15; color: #111827; box-shadow: 0 4px 12px rgba(250,204,21,0.35); border-color: #facc15; }
     .day-btn.unselected { background: rgba(0,0,0,0.04); color: #6b7280; border-color: rgba(0,0,0,0.05); }
     .dark .day-btn.unselected { background: rgba(255,255,255,0.05); color: #d1d5db; border-color: rgba(255,255,255,0.05); }
     .day-btn.unselected:hover { background: rgba(0,0,0,0.08); }
     .dark .day-btn.unselected:hover { background: rgba(255,255,255,0.1); }
+    .day-name-full { font-size: 10px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; line-height: 1; }
+    .day-time-preview { font-size: 9px; font-weight: 600; opacity: 0.85; line-height: 1; white-space: nowrap; }
+    .day-trash-btn { position: absolute; top: 4px; right: 4px; width: 16px; height: 16px; border-radius: 50%; background: rgba(0,0,0,0.15); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; z-index: 5; }
+    .day-trash-btn:hover { background: rgba(238,64,54,0.4); color: #EE4036; transform: scale(1.1); }
+    .day-btn.editing .day-trash-btn { display: none; }
 
     /* Calendário */
     .cf-cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); grid-template-rows: auto repeat(6, minmax(0, 1fr)); height: 100%; gap: 6px; }
@@ -564,9 +569,12 @@
       <div id="view-chat-feeder" class="view-section hidden h-full flex flex-col relative animate__animated animate__fadeIn animate__faster min-h-0">
         
         <div class="relative flex items-end shrink-0">
-            <div id="cf-tabs-container" class="flex overflow-x-auto no-scrollbar scroll-smooth w-full pr-12 items-end snap-x -mb-[1px]">
+            <button id="cf-tabs-scroll-left" onclick="cfScrollTabsLeft()" class="hidden absolute left-0 top-0 bottom-0 px-3 bg-gradient-to-r from-[#ebedee] via-[#ebedee]/80 dark:from-[#0a0e1b] dark:via-[#0a0e1b]/80 to-transparent text-gray-500 hover:text-[#EE4036] z-10 flex items-center justify-center">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+            </button>
+            <div id="cf-tabs-container" class="flex overflow-x-auto no-scrollbar scroll-smooth w-full px-12 items-end snap-x -mb-[1px]">
                </div>
-            <button onclick="document.getElementById('cf-tabs-container').scrollBy({left: 200, behavior: 'smooth'}); appLog('Scroll abas Feeder clicado', 'info');" class="absolute right-0 top-0 bottom-0 px-3 bg-gradient-to-l from-[#ebedee] via-[#ebedee] dark:from-[#0a0e1b] dark:via-[#0a0e1b] to-transparent text-gray-500 hover:text-apollo-red z-10 flex items-center justify-center">
+            <button onclick="cfScrollTabsRight()" class="absolute right-0 top-0 bottom-0 px-3 bg-gradient-to-l from-[#ebedee] via-[#ebedee]/80 dark:from-[#0a0e1b] dark:via-[#0a0e1b]/80 to-transparent text-gray-500 hover:text-[#EE4036] z-10 flex items-center justify-center">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
             </button>
         </div>
@@ -582,11 +590,18 @@
                     <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-2">Descrição</label>
                     <textarea id="cf-desc" class="glass-input w-full p-4 rounded-xl text-sm min-h-[80px]" oninput="cfMarkDirty()"></textarea>
                 </div>
+                <div id="cf-name-field" class="hidden">
+                    <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-2">Nome da Equipe *</label>
+                    <input type="text" id="cf-name" class="glass-input w-full h-[46px] px-4 rounded-[14px] text-sm" oninput="cfMarkDirty()" placeholder="Ex: Equipe Apollo">
+                </div>
+                <div id="cf-category-field" class="hidden">
+                    <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-2">Categoria *</label>
+                    <input type="text" id="cf-category" class="glass-input w-full h-[46px] px-4 rounded-[14px] text-sm" oninput="cfMarkDirty()" placeholder="Ex: escolinha, adulto, competitivo...">
+                </div>
                 <div>
                     <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-2">Local de Treino</label>
-                    <select id="cf-local" class="glass-input w-full h-[46px] px-4 rounded-[14px] text-sm" onchange="cfMarkDirty()">
-                        <option value="Núcleo Apollo">Núcleo Apollo</option>
-                        <option value="Núcleo PUC - Ginásio da PUC">Núcleo PUC - Ginásio da PUC</option>
+                    <select id="cf-local" class="glass-input w-full h-[46px] px-4 rounded-[14px] text-sm" onchange="cfHandleLocalChange()">
+                        <option value="">Carregando locais...</option>
                     </select>
                 </div>
                 <div>
@@ -622,9 +637,12 @@
             </div>
 
             <div id="cf-actions" class="mt-6 pt-6 border-t border-gray-200 dark:border-white/10 flex gap-4 shrink-0 opacity-0 pointer-events-none transition-opacity duration-300">
-                <button onclick="cfDiscard()" class="px-6 py-3 rounded-[14px] bg-white/40 dark:bg-white/10 hover:bg-white/80 dark:hover:bg-white/20 font-bold text-gray-700 dark:text-gray-200 transition-all border border-gray-200 dark:border-white/10 shadow-sm">Descartar</button>
+                <button onclick="cfDiscard()" class="flex-1 py-3 rounded-[14px] bg-white/40 dark:bg-white/10 hover:bg-white/80 dark:hover:bg-white/20 font-bold text-gray-700 dark:text-gray-200 transition-all border border-gray-200 dark:border-white/10 shadow-sm flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                    Descartar
+                </button>
                 <button id="cf-btn-save" onclick="cfSave()" class="flex-1 py-3 bg-[#EE4036] hover:bg-[#FF554A] text-white font-bold rounded-[14px] shadow-lg transition-all shadow-red-500/25 flex items-center justify-center gap-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg> 
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
                     <span>Salvar alterações</span>
                 </button>
             </div>
@@ -841,6 +859,40 @@
     </div>
   </div>
 
+  <div id="modal-new-location" class="modal-overlay fixed inset-0 bg-black/60 backdrop-blur-xl z-[70] items-center justify-center p-4">
+    <div class="glass-panel w-full max-w-md bg-white/90 dark:bg-[#0f1332]/90 rounded-[28px] overflow-hidden flex flex-col shadow-2xl animate__animated animate__zoomIn animate__faster">
+      <div class="p-6 border-b border-gray-200 dark:border-white/10 flex justify-between items-center">
+        <h2 class="text-xl font-bold text-gray-900 dark:text-white">Novo Local de Treino</h2>
+        <button onclick="closeNewLocationModal()" class="text-gray-500 hover:text-[#EE4036] transition-colors"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+      </div>
+      <div class="p-6 overflow-y-auto max-h-[60vh] space-y-4">
+        <div>
+          <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">Nome do Local *</label>
+          <input type="text" id="newLocName" class="glass-input w-full h-[46px] px-4 rounded-[14px] font-sans" placeholder="Ex: Ginásio Apollo">
+        </div>
+        <div>
+          <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">Endereço *</label>
+          <input type="text" id="newLocAddress" class="glass-input w-full h-[46px] px-4 rounded-[14px] font-sans" placeholder="Rua, número, bairro, cidade - UF, CEP">
+        </div>
+        <div>
+          <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">Telefone</label>
+          <input type="text" id="newLocPhone" class="glass-input w-full h-[46px] px-4 rounded-[14px] font-sans" placeholder="(XX) XXXXX-XXXX">
+        </div>
+        <div>
+          <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">Observações</label>
+          <textarea id="newLocNotes" class="glass-input w-full p-4 rounded-xl text-sm min-h-[60px]" placeholder="Informações adicionais..."></textarea>
+        </div>
+      </div>
+      <div class="p-6 border-t border-gray-200 dark:border-white/10 flex gap-3">
+        <button onclick="closeNewLocationModal()" class="flex-1 py-3 bg-black/05 dark:bg-white/10 rounded-[14px] font-bold text-gray-600 dark:text-gray-200 transition-colors">Cancelar</button>
+        <button onclick="saveNewLocation()" class="flex-1 py-3 bg-[#EE4036] hover:bg-[#FF554A] text-white font-bold rounded-[14px] shadow-lg flex items-center justify-center gap-2 transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
+          Salvar Local
+        </button>
+      </div>
+    </div>
+  </div>
+
   <button id="debug-toggle" title="Painel de debug" onclick="document.getElementById('debug-panel').classList.toggle('open')" class="fixed bottom-6 left-6 z-[9999] w-9 h-9 rounded-full bg-black/50 text-white flex items-center justify-center text-base cursor-pointer border-none shadow-md opacity-50 hover:opacity-100 transition-opacity">🐛</button>
   
   <div id="debug-panel">
@@ -962,9 +1014,11 @@
       if(viewId === 'chat-feeder') {
           if (cfTeams.length > 0 && !cfActiveId) {
               cfSelectTeam(cfTeams[0].id);
+          } else if (cfTeams.length > 0) {
+              renderCFTabs();
+              cfSetSubTab('dados');
           } else {
               renderCFTabs();
-              cfSetSubTab('dados'); // Sempre força voltar pro 'dados'
           }
       }
     }
@@ -1056,7 +1110,8 @@
         carregarDadosDoSupabase();
         carregarTeamPadrao();
         carregarAtletasDoSupabase();
-        populateTimeSelects(); // Inicializar opções de hora (00-23, 00-59)
+        populateTimeSelects();
+        loadTrainingLocations().then(() => loadCFTeams());
       } catch (e) { tratarErro('Erro na inicialização: ' + String(e)); }
     }
 
@@ -1834,28 +1889,16 @@
        LOGIC: CHAT FEEDER (REVISADO)
     ============================================ */
     const cfDayNames = ['DOM','SEG','TER','QUA','QUI','SEX','SÁB'];
-    
-    // Dados integrados com as 12 turmas solicitadas
-    let cfTeams = [
-        { id: '1', name: 'Escolinha A', desc: 'Esta turma é para crianças de 9 a 13 anos, e acontece às terças e quintas. Existe a opção de treinar apenas um dia da semana. O horário é das 14h às 15h, no núcleo Apollo.', local: 'Núcleo Apollo', schedules: { 2: { start: '14:00', end: '15:00' }, 4: { start: '14:00', end: '15:00' } }, unavail: [] },
-        { id: '2', name: 'Escolinha B', desc: 'Esta turma é para crianças de 9 a 13 anos, e acontece aos sábados. Esta turma realiza um único treino na semana. O horário é das 13h30 às 14h30, no núcleo Apollo.', local: 'Núcleo Apollo', schedules: { 6: { start: '13:30', end: '14:30' } }, unavail: [] },
-        { id: '3', name: 'Escolinha C', desc: 'Esta turma é para crianças de 9 a 13 anos, e acontece às terças e sextas. Existe a opção de treinar apenas um dia da semana. O horário é das 18h às 19h, no núcleo Apollo.', local: 'Núcleo Apollo', schedules: { 2: { start: '18:00', end: '19:00' }, 5: { start: '18:00', end: '19:00' } }, unavail: [] },
-        { id: '4', name: 'Pré-equipe', desc: 'Turma para crianças de 12 a 15 anos, com treinos às terças e quintas (opção de 1x por semana), das 14h às 15h, no núcleo Apollo. Funciona como transição da escolinha para as categorias de base.', local: 'Núcleo Apollo', schedules: { 2: { start: '14:00', end: '15:00' }, 4: { start: '14:00', end: '15:00' } }, unavail: [] },
-        { id: '5', name: 'Equipe Feminino', desc: 'Esta equipe é das categorias de base, destinada a adolescentes acima de 13 anos. Treinos às terças, quintas e sextas, das 15h às 16h30, no núcleo Apollo.', local: 'Núcleo Apollo', schedules: { 2: { start: '15:00', end: '16:30' }, 4: { start: '15:00', end: '16:30' }, 5: { start: '15:00', end: '16:30' } }, unavail: [] },
-        { id: '6', name: 'Equipe Masculino', desc: 'Esta equipe é das categorias de base, destinada a adolescentes acima de 13 anos. Treinos às terças e quintas, das 16h30 às 18h, no núcleo Apollo.', local: 'Núcleo Apollo', schedules: { 2: { start: '16:30', end: '18:00' }, 4: { start: '16:30', end: '18:00' } }, unavail: [] },
-        { id: '7', name: 'Equipe Armstrong', desc: 'Esta equipe visa o aprendizado do voleibol ou o desenvolvimento dos fundamentos básicos. Equivale à escolinha para adultos e não possui foco competitivo. Treinos às segundas, quartas e sábados.', local: 'Núcleo PUC - Ginásio da PUC', schedules: { 1: { start: '19:00', end: '20:00' }, 3: { start: '19:00', end: '20:00' }, 6: { start: '09:00', end: '10:15' } }, unavail: [] },
-        { id: '8', name: 'Equipe Aldrin', desc: 'Equipe de nível competitivo (equivalente ao nível prata masculino). Destinada a atletas com fundamentos consolidados, com foco no desenvolvimento tático e visão de jogo. Treinos aos sábados.', local: 'Núcleo PUC - Ginásio da PUC', schedules: { 6: { start: '10:00', end: '12:00' } }, unavail: [] },
-        { id: '9', name: 'Equipe Collins', desc: 'Equipe de nível competitivo (nível ouro masculino). Espera-se que os atletas já tenham fundamentos consolidados. Treinos às sextas, das 20h às 22h.', local: 'Núcleo PUC - Ginásio da PUC', schedules: { 5: { start: '20:00', end: '22:00' } }, unavail: [] },
-        { id: '10', name: 'Equipe Borman', desc: 'Equipe de nível competitivo (nível bronze masculino). Espera-se que os atletas saibam os fundamentos em nível básico. Treinos aos sábados, das 10h30 às 12h30.', local: 'Núcleo Apollo', schedules: { 6: { start: '10:30', end: '12:30' } }, unavail: [] },
-        { id: '11', name: 'Equipe Johnson', desc: 'Equipe de nível competitivo (nível ouro feminino). Espera-se que as atletas já tenham fundamentos consolidados e capacidade tática bem desenvolvida. Treinos aos sábados.', local: 'Núcleo PUC - Ginásio da PUC', schedules: { 6: { start: '12:30', end: '14:30' } }, unavail: [] },
-        { id: '12', name: 'Equipe Hopper', desc: 'Equipe de nível competitivo (nível prata feminino). Destinada a atletas com fundamentos básicos desenvolvidos, com foco no desenvolvimento tático e visão de jogo. Treinos às quartas.', local: 'Núcleo PUC - Ginásio da PUC', schedules: { 3: { start: '20:00', end: '22:00' } }, unavail: [] }
-    ];
+    const cfFullDayNames = ['DOMINGO','SEGUNDA','TERÇA','QUARTA','QUINTA','SEXTA','SÁBADO'];
+
+    let cfTeams = [];
+    let cfTrainingLocations = [];
     let cfActiveId = null;
     let cfSubTab = 'dados';
     let cfSelectedDay = null;
     let cfDirty = false;
     let cfIsNew = false;
-    let cfCalDate = new Date(); 
+    let cfCalDate = new Date();
     let cfTempTeam = null;
 
     function populateTimeSelects() {
@@ -1884,6 +1927,35 @@
         if(cfIsNew) {
             container.innerHTML += `<div class="cf-tab active italic" style="color: #EE4036; border-top: 3px solid #EE4036;">Nova Equipe...</div>`;
         }
+        // Scroll the active tab into view
+        setTimeout(() => {
+            const active = container.querySelector('.cf-tab.active');
+            if (active) active.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+            cfUpdateScrollButtons();
+        }, 50);
+        container.removeEventListener('scroll', cfUpdateScrollButtons);
+        container.addEventListener('scroll', cfUpdateScrollButtons);
+    }
+
+    function cfScrollTabsRight() {
+        const container = document.getElementById('cf-tabs-container');
+        container.scrollBy({ left: 200, behavior: 'smooth' });
+        setTimeout(cfUpdateScrollButtons, 300);
+        appLog('Scroll abas Feeder clicado (direita)', 'info');
+    }
+
+    function cfScrollTabsLeft() {
+        const container = document.getElementById('cf-tabs-container');
+        container.scrollBy({ left: -200, behavior: 'smooth' });
+        setTimeout(cfUpdateScrollButtons, 300);
+        appLog('Scroll abas Feeder clicado (esquerda)', 'info');
+    }
+
+    function cfUpdateScrollButtons() {
+        const container = document.getElementById('cf-tabs-container');
+        const leftBtn = document.getElementById('cf-tabs-scroll-left');
+        if (!container || !leftBtn) return;
+        leftBtn.classList.toggle('hidden', container.scrollLeft <= 5);
     }
 
     function cfSelectTeam(id) {
@@ -1920,9 +1992,11 @@
         cfDirty = true;
         cfSelectedDay = null;
         cfSetSubTab('dados');
-        
-        cfTempTeam = { id: 'new', name: 'Nova Equipe', desc: '', local: 'Núcleo Apollo', schedules: {}, unavail: [] };
-        
+
+        const firstLocId = cfTrainingLocations.length > 0 ? cfTrainingLocations[0].id : null;
+        const firstLocName = cfTrainingLocations.length > 0 ? cfTrainingLocations[0].name : '';
+        cfTempTeam = { id: 'new', name: '', category: '', desc: '', local: firstLocName, location_id: firstLocId, schedules: {}, unavail: [] };
+
         document.getElementById('cf-time-panel').classList.add('hidden');
         renderCFTabs();
         renderCFContent();
@@ -1932,20 +2006,24 @@
     function cfSetSubTab(tab) {
         cfSubTab = tab;
         appLog(`Aba do Feeder alterada para: ${tab}`, 'info');
-        
+
         const btnDados = document.getElementById('cf-subtab-dados');
         const btnDatas = document.getElementById('cf-subtab-datas');
-        
+        const actionsDiv = document.getElementById('cf-actions');
+
         if(tab === 'dados') {
             btnDados.className = 'flex-1 pb-3 text-sm font-bold border-b-2 border-[#EE4036] text-[#EE4036] transition-all';
             btnDatas.className = 'flex-1 pb-3 text-sm font-bold text-gray-500 border-b-2 border-transparent hover:text-gray-700 dark:hover:text-gray-300 transition-all';
             document.getElementById('cf-view-dados').classList.remove('hidden');
             document.getElementById('cf-view-datas').classList.add('hidden');
+            actionsDiv.style.removeProperty('display');
+            cfToggleActions(cfDirty);
         } else {
             btnDatas.className = 'flex-1 pb-3 text-sm font-bold border-b-2 border-[#EE4036] text-[#EE4036] transition-all';
             btnDados.className = 'flex-1 pb-3 text-sm font-bold text-gray-500 border-b-2 border-transparent hover:text-gray-700 dark:hover:text-gray-300 transition-all';
             document.getElementById('cf-view-dados').classList.add('hidden');
             document.getElementById('cf-view-datas').classList.remove('hidden');
+            actionsDiv.style.display = 'none';
             renderCFCalendar();
         }
     }
@@ -1953,13 +2031,24 @@
     function renderCFContent() {
         const team = cfIsNew ? cfTempTeam : cfTeams.find(t => t.id === cfActiveId);
         if(!team) return;
+
+        // Show/hide name and category fields (only for new teams)
+        document.getElementById('cf-name-field').classList.toggle('hidden', !cfIsNew);
+        document.getElementById('cf-category-field').classList.toggle('hidden', !cfIsNew);
+        if (cfIsNew) {
+            document.getElementById('cf-name').value = team.name || '';
+            document.getElementById('cf-category').value = team.category || '';
+        }
+
         document.getElementById('cf-desc').value = team.desc || '';
-        
+
+        // Populate location select
+        populateCFLocalSelect(cfIsNew);
         const localSelect = document.getElementById('cf-local');
-        if (team.local && Array.from(localSelect.options).some(o => o.value === team.local)) {
-            localSelect.value = team.local;
-        } else {
-            localSelect.value = 'Núcleo Apollo';
+        if (team.location_id && Array.from(localSelect.options).some(o => o.value === team.location_id)) {
+            localSelect.value = team.location_id;
+        } else if (cfTrainingLocations.length > 0) {
+            localSelect.value = cfTrainingLocations[0].id;
         }
 
         renderCFDays(team);
@@ -1969,37 +2058,66 @@
     function renderCFDays(team) {
         const container = document.getElementById('cf-days-container');
         container.innerHTML = '';
-        for(let i=0; i<7; i++) {
+        for(let i = 0; i < 7; i++) {
             const hasTime = team.schedules && team.schedules[i] && team.schedules[i].start;
             const isSel = cfSelectedDay === i;
-            
+
             let c = 'day-btn unselected';
             if (isSel) c = 'day-btn editing';
             else if (hasTime) c = 'day-btn selected';
 
-            container.innerHTML += `<button class="${c} relative" onclick="cfSelectDay(${i})">${cfDayNames[i]}</button>`;
+            let timePreview = '';
+            if (hasTime) {
+                const s = team.schedules[i];
+                const sf = s.start ? s.start.replace(':', 'h') : '--';
+                const ef = s.end ? s.end.replace(':', 'h') : '--';
+                timePreview = `<span class="day-time-preview">${sf} - ${ef}</span>`;
+            } else {
+                timePreview = `<span class="day-time-preview" style="opacity:0.35;">—</span>`;
+            }
+
+            let trashBtn = '';
+            if (hasTime && !isSel) {
+                trashBtn = `<span class="day-trash-btn" onclick="cfDeleteDaySchedule(event, ${i})" title="Remover horário de ${cfFullDayNames[i]}">
+                    <svg style="width:10px;height:10px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                </span>`;
+            }
+
+            container.innerHTML += `<button class="${c}" onclick="cfSelectDay(${i})">
+                <span class="day-name-full">${cfFullDayNames[i]}</span>
+                ${timePreview}
+                ${trashBtn}
+            </button>`;
         }
     }
 
     function cfSelectDay(dayIdx) {
-        appLog(`Iniciando edição do dia de treino: ${cfDayNames[dayIdx]}`, 'info');
-        cfSelectedDay = dayIdx;
         const team = cfIsNew ? cfTempTeam : cfTeams.find(t => t.id === cfActiveId);
+
+        // Toggle: if already editing this day, deactivate edit mode
+        if (cfSelectedDay === dayIdx) {
+            cfSelectedDay = null;
+            document.getElementById('cf-time-panel').classList.add('hidden');
+            renderCFDays(team);
+            appLog(`Edição do dia ${cfFullDayNames[dayIdx]} desativada.`, 'info');
+            return;
+        }
+
+        appLog(`Iniciando edição do dia de treino: ${cfFullDayNames[dayIdx]}`, 'info');
+        cfSelectedDay = dayIdx;
         renderCFDays(team);
-        
+
         const panel = document.getElementById('cf-time-panel');
         panel.classList.remove('hidden');
-        document.getElementById('cf-time-title').innerText = `HORÁRIO DE TREINO: ${cfDayNames[dayIdx]}`;
-        
+
+        const dayLabel = cfFullDayNames[dayIdx].charAt(0) + cfFullDayNames[dayIdx].slice(1).toLowerCase();
+        document.getElementById('cf-time-title').innerText = `Selecione o horário de início e término do treino de ${dayLabel}:`;
+
         const sched = team.schedules && team.schedules[dayIdx] ? team.schedules[dayIdx] : {start:'', end:''};
-        
+
         let sH = '', sM = '', eH = '', eM = '';
-        if (sched.start && sched.start.includes(':')) {
-            [sH, sM] = sched.start.split(':');
-        }
-        if (sched.end && sched.end.includes(':')) {
-            [eH, eM] = sched.end.split(':');
-        }
+        if (sched.start && sched.start.includes(':')) [sH, sM] = sched.start.split(':');
+        if (sched.end && sched.end.includes(':')) [eH, eM] = sched.end.split(':');
 
         document.getElementById('cf-time-start-h').value = sH;
         document.getElementById('cf-time-start-m').value = sM;
@@ -2081,16 +2199,41 @@
         renderCFCalendar();
     }
     
-    function cfToggleDate(dateStr) {
-        appLog(`Toggling status de disponibilidade da data: ${dateStr}`, 'info');
-        cfMarkDirty();
+    async function cfToggleDate(dateStr) {
+        appLog(`Toggling disponibilidade da data: ${dateStr}`, 'info');
         let team = cfIsNew ? cfTempTeam : cfTeams.find(t => t.id === cfActiveId);
         if(!team) return;
         if(!team.unavail) team.unavail = [];
         const idx = team.unavail.indexOf(dateStr);
-        if(idx > -1) team.unavail.splice(idx, 1);
-        else team.unavail.push(dateStr);
+        if(idx > -1) {
+            team.unavail.splice(idx, 1);
+            await cfDeleteUnavailDate(team.id, dateStr);
+        } else {
+            team.unavail.push(dateStr);
+            await cfInsertUnavailDate(team.id, dateStr);
+        }
         renderCFCalendar();
+    }
+
+    async function cfInsertUnavailDate(teamId, dateStr) {
+        try {
+            const res = await fetch(`${SUPABASE_URL}/rest/v1/team_unavailable_dates`, {
+                method: 'POST', headers: getSupabaseHeaders(),
+                body: JSON.stringify({ team_id: teamId, date: dateStr })
+            });
+            if (!res.ok) { const t = await res.text(); throw new Error(t); }
+            appLog(`Data ${dateStr} marcada como indisponível.`, 'ok');
+        } catch(e) { appLog('Erro ao marcar data indisponível', 'err', e.message); }
+    }
+
+    async function cfDeleteUnavailDate(teamId, dateStr) {
+        try {
+            const res = await fetch(`${SUPABASE_URL}/rest/v1/team_unavailable_dates?team_id=eq.${teamId}&date=eq.${dateStr}`, {
+                method: 'DELETE', headers: getSupabaseHeaders()
+            });
+            if (!res.ok) { const t = await res.text(); throw new Error(t); }
+            appLog(`Data ${dateStr} disponibilizada novamente.`, 'ok');
+        } catch(e) { appLog('Erro ao remover data indisponível', 'err', e.message); }
     }
 
     function cfMarkDirty() {
@@ -2117,7 +2260,10 @@
     function cfDiscard() {
         appLog('Alterações da equipe descartadas pelo usuário.', 'info');
         if(cfIsNew) {
-            cfSelectTeam(cfTeams[0].id);
+            cfIsNew = false;
+            cfDirty = false;
+            if (cfTeams.length > 0) cfSelectTeam(cfTeams[0].id);
+            else { cfActiveId = null; renderCFTabs(); }
         } else {
             cfDirty = false;
             cfSelectedDay = null;
@@ -2127,32 +2273,239 @@
         }
     }
 
-    function cfSave() {
+    async function cfSave() {
         appLog('Salvando alterações da equipe...', 'info');
         let team = cfIsNew ? cfTempTeam : cfTeams.find(t => t.id === cfActiveId);
+        if (!team) return;
+
         team.desc = document.getElementById('cf-desc').value;
-        team.local = document.getElementById('cf-local').value;
-        
-        if(cfIsNew) {
-            team.id = Date.now().toString();
-            team.name = prompt("Nome da equipe:", "Equipe Apollo") || "Equipe Sem Nome";
-            appLog(`Nova equipe criada: ${team.name}`, 'ok');
-            cfTeams.push(team);
-        } else {
-            appLog(`Equipe atualizada: ${team.name}`, 'ok');
+
+        const selectedLocId = document.getElementById('cf-local').value;
+        if (selectedLocId && selectedLocId !== '__new__') {
+            const selectedLoc = cfTrainingLocations.find(l => l.id === selectedLocId);
+            team.local = selectedLoc ? selectedLoc.name : team.local;
+            team.location_id = selectedLocId;
         }
-        
-        cfDirty = false;
-        cfIsNew = false;
-        cfActiveId = team.id;
+
+        // Convert schedules object to array for DB storage
+        const scheduleArray = Object.entries(team.schedules || {}).map(([day, s]) => ({
+            day: parseInt(day), start: s.start, end: s.end
+        }));
+
+        const btn = document.getElementById('cf-btn-save');
+        const origHTML = btn.innerHTML;
+        btn.innerHTML = '<div class="loader w-5 h-5 border-2 border-t-white m-0"></div>'; btn.disabled = true;
+
+        if (cfIsNew) {
+            const teamName = (document.getElementById('cf-name').value || '').trim();
+            const teamCategory = (document.getElementById('cf-category').value || '').trim();
+            if (!teamName) { alert('Informe o nome da equipe.'); btn.innerHTML = origHTML; btn.disabled = false; return; }
+            if (!teamCategory) { alert('Informe a categoria da equipe.'); btn.innerHTML = origHTML; btn.disabled = false; return; }
+            team.name = teamName;
+            team.category = teamCategory;
+
+            const payload = {
+                name: team.name, category: team.category,
+                description: team.desc, location_id: team.location_id || null,
+                training_schedule: scheduleArray, is_active: true
+            };
+            try {
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/teams`, {
+                    method: 'POST', headers: getSupabaseHeaders(), body: JSON.stringify(payload)
+                });
+                const rawText = await res.text();
+                let data; try { data = JSON.parse(rawText); } catch(e) { throw new Error('Resposta inválida'); }
+                if (!res.ok) throw new Error(JSON.stringify(data));
+                const newTeam = Array.isArray(data) ? data[0] : data;
+                team.id = newTeam.id;
+                cfTeams.push(team);
+                cfDirty = false; cfIsNew = false; cfActiveId = team.id;
+                appLog(`Nova equipe criada: ${team.name}`, 'ok');
+            } catch(e) {
+                appLog('Erro ao criar equipe', 'err', e.message);
+                alert('Erro ao salvar: ' + e.message);
+                btn.innerHTML = origHTML; btn.disabled = false; return;
+            }
+        } else {
+            const payload = {
+                description: team.desc, location_id: team.location_id || null,
+                training_schedule: scheduleArray
+            };
+            try {
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/teams?id=eq.${team.id}`, {
+                    method: 'PATCH', headers: getSupabaseHeaders(), body: JSON.stringify(payload)
+                });
+                const rawText = await res.text();
+                if (rawText.length > 0 && !res.ok) { let d; try { d = JSON.parse(rawText); } catch(e){} throw new Error(d ? JSON.stringify(d) : rawText); }
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                cfDirty = false;
+                appLog(`Equipe atualizada: ${team.name}`, 'ok');
+            } catch(e) {
+                appLog('Erro ao atualizar equipe', 'err', e.message);
+                alert('Erro ao salvar: ' + e.message);
+                btn.innerHTML = origHTML; btn.disabled = false; return;
+            }
+        }
+
         cfSelectedDay = null;
         document.getElementById('cf-time-panel').classList.add('hidden');
-
         cfToggleActions(false);
         renderCFTabs();
         renderCFContent();
-        alert('Equipe salva com sucesso!');
+        btn.innerHTML = origHTML; btn.disabled = false;
     }
+    /* ============================================
+       CHAT FEEDER: FUNÇÕES AUXILIARES
+    ============================================ */
+
+    async function loadTrainingLocations() {
+        appLog('Carregando locais de treino...', 'info');
+        try {
+            const res = await fetch(`${SUPABASE_URL}/rest/v1/training_locations?select=*&is_active=eq.true&order=name.asc`, {
+                headers: getSupabaseHeaders()
+            });
+            const rawText = await res.text();
+            let data; try { data = JSON.parse(rawText); } catch(e) { throw new Error('Resposta inválida'); }
+            if (!res.ok) throw new Error(JSON.stringify(data));
+            cfTrainingLocations = data;
+            appLog(`Locais carregados: ${cfTrainingLocations.length}`, 'ok');
+        } catch(e) {
+            appLog('Erro ao carregar locais de treino', 'err', e.message);
+        }
+    }
+
+    async function loadCFTeams() {
+        appLog('Carregando equipes do Chatbot Feeder...', 'info');
+        try {
+            const [resTeams, resUnavail] = await Promise.all([
+                fetch(`${SUPABASE_URL}/rest/v1/teams?select=*,training_locations(id,name)&is_active=eq.true&order=name.asc`, { headers: getSupabaseHeaders() }),
+                fetch(`${SUPABASE_URL}/rest/v1/team_unavailable_dates?select=team_id,date`, { headers: getSupabaseHeaders() })
+            ]);
+
+            const rawTeams = await resTeams.text();
+            let teamsData; try { teamsData = JSON.parse(rawTeams); } catch(e) { throw new Error('Resposta inválida (teams)'); }
+            if (!resTeams.ok) throw new Error(JSON.stringify(teamsData));
+
+            const rawUnavail = await resUnavail.text();
+            let unavailData = []; try { unavailData = JSON.parse(rawUnavail) || []; } catch(e) {}
+
+            const unavailByTeam = {};
+            unavailData.forEach(u => {
+                if (!unavailByTeam[u.team_id]) unavailByTeam[u.team_id] = [];
+                unavailByTeam[u.team_id].push(u.date);
+            });
+
+            cfTeams = teamsData.map(t => {
+                let schedules = {};
+                const raw = t.training_schedule;
+                if (Array.isArray(raw)) {
+                    raw.forEach(s => { if (s.day !== undefined) schedules[s.day] = { start: s.start || '', end: s.end || '' }; });
+                } else if (raw && typeof raw === 'object') {
+                    Object.keys(raw).forEach(k => { schedules[parseInt(k)] = raw[k]; });
+                }
+                const locName = (t.training_locations && t.training_locations.name) ? t.training_locations.name : (t.gym_location || '');
+                return {
+                    id: t.id, name: t.name, category: t.category || '',
+                    desc: t.description || '', local: locName,
+                    location_id: t.location_id || null, schedules,
+                    unavail: unavailByTeam[t.id] || []
+                };
+            });
+
+            appLog(`Equipes carregadas: ${cfTeams.length}`, 'ok');
+            renderCFTabs();
+            if (cfTeams.length > 0) cfSelectTeam(cfTeams[0].id);
+        } catch(e) {
+            appLog('Erro ao carregar equipes do Feeder', 'err', e.message);
+        }
+    }
+
+    function populateCFLocalSelect(includeNewOption) {
+        const select = document.getElementById('cf-local');
+        select.innerHTML = '';
+        cfTrainingLocations.forEach(loc => {
+            const opt = document.createElement('option');
+            opt.value = loc.id;
+            opt.textContent = loc.name;
+            select.appendChild(opt);
+        });
+        if (includeNewOption) {
+            const opt = document.createElement('option');
+            opt.value = '__new__';
+            opt.textContent = '+ Adicionar novo local de treino...';
+            select.appendChild(opt);
+        }
+    }
+
+    function cfHandleLocalChange() {
+        const val = document.getElementById('cf-local').value;
+        if (val === '__new__') {
+            openNewLocationModal();
+        } else {
+            cfMarkDirty();
+        }
+    }
+
+    function cfDeleteDaySchedule(ev, dayIdx) {
+        ev.stopPropagation();
+        const team = cfIsNew ? cfTempTeam : cfTeams.find(t => t.id === cfActiveId);
+        if (!team) return;
+        const dayName = cfFullDayNames[dayIdx].charAt(0) + cfFullDayNames[dayIdx].slice(1).toLowerCase();
+        if (confirm(`Deseja remover o horário de treino de ${dayName}?`)) {
+            if (team.schedules) delete team.schedules[dayIdx];
+            if (cfSelectedDay === dayIdx) {
+                cfSelectedDay = null;
+                document.getElementById('cf-time-panel').classList.add('hidden');
+            }
+            cfMarkDirty();
+            renderCFDays(team);
+        }
+    }
+
+    function openNewLocationModal() {
+        document.getElementById('newLocName').value = '';
+        document.getElementById('newLocAddress').value = '';
+        document.getElementById('newLocPhone').value = '';
+        document.getElementById('newLocNotes').value = '';
+        document.getElementById('modal-new-location').classList.add('open');
+    }
+
+    function closeNewLocationModal() {
+        document.getElementById('modal-new-location').classList.remove('open');
+        const select = document.getElementById('cf-local');
+        if (cfTrainingLocations.length > 0) select.value = cfTrainingLocations[0].id;
+    }
+
+    async function saveNewLocation() {
+        const name = document.getElementById('newLocName').value.trim();
+        const address = document.getElementById('newLocAddress').value.trim();
+        if (!name) { alert('Informe o nome do local.'); return; }
+        try {
+            const res = await fetch(`${SUPABASE_URL}/rest/v1/training_locations`, {
+                method: 'POST', headers: getSupabaseHeaders(),
+                body: JSON.stringify({
+                    name, address: address || null,
+                    phone: document.getElementById('newLocPhone').value.trim() || null,
+                    notes: document.getElementById('newLocNotes').value.trim() || null,
+                    is_active: true
+                })
+            });
+            const rawText = await res.text();
+            let data; try { data = JSON.parse(rawText); } catch(e) { throw new Error('Resposta inválida'); }
+            if (!res.ok) throw new Error(JSON.stringify(data));
+            const newLoc = Array.isArray(data) ? data[0] : data;
+            cfTrainingLocations.push(newLoc);
+            populateCFLocalSelect(true);
+            document.getElementById('cf-local').value = newLoc.id;
+            document.getElementById('modal-new-location').classList.remove('open');
+            cfMarkDirty();
+            appLog(`Novo local criado: ${name}`, 'ok');
+        } catch(e) {
+            appLog('Erro ao criar local de treino', 'err', e.message);
+            alert('Erro ao salvar local: ' + e.message);
+        }
+    }
+
   </script>
 </body>
 </html>
