@@ -28,8 +28,7 @@
        FUNDO: SUTIL (igual ao código original)
     ============================================ */
     body, html {
-      min-height: 100dvh;
-      width: 100%; margin: 0; padding: 0;
+      min-height: 100dvh; width: 100%; margin: 0; padding: 0;
       background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
       color: #0F1332; font-family: 'Inter', sans-serif;
     }
@@ -41,18 +40,12 @@
     /* ============================================
        SHAPES DE FUNDO: OPACIDADE SUTIL
     ============================================ */
-    .bg-shape { position: fixed;
-      border-radius: 50%; filter: blur(100px); opacity: 0.2; animation: float 15s infinite alternate ease-in-out; pointer-events: none; z-index: 0;
-    }
+    .bg-shape { position: fixed; border-radius: 50%; filter: blur(100px); opacity: 0.2; animation: float 15s infinite alternate ease-in-out; pointer-events: none; z-index: 0; }
     .dark .bg-shape { opacity: 0.15; }
-    .shape-1 { top: -10%; left: -10%;
-      width: 60vw; height: 60vw; background: #EE4036; }
-    .shape-2 { bottom: -15%; right: -10%; width: 70vw; height: 70vw;
-      background: #4F46E5; animation-delay: -5s; }
-    .shape-3 { top: 30%; left: 20%; width: 50vw; height: 50vw; background: #c026d3;
-      animation-delay: -2s; }
-    @keyframes float { 0% { transform: translate(0,0) scale(1); } 100% { transform: translate(40px,60px) scale(1.1);
-    } }
+    .shape-1 { top: -10%; left: -10%; width: 60vw; height: 60vw; background: #EE4036; }
+    .shape-2 { bottom: -15%; right: -10%; width: 70vw; height: 70vw; background: #4F46E5; animation-delay: -5s; }
+    .shape-3 { top: 30%; left: 20%; width: 50vw; height: 50vw; background: #c026d3; animation-delay: -2s; }
+    @keyframes float { 0% { transform: translate(0,0) scale(1); } 100% { transform: translate(40px,60px) scale(1.1); } }
 
     /* ============================================
        GLASS PANELS: SUTIL
@@ -69,22 +62,15 @@
       background: rgba(15,19,50,0.5);
     }
 
-    .glass-input { background: rgba(255,255,255,0.6); backdrop-filter: blur(8px);
-      border: 1px solid rgba(255,255,255,0.4); transition: all 0.3s; color: #0F1332; }
-    .glass-input:focus { background: rgba(255,255,255,0.9); border-color: #EE4036;
-      box-shadow: 0 0 0 4px rgba(238,64,54,0.15); outline: none;}
-    .dark .glass-input { background: rgba(0,0,0,0.3); border-color: rgba(255,255,255,0.1); color: white;
-    }
+    .glass-input { background: rgba(255,255,255,0.6); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.4); transition: all 0.3s; color: #0F1332; }
+    .glass-input:focus { background: rgba(255,255,255,0.9); border-color: #EE4036; box-shadow: 0 0 0 4px rgba(238,64,54,0.15); outline: none;}
+    .dark .glass-input { background: rgba(0,0,0,0.3); border-color: rgba(255,255,255,0.1); color: white; }
     .dark .glass-input:focus { background: rgba(0,0,0,0.5); border-color: #EE4036; }
-    .glass-input.error { border-color: #EE4036 !important;
-      box-shadow: 0 0 0 4px rgba(238,64,54,0.2) !important; }
+    .glass-input.error { border-color: #EE4036 !important; box-shadow: 0 0 0 4px rgba(238,64,54,0.2) !important; }
 
-    ::-webkit-scrollbar { width: 6px;
-      height: 6px;} ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 10px; } .dark ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2);
-    }
+    ::-webkit-scrollbar { width: 6px; height: 6px;} ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 10px; } .dark ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); }
 
-    .icon-sun { display: none; } .dark .icon-sun { display: block; } .dark .icon-moon { display: none;
-    }
+    .icon-sun { display: none; } .dark .icon-sun { display: block; } .dark .icon-moon { display: none; }
 
     /* ============================================
        TABELA: TRANSPARÊNCIA E BLUR (AGENDAMENTOS E ATLETAS)
@@ -103,288 +89,166 @@
       border-bottom: 1px solid rgba(255,255,255,0.08);
       background-clip: padding-box;
     }
-    .table-row { border-bottom: 1px solid rgba(0,0,0,0.05);
-      transition: background 0.2s; cursor: pointer; }
-    .table-row:hover { background: rgba(255,255,255,0.4);
-    }
+    .table-row { border-bottom: 1px solid rgba(0,0,0,0.05); transition: background 0.2s; cursor: pointer; }
+    .table-row:hover { background: rgba(255,255,255,0.4); }
     .dark .table-row { border-bottom: 1px solid rgba(255,255,255,0.05); }
-    .dark .table-row:hover { background: rgba(255,255,255,0.05);
-    }
+    .dark .table-row:hover { background: rgba(255,255,255,0.05); }
 
     /* ============================================
-       STATUS BADGES: COR DIFERENTE PARA CADA STATUS
+       STATUS BADGES
     ============================================ */
-    .status-badge { padding: 4px 12px;
-      border-radius: 999px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
-    }
-
-    /* Agendado: Verde */
-    .status-agendado { background: rgba(22,163,74,0.15); color: #15803d;
-      border: 1px solid rgba(22,163,74,0.3); }
-    .dark .status-agendado { background: rgba(74,222,128,0.12); color: #4ade80; border: 1px solid rgba(74,222,128,0.25);
-    }
-
-    /* Cancelado: Vermelho */
-    .status-cancelado { background: rgba(238,64,54,0.12); color: #dc2626;
-      border: 1px solid rgba(238,64,54,0.25); }
-    .dark .status-cancelado { background: rgba(248,113,113,0.12); color: #f87171; border: 1px solid rgba(248,113,113,0.25);
-    }
-
-    /* Pendente: Âmbar/Laranja */
-    .status-pendente { background: rgba(245,158,11,0.15); color: #b45309;
-      border: 1px solid rgba(245,158,11,0.3); }
-    .dark .status-pendente { background: rgba(251,191,36,0.12); color: #fbbf24; border: 1px solid rgba(251,191,36,0.25);
-    }
-
-    /* Em Avaliação: Azul */
-    .status-em-avaliacao { background: rgba(59,130,246,0.12); color: #1d4ed8;
-      border: 1px solid rgba(59,130,246,0.25); }
-    .dark .status-em-avaliacao { background: rgba(96,165,250,0.12); color: #60a5fa; border: 1px solid rgba(96,165,250,0.25);
-    }
-
-    /* Em Cadastro: Ciano/Teal */
-    .status-em-cadastro { background: rgba(20,184,166,0.12); color: #0f766e;
-      border: 1px solid rgba(20,184,166,0.25); }
-    .dark .status-em-cadastro { background: rgba(45,212,191,0.12); color: #2dd4bf; border: 1px solid rgba(45,212,191,0.25);
-    }
-
-    /* Tecnofit: Roxo */
-    .status-tecnofit { background: rgba(139,92,246,0.12); color: #6d28d9;
-      border: 1px solid rgba(139,92,246,0.25); }
-    .dark .status-tecnofit { background: rgba(167,139,250,0.12); color: #a78bfa; border: 1px solid rgba(167,139,250,0.25);
-    }
+    .status-badge { padding: 4px 12px; border-radius: 999px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+    .status-agendado { background: rgba(22,163,74,0.15); color: #15803d; border: 1px solid rgba(22,163,74,0.3); }
+    .dark .status-agendado { background: rgba(74,222,128,0.12); color: #4ade80; border: 1px solid rgba(74,222,128,0.25); }
+    .status-cancelado { background: rgba(238,64,54,0.12); color: #dc2626; border: 1px solid rgba(238,64,54,0.25); }
+    .dark .status-cancelado { background: rgba(248,113,113,0.12); color: #f87171; border: 1px solid rgba(248,113,113,0.25); }
+    .status-pendente { background: rgba(245,158,11,0.15); color: #b45309; border: 1px solid rgba(245,158,11,0.3); }
+    .dark .status-pendente { background: rgba(251,191,36,0.12); color: #fbbf24; border: 1px solid rgba(251,191,36,0.25); }
+    .status-em-avaliacao { background: rgba(59,130,246,0.12); color: #1d4ed8; border: 1px solid rgba(59,130,246,0.25); }
+    .dark .status-em-avaliacao { background: rgba(96,165,250,0.12); color: #60a5fa; border: 1px solid rgba(96,165,250,0.25); }
+    .status-em-cadastro { background: rgba(20,184,166,0.12); color: #0f766e; border: 1px solid rgba(20,184,166,0.25); }
+    .dark .status-em-cadastro { background: rgba(45,212,191,0.12); color: #2dd4bf; border: 1px solid rgba(45,212,191,0.25); }
+    .status-tecnofit { background: rgba(139,92,246,0.12); color: #6d28d9; border: 1px solid rgba(139,92,246,0.25); }
+    .dark .status-tecnofit { background: rgba(167,139,250,0.12); color: #a78bfa; border: 1px solid rgba(167,139,250,0.25); }
 
     /* ============================================
-       DESTAQUE 24H: VERMELHO (#EE4036)
-       Light: mais intenso (menos transparente)
-       Dark: mais sutil
+       DESTAQUE 24H
     ============================================ */
-    .highlight-24h {
-      background-color: rgba(238,64,54,0.18) !important;
-      border-left: 4px solid #EE4036 !important;
-    }
-    .highlight-24h td { color: #7f1d1d !important;
-    }
-    .dark .highlight-24h {
-      background-color: rgba(238,64,54,0.09) !important;
-      border-left: 4px solid #EE4036 !important;
-    }
-    .dark .highlight-24h td { color: inherit !important;
-    }
+    .highlight-24h { background-color: rgba(238,64,54,0.18) !important; border-left: 4px solid #EE4036 !important; }
+    .highlight-24h td { color: #7f1d1d !important; }
+    .dark .highlight-24h { background-color: rgba(238,64,54,0.09) !important; border-left: 4px solid #EE4036 !important; }
+    .dark .highlight-24h td { color: inherit !important; }
 
     /* ============================================
-       KPI CARDS: QUASE TRANSPARENTES COM BLUR
+       KPI CARDS
     ============================================ */
     .liquid-card-kpi {
-      border-radius: 24px;
-      background: rgba(255,255,255,0.2);
-      backdrop-filter: blur(32px) saturate(180%);
-      -webkit-backdrop-filter: blur(32px) saturate(180%);
-      border: 1px solid rgba(255,255,255,0.5);
-      box-shadow: 0 4px 24px rgba(0,0,0,0.04);
-      cursor: pointer;
-      position: relative; overflow: hidden;
-      transform-style: preserve-3d; will-change: transform;
-      transition: box-shadow 0.4s ease, border-color 0.4s ease, transform 0.1s ease-out;
+      border-radius: 24px; background: rgba(255,255,255,0.2); backdrop-filter: blur(32px) saturate(180%); -webkit-backdrop-filter: blur(32px) saturate(180%);
+      border: 1px solid rgba(255,255,255,0.5); box-shadow: 0 4px 24px rgba(0,0,0,0.04); cursor: pointer; position: relative; overflow: hidden;
+      transform-style: preserve-3d; will-change: transform; transition: box-shadow 0.4s ease, border-color 0.4s ease, transform 0.1s ease-out;
     }
-    .dark .liquid-card-kpi {
-      background: rgba(255,255,255,0.04);
-      border-color: rgba(255,255,255,0.1);
-      box-shadow: 0 4px 24px rgba(0,0,0,0.2);
-    }
-    .liquid-card-kpi:hover {
-      transform: rotateX(var(--x-rotation, 0deg)) rotateY(var(--y-rotation, 0deg)) scale(1.03);
-      box-shadow: 0 20px 40px rgba(10,78,228,0.12); border-color: rgba(255,255,255,0.8);
-    }
-    .dark .liquid-card-kpi:hover { border-color: rgba(255,255,255,0.3);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
-
-    .kpi-front { transition: all 0.4s ease;
-    } .kpi-back { transition: all 0.4s ease; opacity: 0; pointer-events: none; }
-    .liquid-card-kpi.show-chart .kpi-front { filter: blur(8px);
-      opacity: 0.15; }
-    .liquid-card-kpi.show-chart .kpi-back { opacity: 1; pointer-events: auto;
-    }
-    .icon-glass { background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.4)); box-shadow: 0 4px 15px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,1);
-    }
-    .dark .icon-glass { background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05));
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.1);
-    }
+    .dark .liquid-card-kpi { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.1); box-shadow: 0 4px 24px rgba(0,0,0,0.2); }
+    .liquid-card-kpi:hover { transform: rotateX(var(--x-rotation, 0deg)) rotateY(var(--y-rotation, 0deg)) scale(1.03); box-shadow: 0 20px 40px rgba(10,78,228,0.12); border-color: rgba(255,255,255,0.8); }
+    .dark .liquid-card-kpi:hover { border-color: rgba(255,255,255,0.3); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+    .kpi-front { transition: all 0.4s ease; } .kpi-back { transition: all 0.4s ease; opacity: 0; pointer-events: none; }
+    .liquid-card-kpi.show-chart .kpi-front { filter: blur(8px); opacity: 0.15; }
+    .liquid-card-kpi.show-chart .kpi-back { opacity: 1; pointer-events: auto; }
+    .icon-glass { background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.4)); box-shadow: 0 4px 15px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,1); }
+    .dark .icon-glass { background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05)); box-shadow: 0 4px 15px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.1); }
 
     /* ============================================
-       SIDEBAR: EXPANDE/CONTRAI E NOVO EFEITO LOGO
+       SIDEBAR
     ============================================ */
-    #sidebar {
-      width: 256px;
-      transition: width 0.25s ease;
-      overflow: hidden;
-    }
-    #sidebar.collapsed { width: 60px;
-    }
-    
-    /* ESCONDER O LOGO COMPLETO QUANDO RECOLHIDO */
-    #sidebar.collapsed .brand-wrapper { display: none;
-    }
+    #sidebar { width: 256px; transition: width 0.25s ease; overflow: hidden; }
+    #sidebar.collapsed { width: 60px; }
+    #sidebar.collapsed .brand-wrapper { display: none; }
     #sidebar.collapsed .sidebar-brand { justify-content: center; padding: 0; }
-    #sidebar.collapsed .sidebar-toggle-btn { margin: 0;
-    }
-    
-    #sidebar.collapsed .sidebar-label,
-    #sidebar.collapsed .sidebar-section-label,
-    #sidebar.collapsed .sidebar-brand-text { display: none;
-    }
-    #sidebar.collapsed .sidebar-btn { justify-content: center; padding-left: 0; padding-right: 0;
-    }
+    #sidebar.collapsed .sidebar-toggle-btn { margin: 0; }
+    #sidebar.collapsed .sidebar-label, #sidebar.collapsed .sidebar-section-label, #sidebar.collapsed .sidebar-brand-text { display: none; }
+    #sidebar.collapsed .sidebar-btn { justify-content: center; padding-left: 0; padding-right: 0; }
     #sidebar .sidebar-toggle-btn { transition: transform 0.25s ease; }
-    #sidebar.collapsed .sidebar-toggle-btn { transform: rotate(180deg);
-    }
-
-    /* SIDEBAR ITEM ATIVO: vermelho, retângulo cheio sem bordas arredondadas */
-    .sidebar-btn {
-      position: relative;
-      display: flex; align-items: center; gap: 12px;
-      padding: 10px 16px;
-      font-size: 14px; font-weight: 500;
-      color: #6b7280;
-      transition: all 0.2s;
-      border-radius: 0;
-      white-space: nowrap;
-      width: 100%;
-      text-align: left;
-    }
-    .sidebar-btn:hover { background: rgba(0,0,0,0.04); color: #111827;
-    }
+    #sidebar.collapsed .sidebar-toggle-btn { transform: rotate(180deg); }
+    .sidebar-btn { position: relative; display: flex; align-items: center; gap: 12px; padding: 10px 16px; font-size: 14px; font-weight: 500; color: #6b7280; transition: all 0.2s; border-radius: 0; white-space: nowrap; width: 100%; text-align: left; }
+    .sidebar-btn:hover { background: rgba(0,0,0,0.04); color: #111827; }
     .dark .sidebar-btn { color: #94a3b8; }
-    .dark .sidebar-btn:hover { background: rgba(255,255,255,0.05); color: #e2e8f0;
-    }
-
-    .sidebar-btn.active {
-      background: rgba(238,64,54,0.1);
-      color: #EE4036;
-      border-left: 3px solid #EE4036;
-    }
-    .dark .sidebar-btn.active {
-      background: rgba(238,64,54,0.12);
-      color: #f87171;
-      border-left: 3px solid #EE4036;
-    }
+    .dark .sidebar-btn:hover { background: rgba(255,255,255,0.05); color: #e2e8f0; }
+    .sidebar-btn.active { background: rgba(238,64,54,0.1); color: #EE4036; border-left: 3px solid #EE4036; }
+    .dark .sidebar-btn.active { background: rgba(238,64,54,0.12); color: #f87171; border-left: 3px solid #EE4036; }
     .sidebar-btn.active:hover { background: rgba(238,64,54,0.15); }
 
     /* ============================================
        RESPONSIVO TABELA
     ============================================ */
     @media (max-width: 768px) {
-      .responsive-table table, .responsive-table thead, .responsive-table tbody, .responsive-table th, .responsive-table td, .responsive-table tr { display: block;
-      }
-      .responsive-table thead tr { position: absolute; top: -9999px; left: -9999px;
-      }
-      .responsive-table tr { border: 1px solid rgba(255,255,255,0.3) !important; border-radius: 16px; margin-bottom: 16px;
-        padding: 16px 12px; background: rgba(255,255,255,0.3); box-shadow: 0 4px 15px rgba(0,0,0,0.02);
-      }
-      .dark .responsive-table tr { border-color: rgba(255,255,255,0.08) !important; background: rgba(0,0,0,0.2);
-      }
-      .responsive-table td { border: none !important; position: relative; padding: 8px 0 8px 30% !important;
-        margin-bottom: 4px; white-space: normal; }
-      .responsive-table td:before { position: absolute; left: 0; top: 10px;
-        width: 25%; padding-right: 10px; white-space: nowrap; font-weight: 800; color: #808083; text-transform: uppercase; font-size: 10px;
-      }
-      .table-agendamentos td:nth-of-type(1):before { content: "Atleta";
-      }
-      .table-agendamentos td:nth-of-type(2):before { content: "Contato";
-      }
-      .table-agendamentos td:nth-of-type(3):before { content: "Data";
-      }
-      .table-agendamentos td:nth-of-type(4):before { content: "Local";
-      }
-      .table-agendamentos td:nth-of-type(5):before { content: "Status";
-      }
-      .table-atletas td:nth-of-type(1):before { content: "Nome/Resp";
-      }
-      .table-atletas td:nth-of-type(2):before { content: "Contato/CPF";
-      }
-      .table-atletas td:nth-of-type(3):before { content: "Plano";
-      }
-      .table-atletas td:nth-of-type(4):before { content: "Status";
-      }
+      .responsive-table table, .responsive-table thead, .responsive-table tbody, .responsive-table th, .responsive-table td, .responsive-table tr { display: block; }
+      .responsive-table thead tr { position: absolute; top: -9999px; left: -9999px; }
+      .responsive-table tr { border: 1px solid rgba(255,255,255,0.3) !important; border-radius: 16px; margin-bottom: 16px; padding: 16px 12px; background: rgba(255,255,255,0.3); box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+      .dark .responsive-table tr { border-color: rgba(255,255,255,0.08) !important; background: rgba(0,0,0,0.2); }
+      .responsive-table td { border: none !important; position: relative; padding: 8px 0 8px 30% !important; margin-bottom: 4px; white-space: normal; }
+      .responsive-table td:before { position: absolute; left: 0; top: 10px; width: 25%; padding-right: 10px; white-space: nowrap; font-weight: 800; color: #808083; text-transform: uppercase; font-size: 10px; }
+      .table-agendamentos td:nth-of-type(1):before { content: "Atleta"; }
+      .table-agendamentos td:nth-of-type(2):before { content: "Contato"; }
+      .table-agendamentos td:nth-of-type(3):before { content: "Data"; }
+      .table-agendamentos td:nth-of-type(4):before { content: "Local"; }
+      .table-agendamentos td:nth-of-type(5):before { content: "Status"; }
+      .table-atletas td:nth-of-type(1):before { content: "Nome/Resp"; }
+      .table-atletas td:nth-of-type(2):before { content: "Contato/CPF"; }
+      .table-atletas td:nth-of-type(3):before { content: "Plano"; }
+      .table-atletas td:nth-of-type(4):before { content: "Status"; }
     }
 
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg);
-    } }
-    .loader { border: 3px solid rgba(238,64,54,0.2); border-top-color: #EE4036; border-radius: 50%; width: 40px; height: 40px;
-      animation: spin 1s linear infinite; margin: 40px auto; }
-
-    .modal-overlay { display: none;
-    } .modal-overlay.open { display: flex; animation: fadeIn 0.3s forwards; }
-    @keyframes fadeIn { from { opacity: 0;
-      backdrop-filter: blur(0px); } to { opacity: 1; backdrop-filter: blur(16px); } }
-
-    .filter-popover { display: none; position: absolute;
-      right: 0; top: 100%; margin-top: 8px; background: white; border: 1px solid #e5e7eb; border-radius: 8px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
-      z-index: 50; width: 160px; overflow: hidden; }
-    .dark .filter-popover { background: rgba(15,19,50,0.95); border-color: rgba(255,255,255,0.1);
-    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    .loader { border: 3px solid rgba(238,64,54,0.2); border-top-color: #EE4036; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 40px auto; }
+    .modal-overlay { display: none; } .modal-overlay.open { display: flex; animation: fadeIn 0.3s forwards; }
+    @keyframes fadeIn { from { opacity: 0; backdrop-filter: blur(0px); } to { opacity: 1; backdrop-filter: blur(16px); } }
+    .filter-popover { display: none; position: absolute; right: 0; top: 100%; margin-top: 8px; background: white; border: 1px solid #e5e7eb; border-radius: 8px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); z-index: 50; width: 160px; overflow: hidden; }
+    .dark .filter-popover { background: rgba(15,19,50,0.95); border-color: rgba(255,255,255,0.1); }
     .filter-popover.open { display: block; }
-    .filter-option { padding: 10px 16px; font-size: 12px;
-      cursor: pointer; color: #374151; font-weight: 500; }
-    .dark .filter-option { color: #d1d5db;
-    }
-    .filter-option:hover { background: #f3f4f6; } .dark .filter-option:hover { background: rgba(255,255,255,0.05);
-    }
+    .filter-option { padding: 10px 16px; font-size: 12px; cursor: pointer; color: #374151; font-weight: 500; }
+    .dark .filter-option { color: #d1d5db; }
+    .filter-option:hover { background: #f3f4f6; } .dark .filter-option:hover { background: rgba(255,255,255,0.05); }
 
-    .custom-calendar { display: none; position: absolute; z-index: 100; background: white; border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1); border: 1px solid #e5e7eb; padding: 12px; width: 280px; margin-top: 4px;
-    }
+    .custom-calendar { display: none; position: absolute; z-index: 100; background: white; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border: 1px solid #e5e7eb; padding: 12px; width: 280px; margin-top: 4px; }
     .dark .custom-calendar { background: rgba(15,19,50,0.98); border-color: rgba(255,255,255,0.1); }
-    .custom-calendar.open { display: block;
-    }
-    .cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-weight: 600; font-size: 14px;
-    }
-    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center;
-    }
-    .cal-day-name { font-size: 10px; font-weight: 700; color: #9ca3af; text-transform: uppercase;
-    }
-    .cal-day { padding: 6px 0; font-size: 13px; border-radius: 6px; cursor: pointer; transition: all 0.2s;
-    }
+    .custom-calendar.open { display: block; }
+    .cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-weight: 600; font-size: 14px; }
+    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; }
+    .cal-day-name { font-size: 10px; font-weight: 700; color: #9ca3af; text-transform: uppercase; }
+    .cal-day { padding: 6px 0; font-size: 13px; border-radius: 6px; cursor: pointer; transition: all 0.2s; }
     .cal-day:hover:not(.disabled) { background: rgba(238,64,54,0.1); color: #EE4036; }
-    .cal-day.disabled { opacity: 0.3; cursor: not-allowed;
-    }
+    .cal-day.disabled { opacity: 0.3; cursor: not-allowed; }
     .cal-day.selected { background: #EE4036; color: white; font-weight: bold; }
 
-    .chat-bubble { max-width: 82%;
-      padding: 10px 14px; border-radius: 18px; font-size: 13px; line-height: 1.5; position: relative; word-wrap: break-word;
-    }
-    .chat-bubble.bot { background: #ffffff; color: #0F1332; border-bottom-left-radius: 4px; align-self: flex-start; box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-    }
+    .chat-bubble { max-width: 82%; padding: 10px 14px; border-radius: 18px; font-size: 13px; line-height: 1.5; position: relative; word-wrap: break-word; }
+    .chat-bubble.bot { background: #ffffff; color: #0F1332; border-bottom-left-radius: 4px; align-self: flex-start; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
     .dark .chat-bubble.bot { background: rgba(255,255,255,0.08); color: #e2e8f0; }
-    .chat-bubble.user { background: #EE4036;
-      color: white; border-bottom-right-radius: 4px; align-self: flex-end; box-shadow: 0 2px 8px rgba(238,64,54,0.3); }
-    .chat-time { font-size: 10px;
-      opacity: 0.55; margin-top: 4px; text-align: right; }
+    .chat-bubble.user { background: #EE4036; color: white; border-bottom-right-radius: 4px; align-self: flex-end; box-shadow: 0 2px 8px rgba(238,64,54,0.3); }
+    .chat-time { font-size: 10px; opacity: 0.55; margin-top: 4px; text-align: right; }
 
     /* ============================================
        DEBUG PANEL AVANÇADO
     ============================================ */
-    #debug-panel { display: none;
-      position: fixed; bottom: 70px; left: 16px; z-index: 9998; width: min(600px, calc(100vw - 32px)); max-height: 400px; background: rgba(10,14,27,0.97); color: #4ade80;
-      font-family: monospace; font-size: 11px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); overflow-y: hidden; box-shadow: 0 8px 32px rgba(0,0,0,0.5); flex-direction: column;
-    }
+    #debug-panel { display: none; position: fixed; bottom: 70px; left: 16px; z-index: 9998; width: min(600px, calc(100vw - 32px)); max-height: 400px; background: rgba(10,14,27,0.97); color: #4ade80; font-family: monospace; font-size: 11px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); overflow-y: hidden; box-shadow: 0 8px 32px rgba(0,0,0,0.5); flex-direction: column; }
     #debug-panel.open { display: flex; }
-    .dbg-header { display: flex; justify-content: space-between; align-items: center;
-      border-bottom: 1px solid rgba(255,255,255,0.1); padding: 12px; font-weight: 700; color: #f8fafc; font-size: 12px; background: rgba(10,14,27,0.97); flex-shrink: 0;
-    }
+    .dbg-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 12px; font-weight: 700; color: #f8fafc; font-size: 12px; background: rgba(10,14,27,0.97); flex-shrink: 0; }
     .dbg-actions { display: flex; gap: 8px; }
-    .dbg-btn { background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.2); color: #e2e8f0; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-size: 10px; font-weight: bold; transition: all 0.2s;
-    }
+    .dbg-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #e2e8f0; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-size: 10px; font-weight: bold; transition: all 0.2s; }
     .dbg-btn:hover { background: rgba(255,255,255,0.2); }
-    #debug-content { flex: 1; overflow-y: auto;
-      padding: 0 12px 12px 12px; }
-    .dbg-line { padding: 6px 0; border-bottom: 1px dashed rgba(255,255,255,0.05); word-wrap: break-word;
-      white-space: pre-wrap; }
-    .dbg-time { color: #94a3b8; margin-right: 8px; font-size: 10px;
-    }
-    .dbg-line.err { color: #f87171; } .dbg-line.warn { color: #fbbf24; } .dbg-line.info { color: #60a5fa;
-    } .dbg-line.ok { color: #4ade80; }
+    #debug-content { flex: 1; overflow-y: auto; padding: 0 12px 12px 12px; }
+    .dbg-line { padding: 6px 0; border-bottom: 1px dashed rgba(255,255,255,0.05); word-wrap: break-word; white-space: pre-wrap; }
+    .dbg-time { color: #94a3b8; margin-right: 8px; font-size: 10px; }
+    .dbg-line.err { color: #f87171; } .dbg-line.warn { color: #fbbf24; } .dbg-line.info { color: #60a5fa; } .dbg-line.ok { color: #4ade80; }
+
+    /* ============================================
+       CHAT FEEDER STYLES (NOVO)
+    ============================================ */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    
+    .cf-tab { border-radius: 12px 12px 0 0; margin-right: 4px; padding: 12px 24px; font-weight: 600; cursor: pointer; transition: all 0.2s; white-space: nowrap; font-size: 13px; }
+    .cf-tab.active { background: rgba(255,255,255,0.9); color: #0F1332; border-bottom: 2px solid #EE4036; opacity: 1; box-shadow: 0 -4px 10px rgba(0,0,0,0.02); }
+    .dark .cf-tab.active { background: rgba(15,19,50,0.9); color: #fff; }
+    .cf-tab.inactive { background: rgba(255,255,255,0.3); color: #6b7280; opacity: 0.6; border-bottom: 2px solid transparent; }
+    .dark .cf-tab.inactive { background: rgba(255,255,255,0.05); color: #9ca3af; }
+    .cf-tab.inactive:hover { opacity: 0.9; background: rgba(255,255,255,0.5); }
+    .dark .cf-tab.inactive:hover { background: rgba(255,255,255,0.1); }
+
+    .day-btn { width: 46px; height: 46px; border-radius: 12px; font-size: 12px; font-weight: 700; transition: all 0.2s; border: 2px solid transparent; flex-shrink: 0; }
+    .day-btn.selected { background: #EE4036; color: white; box-shadow: 0 4px 12px rgba(238,64,54,0.35); border-color: #EE4036; }
+    .day-btn.unselected { background: rgba(0,0,0,0.04); color: #6b7280; border-color: rgba(0,0,0,0.05); }
+    .dark .day-btn.unselected { background: rgba(255,255,255,0.05); color: #d1d5db; border-color: rgba(255,255,255,0.05); }
+    .day-btn.unselected:hover { background: rgba(0,0,0,0.08); }
+    .dark .day-btn.unselected:hover { background: rgba(255,255,255,0.1); }
+
+    .cf-cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); grid-template-rows: auto repeat(6, minmax(0, 1fr)); height: 100%; gap: 6px; }
+    .cf-cal-day-header { text-align: center; font-size: 11px; font-weight: 800; color: #9ca3af; text-transform: uppercase; padding-bottom: 8px; align-self: end; }
+    .cf-cal-day { border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: clamp(1.2rem, 3vh, 2rem); font-weight: 700; cursor: pointer; transition: transform 0.1s, box-shadow 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+    .cf-cal-day:hover { transform: scale(1.03); box-shadow: 0 6px 15px rgba(0,0,0,0.08); z-index: 10; }
+    .cf-cal-day.available { background: rgba(22, 163, 74, 0.15); color: #15803d; border: 1px solid rgba(22, 163, 74, 0.25); }
+    .dark .cf-cal-day.available { background: rgba(74, 222, 128, 0.12); color: #4ade80; border-color: rgba(74, 222, 128, 0.2); }
+    .cf-cal-day.unavailable { background: rgba(238, 64, 54, 0.15); color: #dc2626; border: 1px solid rgba(238, 64, 54, 0.25); }
+    .dark .cf-cal-day.unavailable { background: rgba(248, 113, 113, 0.15); color: #f87171; border-color: rgba(248, 113, 113, 0.25); }
+    .cf-cal-day.empty { visibility: hidden; pointer-events: none; }
   </style>
 </head>
 <body class="flex h-[100dvh] overflow-hidden selection:bg-red-200 selection:text-red-900">
@@ -396,7 +260,6 @@
         <span style="color:#EE4036;font-weight:800;font-size:24px;">A</span>
       </div>
       <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Painel Apollo</h2>
-      
       <p class="text-gray-600 dark:text-white/60 text-sm mb-8 text-center">Faça login para gerenciar o sistema</p>
       <form id="formLogin" class="w-full space-y-4" onsubmit="realizarLogin(event)">
         <div>
@@ -446,10 +309,8 @@
         <span class="sidebar-label">Gestão de Atletas</span>
       </button>
 
-      <button id="btn-chatbot-feeder" onclick="switchView('chatbot-feeder')" class="sidebar-btn">
-        <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
-        </svg>
+      <button id="btn-chat-feeder" onclick="switchView('chat-feeder')" class="sidebar-btn">
+        <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
         <span class="sidebar-label">Chatbot Feeder</span>
       </button>
     </nav>
@@ -457,7 +318,6 @@
 
   <main class="flex-1 flex flex-col h-full overflow-hidden relative bg-transparent">
     <header class="h-20 flex items-center justify-between px-8 border-b border-gray-200/40 dark:border-white/08 bg-white/30 dark:bg-black/20 backdrop-blur-md z-10 sticky top-0 shrink-0">
-     
       <div class="flex items-center gap-4">
         <button class="md:hidden text-gray-500 hover:text-gray-900 dark:hover:text-white">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
@@ -470,83 +330,69 @@
           <svg class="icon-moon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
         </button>
         <div class="h-8 w-px bg-gray-300 dark:bg-slate-700"></div>
-  
         <div class="flex items-center gap-3 cursor-pointer group">
           <div class="text-right hidden sm:block">
             <p class="text-sm font-bold text-gray-900 dark:text-slate-200">Admin Apollo</p>
             <p class="text-[11px] text-gray-500" id="userEmailDisplay">Aguardando login...</p>
           </div>
           <div class="w-9 h-9 rounded-full bg-white/60 dark:bg-black/30 border border-gray-200 dark:border-white/10 flex items-center justify-center text-gray-500">
-           
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
           </div>
         </div>
       </div>
     </header>
 
-    <div class="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8 relative z-10 scroll-smooth">
+    <div class="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8 relative z-10 scroll-smooth flex flex-col min-h-0">
 
-      <div id="view-agendamentos" class="view-section animate__animated animate__fadeIn animate__faster h-full flex flex-col">
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-6">
-        
+      <div id="view-agendamentos" class="view-section animate__animated animate__fadeIn animate__faster h-full flex flex-col shrink-0">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-6 shrink-0">
           <div class="[perspective:800px] h-36 md:h-40">
             <div class="liquid-card-kpi w-full h-full" onclick="this.classList.toggle('show-chart')">
               <div class="kpi-front absolute inset-0 p-5 md:p-6 flex flex-col justify-between">
                 <div class="flex justify-between items-start z-10">
                   <span class="text-[11px] md:text-xs uppercase tracking-widest font-bold text-gray-500 dark:text-gray-400">Total Registros</span>
-           
                   <div class="w-10 h-10 rounded-full icon-glass flex items-center justify-center text-apollo-navy dark:text-white">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                   </div>
-              
                 </div>
                 <div class="flex items-end gap-2 z-10 mt-auto">
                   <span id="kpi-total" class="text-5xl md:text-6xl font-normal text-gray-900 dark:text-white leading-none tracking-tight">0</span>
                 </div>
                 <div id="spark-total" class="absolute bottom-4 right-4 w-[45%] h-12 pointer-events-none opacity-100 z-0"></div>
-          
               </div>
               <div class="kpi-back absolute inset-0 p-4 flex flex-col items-center justify-center bg-white/70 dark:bg-black/50 backdrop-blur-md rounded-[24px]">
                 <h4 class="text-[10px] uppercase font-bold text-gray-800 dark:text-gray-300 mb-1 tracking-widest">Evolução (Semanas)</h4>
                 <div class="w-full h-full flex-1 relative"><canvas id="chart-total"></canvas></div>
               </div>
-           
             </div>
           </div>
           <div class="[perspective:800px] h-36 md:h-40">
             <div class="liquid-card-kpi w-full h-full" onclick="this.classList.toggle('show-chart')">
               <div class="kpi-front absolute inset-0 p-5 md:p-6 flex flex-col justify-between">
                 <div class="flex justify-between items-start z-10">
-                  
                   <span class="text-[11px] md:text-xs uppercase tracking-widest font-bold text-[#15803d] dark:text-[#4ade80]">Agendados</span>
                   <div class="w-10 h-10 rounded-full icon-glass flex items-center justify-center text-[#15803d] dark:text-[#4ade80]">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                   </div>
-             
                 </div>
                 <div class="flex items-end gap-2 z-10 mt-auto">
                   <span id="kpi-confirmados" class="text-5xl md:text-6xl font-normal text-gray-900 dark:text-white leading-none tracking-tight">0</span>
                 </div>
                 <div id="spark-confirmados" class="absolute bottom-4 right-4 w-[45%] h-12 pointer-events-none opacity-100 z-0"></div>
-         
               </div>
               <div class="kpi-back absolute inset-0 p-4 flex flex-col items-center justify-center bg-white/70 dark:bg-black/50 backdrop-blur-md rounded-[24px]">
                 <h4 class="text-[10px] uppercase font-bold text-gray-800 dark:text-gray-300 mb-1 tracking-widest">Agendamentos Semanais</h4>
                 <div class="w-full h-full flex-1 relative"><canvas id="chart-confirmados"></canvas></div>
               </div>
-          
             </div>
           </div>
           <div class="[perspective:800px] h-36 md:h-40">
             <div class="liquid-card-kpi w-full h-full" onclick="this.classList.toggle('show-chart')">
               <div class="kpi-front absolute inset-0 p-5 md:p-6 flex flex-col justify-between">
                 <div class="flex justify-between items-start z-10">
-                 
                   <span class="text-[11px] md:text-xs uppercase tracking-widest font-bold text-[#6d28d9] dark:text-[#a78bfa]">Reagendados</span>
                   <div class="w-10 h-10 rounded-full icon-glass flex items-center justify-center text-[#6d28d9] dark:text-[#a78bfa]">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-               
                   </div>
                 </div>
                 <div class="flex items-end gap-2 z-10 mt-auto">
@@ -557,7 +403,6 @@
               <div class="kpi-back absolute inset-0 p-4 flex flex-col items-center justify-center bg-white/70 dark:bg-black/50 backdrop-blur-md rounded-[24px]">
                 <h4 class="text-[10px] uppercase font-bold text-gray-800 dark:text-gray-300 mb-1 tracking-widest">Reagendamentos Semanais</h4>
                 <div class="w-full h-full flex-1 relative"><canvas id="chart-reagendados"></canvas></div>
-        
               </div>
             </div>
           </div>
@@ -565,40 +410,34 @@
             <div class="liquid-card-kpi w-full h-full" onclick="this.classList.toggle('show-chart')">
               <div class="kpi-front absolute inset-0 p-5 md:p-6 flex flex-col justify-between">
                 <div class="flex justify-between items-start z-10">
- 
                   <span class="text-[11px] md:text-xs uppercase tracking-widest font-bold text-[#EE4036] dark:text-[#f87171]">Cancelados</span>
                   <div class="w-10 h-10 rounded-full icon-glass flex items-center justify-center text-[#EE4036] dark:text-[#f87171]">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-             
                   </div>
                 </div>
                 <div class="flex items-end gap-2 z-10 mt-auto">
                   <span id="kpi-cancelados" class="text-5xl md:text-6xl font-normal text-gray-900 dark:text-white leading-none tracking-tight">0</span>
                 </div>
-                
                 <div id="spark-cancelados" class="absolute bottom-4 right-4 w-[45%] h-12 pointer-events-none opacity-100 z-0"></div>
               </div>
               <div class="kpi-back absolute inset-0 p-4 flex flex-col items-center justify-center bg-white/70 dark:bg-black/50 backdrop-blur-md rounded-[24px]">
                 <h4 class="text-[10px] uppercase font-bold text-gray-800 dark:text-gray-300 mb-1 tracking-widest">Cancelamentos Semanais</h4>
                 <div class="w-full h-full flex-1 relative"><canvas id="chart-cancelados"></canvas></div>
-      
               </div>
             </div>
           </div>
         </div>
 
-        <div class="flex flex-col md:flex-row gap-4 mb-6">
+        <div class="flex flex-col md:flex-row gap-4 mb-6 shrink-0">
           <div class="flex-1">
             <input type="text" id="searchName" placeholder="Buscar por Nome ou WhatsApp..." class="glass-input w-full h-[46px] px-4 rounded-[14px] text-[14px] font-sans">
           </div>
-  
           <div class="w-full md:w-56 shrink-0">
             <select id="filterStatus" class="glass-input w-full h-[46px] px-4 rounded-[14px] text-[14px] font-sans appearance-none">
               <option value="">Todos os Status</option>
               <option value="agendado">Agendado</option>
               <option value="pendente">Pendente</option>
               <option value="cancelado">Cancelado</option>
-      
               <option value="em avaliação">Em avaliação</option>
               <option value="em cadastro">Em cadastro</option>
               <option value="tecnofit">Tecnofit</option>
@@ -606,13 +445,12 @@
           </div>
           <div class="w-full md:w-64 shrink-0">
             <select id="filterEquipe" class="glass-input w-full h-[46px] px-4 rounded-[14px] text-[14px] font-sans appearance-none">
- 
               <option value="">Todas as Equipes</option>
             </select>
           </div>
         </div>
 
-        <div class="flex-1 glass-input rounded-[16px] overflow-hidden flex flex-col relative bg-transparent md:bg-white/20 dark:md:bg-black/10 border-none md:border-solid">
+        <div class="flex-1 glass-input rounded-[16px] overflow-hidden flex flex-col relative bg-transparent md:bg-white/20 dark:md:bg-black/10 border-none md:border-solid min-h-0">
           <div id="loading" class="absolute inset-0 flex flex-col items-center justify-center bg-white/50 dark:bg-black/50 backdrop-blur-sm z-20">
             <div class="loader"></div>
             <div id="loadingText" class="mt-4 text-sm font-medium text-gray-600 dark:text-gray-300 text-center px-4 hidden"></div>
@@ -621,21 +459,18 @@
             <table class="w-full text-left border-collapse whitespace-nowrap md:min-w-[1000px]">
               <thead class="table-header sticky top-0 z-10 hidden md:table-header-group">
                 <tr>
- 
                   <th class="px-5 py-4 text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider relative group">
                     <div class="flex items-center justify-between cursor-pointer" onclick="toggleFilterMenu(event, 'nome')">
                       Atleta / Resp
                       <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
                     </div>
                     <div id="popover-nome" class="filter-popover">
-                      
                       <div class="filter-option" onclick="sortTable('nome', 'asc')">Classificar A &gt; Z</div>
                       <div class="filter-option" onclick="sortTable('nome', 'desc')">Classificar Z &gt; A</div>
                     </div>
                   </th>
                   <th class="px-5 py-4 text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Contato</th>
                   <th class="px-5 py-4 text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider relative group">
-        
                     <div class="flex items-center justify-between cursor-pointer" onclick="toggleFilterMenu(event, 'data')">
                       Data do Teste
                       <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
@@ -643,16 +478,13 @@
                     <div id="popover-data" class="filter-popover">
                       <div class="filter-option" onclick="sortTable('data', 'asc')">Data Mais Próxima</div>
                       <div class="filter-option" onclick="sortTable('data', 'desc')">Data Mais Distante</div>
-   
                     </div>
                   </th>
                   <th class="px-5 py-4 text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider relative group">
                     <div class="flex items-center justify-between cursor-pointer" onclick="toggleFilterMenu(event, 'equipe')">
-           
                       Equipe / Local
                       <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 013 6.586V4z"></path></svg>
                     </div>
-            
                     <div id="popover-equipe" class="filter-popover">
                       <div class="filter-option" onclick="sortTable('equipe', 'asc')">Classificar A &gt; Z</div>
                       <div class="filter-option" onclick="sortTable('equipe', 'desc')">Classificar Z &gt; A</div>
@@ -661,7 +493,6 @@
                   <th class="px-5 py-4 text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
                 </tr>
               </thead>
-      
               <tbody id="tableBody" class="text-[14px] text-apollo-navy dark:text-gray-200"></tbody>
             </table>
             <div id="emptyState" class="hidden p-10 text-center text-gray-500 font-medium">Nenhum agendamento encontrado.</div>
@@ -670,9 +501,8 @@
         </div>
       </div>
 
-  
-      <div id="view-atletas" class="view-section hidden animate__animated animate__fadeIn animate__faster space-y-6">
-        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4">
+      <div id="view-atletas" class="view-section hidden animate__animated animate__fadeIn animate__faster space-y-6 h-full flex flex-col shrink-0">
+        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4 shrink-0">
           <div>
             <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-1">Gestão de Atletas</h2>
             <p class="text-sm text-gray-500 dark:text-slate-400">Gerencie cadastros, planos e status dos atletas da equipe.</p>
@@ -682,9 +512,8 @@
           </button>
         </div>
 
-        <div class="glass-input rounded-[16px] overflow-hidden flex flex-col relative bg-transparent md:bg-white/20 dark:md:bg-black/10 border-none md:border-solid">
-          <div class="p-4 border-b border-gray-200/30 dark:border-white/08 flex flex-col md:flex-row gap-4 bg-white/20 dark:bg-black/10 backdrop-blur-sm">
-   
+        <div class="glass-input rounded-[16px] overflow-hidden flex flex-col relative bg-transparent md:bg-white/20 dark:md:bg-black/10 border-none md:border-solid flex-1 min-h-0">
+          <div class="p-4 border-b border-gray-200/30 dark:border-white/08 flex flex-col md:flex-row gap-4 bg-white/20 dark:bg-black/10 backdrop-blur-sm shrink-0">
             <div class="relative flex-1">
               <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
               <input type="text" id="searchAtleta" oninput="filtrarAtletas()" placeholder="Buscar por Nome, CPF ou Telefone..." class="glass-input w-full rounded-[14px] pl-9 pr-4 py-2.5 text-sm font-medium">
@@ -695,55 +524,91 @@
                 <option value="ativo">Ativos</option>
                 <option value="inativo">Inativos</option>
               </select>
-    
             </div>
           </div>
           <div id="loadingAtletas" class="absolute inset-0 flex flex-col items-center justify-center bg-white/50 dark:bg-black/50 backdrop-blur-sm z-20 hidden">
             <div class="loader"></div>
           </div>
-          <div class="overflow-x-auto responsive-table table-atletas min-h-[50vh]">
+          <div class="overflow-x-auto overflow-y-auto flex-1 responsive-table table-atletas">
             <table class="w-full text-left border-collapse whitespace-nowrap md:min-w-[1000px]">
-      
               <thead class="table-header sticky top-0 z-10 hidden md:table-header-group">
                 <tr>
                   <th class="px-5 py-4 text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Atleta / Responsável</th>
                   <th class="px-5 py-4 text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Contato / CPF</th>
-              
                   <th class="px-5 py-4 text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Plano / Categoria</th>
                   <th class="px-5 py-4 text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
                 </tr>
               </thead>
               <tbody id="tableBodyAtletas" class="text-[14px] text-apollo-navy dark:text-gray-200"></tbody>
-            
             </table>
             <div id="emptyStateAtletas" class="hidden p-10 text-center text-gray-500 font-medium">Nenhum atleta encontrado.</div>
           </div>
         </div>
       </div>
 
-      <div id="view-chatbot-feeder" class="view-section hidden animate__animated animate__fadeIn animate__faster h-full flex flex-col md:flex-row gap-4 md:gap-6">
-
-        <div class="w-full md:w-80 shrink-0 glass-input rounded-[16px] flex flex-col overflow-hidden relative bg-transparent md:bg-white/20 dark:md:bg-black/10 border-none md:border-solid">
-          <div class="px-5 py-4 border-b border-gray-200/30 dark:border-white/08 shrink-0 flex justify-between items-center bg-white/20 dark:bg-black/10 backdrop-blur-sm">
-            <div>
-              <h3 class="font-bold text-[15px] text-gray-900 dark:text-slate-200">Equipes Ativas</h3>
-              <p class="text-[11px] text-gray-500 mt-0.5">Selecione para editar</p>
+      <div id="view-chat-feeder" class="view-section hidden h-full flex flex-col relative animate__animated animate__fadeIn animate__faster min-h-0">
+        
+        <div class="relative flex items-center border-b border-gray-200 dark:border-white/10 mb-6 shrink-0">
+            <div id="cf-tabs-container" class="flex overflow-x-auto no-scrollbar scroll-smooth w-full pr-12 items-end snap-x">
+               </div>
+            <button onclick="document.getElementById('cf-tabs-container').scrollBy({left: 200, behavior: 'smooth'})" class="absolute right-0 top-0 bottom-0 px-3 bg-gradient-to-l from-[#ebedee] via-[#ebedee] dark:from-[#0a0e1b] dark:via-[#0a0e1b] to-transparent text-gray-500 hover:text-apollo-red z-10 flex items-center justify-center">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </button>
+        </div>
+        
+        <div class="flex-1 flex flex-col min-h-0 relative glass-panel rounded-[24px] p-6 overflow-hidden">
+            <div class="flex border-b border-gray-200 dark:border-white/10 mb-6 shrink-0">
+                <button id="cf-subtab-dados" onclick="cfSetSubTab('dados')" class="flex-1 pb-3 text-sm font-bold border-b-2 border-[#EE4036] text-[#EE4036] transition-all">Dados</button>
+                <button id="cf-subtab-datas" onclick="cfSetSubTab('datas')" class="flex-1 pb-3 text-sm font-bold text-gray-500 border-b-2 border-transparent hover:text-gray-700 dark:hover:text-gray-300 transition-all">Datas Indisponíveis</button>
             </div>
-            <button onclick="createNewFeederTeam()" class="w-8 h-8 bg-[#EE4036] hover:bg-[#FF554A] text-white rounded-lg shadow-md flex items-center justify-center text-lg font-light hover:scale-105 active:scale-95 transition-all" title="Nova Equipe">+</button>
-          </div>
-          <div id="feeder-team-list" class="flex-1 overflow-y-auto py-2"></div>
+            
+            <div id="cf-view-dados" class="flex-1 overflow-y-auto flex flex-col gap-6 pr-2 min-h-0">
+                <div>
+                    <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-2">Descrição</label>
+                    <textarea id="cf-desc" class="glass-input w-full p-4 rounded-xl text-sm min-h-[80px]" oninput="cfMarkDirty()"></textarea>
+                </div>
+                <div>
+                    <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-2">Local de Treino</label>
+                    <input type="text" id="cf-local" class="glass-input w-full h-[46px] px-4 rounded-[14px] text-sm" oninput="cfMarkDirty()">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-3">Horários de Treino</label>
+                    <div class="flex flex-wrap gap-3" id="cf-days-container"></div>
+                    
+                    <div id="cf-time-panel" class="hidden mt-4 p-4 rounded-[16px] bg-white/40 dark:bg-black/20 border border-gray-200 dark:border-white/10 animate__animated animate__fadeIn animate__faster">
+                        <h4 class="text-xs font-bold text-gray-700 dark:text-gray-300 mb-3 tracking-widest" id="cf-time-title">SELECIONAR HORÁRIO</h4>
+                        <div class="flex items-center gap-3">
+                            <input type="time" id="cf-time-start" class="glass-input h-[42px] px-3 rounded-xl text-sm" onchange="cfUpdateTime()">
+                            <span class="font-bold text-gray-400">às</span>
+                            <input type="time" id="cf-time-end" class="glass-input h-[42px] px-3 rounded-xl text-sm" onchange="cfUpdateTime()">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="cf-view-datas" class="hidden flex-1 flex flex-col min-h-0">
+                <div class="flex justify-between items-center mb-4 shrink-0">
+                    <button onclick="cfChangeMonth(-1)" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-200 dark:hover:bg-white/10 font-bold">&lt;</button>
+                    <span id="cf-cal-month-year" class="font-bold text-sm uppercase tracking-widest text-gray-700 dark:text-gray-200"></span>
+                    <button onclick="cfChangeMonth(1)" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-200 dark:hover:bg-white/10 font-bold">&gt;</button>
+                </div>
+                <div id="cf-cal-grid" class="cf-cal-grid flex-1"></div>
+            </div>
+
+            <div id="cf-actions" class="mt-6 pt-6 border-t border-gray-200 dark:border-white/10 flex gap-4 shrink-0 opacity-0 pointer-events-none transition-opacity duration-300">
+                <button onclick="cfDiscard()" class="px-6 py-3 rounded-[14px] bg-white/40 dark:bg-white/10 hover:bg-white/80 dark:hover:bg-white/20 font-bold text-gray-700 dark:text-gray-200 transition-all border border-gray-200 dark:border-white/10 shadow-sm">Descartar</button>
+                <button id="cf-btn-save" onclick="cfSave()" class="flex-1 py-3 bg-[#EE4036] hover:bg-[#FF554A] text-white font-bold rounded-[14px] shadow-lg transition-all shadow-red-500/25 flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg> 
+                    <span>Salvar alterações</span>
+                </button>
+            </div>
         </div>
 
-        <div class="flex-1 flex flex-col min-w-0 glass-input rounded-[16px] overflow-hidden relative bg-transparent md:bg-white/20 dark:md:bg-black/10 border-none md:border-solid">
-          <div id="feeder-editor" class="flex-1 flex flex-col items-center justify-center text-gray-400 dark:text-slate-600 h-full">
-            <svg class="w-12 h-12 mb-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
-            <p class="text-[14px] font-medium">Selecione uma equipe</p>
-          </div>
-        </div>
-
+        <button onclick="cfNewTeam()" title="Adicionar nova equipe" class="absolute bottom-6 right-6 w-16 h-16 bg-[#EE4036] hover:bg-[#FF554A] text-white rounded-full shadow-[0_10px_25px_rgba(238,64,54,0.4)] flex items-center justify-center text-4xl font-light hover:scale-105 active:scale-95 transition-all z-40">+</button>
       </div>
 
-    </div></main>
+    </div>
+  </main>
 
   <div id="modal-actions" class="modal-overlay fixed inset-0 bg-black/40 backdrop-blur-sm z-50 items-center justify-center p-4">
     <div class="glass-panel w-full max-w-sm bg-white/90 dark:bg-[#0f1332]/90 rounded-[28px] overflow-hidden flex flex-col relative shadow-2xl animate__animated animate__zoomIn animate__faster">
@@ -753,13 +618,11 @@
       </div>
       <div class="p-4 flex flex-col gap-2">
         <button onclick="openEditModal()" class="w-full py-3 px-4 flex items-center gap-3 rounded-xl bg-white hover:bg-gray-50 dark:bg-slate-200 dark:hover:bg-white transition-colors font-bold text-left" style="color: #0F1332 !important;">
-          <svg class="w-5 h-5" style="color: #0F1332 !important;"
-fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+          <svg class="w-5 h-5" style="color: #0F1332 !important;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
           Editar manualmente
         </button>
         <button onclick="openChatlogModal()" class="w-full py-3 px-4 flex items-center gap-3 rounded-xl bg-white hover:bg-gray-50 dark:bg-slate-200 dark:hover:bg-white transition-colors font-bold text-left" style="color: #0F1332 !important;">
-          <svg class="w-5 h-5" style="color: #0F1332 !important;"
-fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+          <svg class="w-5 h-5" style="color: #0F1332 !important;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
           Visualizar chatlog
         </button>
       </div>
@@ -776,7 +639,6 @@ fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="roun
         <form id="formAgendamento" class="space-y-4">
           <input type="hidden" id="formId">
           <div>
-         
             <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">Equipe / Local</label>
             <select id="formEquipe" required class="glass-input w-full h-[46px] px-4 rounded-[14px] text-[13px] leading-tight font-sans">
               <option value="">Selecione uma opção...</option>
@@ -788,7 +650,6 @@ fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="roun
               <option value="Equipe Masculino - terças e quintas (16h30-18h)">Equipe Masculino - terças e quintas (16h30-18h)</option>
               <option value="Equipe Armstrong - segundas e quartas (19h - 20h) e sábados (9h - 10h15)">Equipe Armstrong - segundas e quartas (19h - 20h) e sábados (9h - 10h15)</option>
               <option value="Equipe Aldrin - sábados, 10h - 12h">Equipe Aldrin - sábados, 10h - 12h</option>
-   
               <option value="Equipe Collins - sextas, 20h - 22h">Equipe Collins - sextas, 20h - 22h</option>
               <option value="Equipe Borman - sábados, 10h30 - 12h30">Equipe Borman - sábados, 10h30 - 12h30</option>
               <option value="Equipe Johnson - sábados, 12h30 - 14h30">Equipe Johnson - sábados, 12h30 - 14h30</option>
@@ -799,7 +660,6 @@ fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="roun
             <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1" id="labelNomePrincipal">Nome do Atleta</label>
             <input type="text" id="formNome" required class="glass-input w-full h-[46px] px-4 rounded-[14px] font-sans">
           </div>
-          
           <div id="containerNomeMenor" class="hidden">
             <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">Nome do Atleta Menor</label>
             <input type="text" id="formNomeMenor" class="glass-input w-full h-[46px] px-4 rounded-[14px] font-sans">
@@ -812,14 +672,12 @@ fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="roun
           <div class="relative">
             <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">Data e hora</label>
             <input type="text" id="formData" required readonly placeholder="dd/mm/aaaa --:--" class="glass-input w-full h-[46px] px-4 rounded-[14px] cursor-pointer font-sans">
-         
             <div id="custom-calendar" class="custom-calendar">
               <div class="cal-header text-gray-900 dark:text-white">
                 <button type="button" onclick="changeMonth(-1)">&lt;</button>
                 <span id="cal-month-year">Junho 2026</span>
                 <button type="button" onclick="changeMonth(1)">&gt;</button>
               </div>
-          
               <div class="cal-grid">
                 <div class="cal-day-name">Dom</div><div class="cal-day-name">Seg</div><div class="cal-day-name">Ter</div><div class="cal-day-name">Qua</div><div class="cal-day-name">Qui</div><div class="cal-day-name">Sex</div><div class="cal-day-name">Sáb</div>
               </div>
@@ -827,7 +685,6 @@ fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="roun
             </div>
           </div>
           <div id="containerStatus" class="hidden">
-      
             <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">Status</label>
             <select id="formStatus" class="glass-input w-full h-[46px] px-4 rounded-[14px] font-sans">
               <option value="Agendado">Agendado</option>
@@ -836,12 +693,10 @@ fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="roun
           </div>
         </form>
       </div>
-  
       <div class="p-6 border-t border-gray-200 dark:border-white/10 flex gap-3">
         <button onclick="attemptCloseFormModal()" class="flex-1 py-3 bg-black/05 dark:bg-white/10 rounded-[14px] font-bold text-gray-600 dark:text-gray-200 transition-colors">Cancelar</button>
         <button id="btnExcluirModal" onclick="handleExcluir()" class="hidden flex-1 py-3 bg-[#EE4036] hover:bg-[#FF554A] text-white font-bold rounded-[14px] shadow-lg flex justify-center items-center gap-2 transition-colors">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg> Excluir
-      
         </button>
         <button id="btnSalvarModal" class="flex-1 py-3 bg-[#16a34a] hover:bg-[#15803d] text-white font-bold rounded-[14px] shadow-lg flex justify-center items-center gap-2 transition-colors">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg> Salvar
@@ -851,14 +706,12 @@ fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="roun
   </div>
 
   <div id="modal-dirty" class="modal-overlay fixed inset-0 bg-black/50 z-[60] items-center justify-center p-4">
-   
     <div class="bg-white dark:bg-[#0f1332] p-6 rounded-2xl max-w-sm w-full shadow-xl text-center border border-white/40 dark:border-white/08">
       <h3 class="text-lg font-bold mb-2 text-gray-900 dark:text-white">Atenção</h3>
       <p class="text-gray-600 dark:text-gray-300 mb-6 text-sm">Deseja salvar antes de sair?</p>
       <div class="flex gap-3">
         <button onclick="forceCloseForm()" class="flex-1 py-2 rounded-xl bg-gray-200 dark:bg-gray-700 font-bold text-gray-700 dark:text-gray-200">Descartar</button>
-        <button onclick="document.getElementById('btnSalvarModal').click();
-document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 py-2 rounded-xl bg-[#16a34a] text-white font-bold">Salvar</button>
+        <button onclick="document.getElementById('btnSalvarModal').click(); document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 py-2 rounded-xl bg-[#16a34a] text-white font-bold">Salvar</button>
       </div>
     </div>
   </div>
@@ -874,7 +727,6 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
           <span class="text-[11px] text-gray-500 dark:text-gray-400">Histórico — Apollo AI Bot</span>
         </div>
         <button onclick="closeModals()" class="text-gray-400 hover:text-[#EE4036] transition-colors flex-shrink-0">
- 
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
         </button>
       </div>
@@ -892,21 +744,18 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
         <form id="formAtleta" class="space-y-4">
           <input type="hidden" id="formAtletaId">
           <div>
-           
             <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">Nome Completo do Atleta *</label>
             <input type="text" id="formAtletaNome" required class="glass-input w-full h-[46px] px-4 rounded-[14px] font-sans">
           </div>
           <div class="flex gap-4">
             <div class="flex-1">
               <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">Data de Nascimento</label>
-         
               <input type="date" id="formAtletaNascimento" class="glass-input w-full h-[46px] px-4 rounded-[14px] font-sans">
             </div>
             <div class="flex-1">
               <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">E-mail</label>
               <input type="email" id="formAtletaEmail" class="glass-input w-full h-[46px] px-4 rounded-[14px] font-sans">
             </div>
-       
           </div>
           <div class="flex gap-4">
             <div class="flex-1">
@@ -914,21 +763,18 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
               <input type="text" id="formAtletaCpf" required placeholder="000.000.000-00" class="glass-input w-full h-[46px] px-4 rounded-[14px] font-sans">
             </div>
             <div class="flex-1">
- 
               <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">RG</label>
               <input type="text" id="formAtletaRg" placeholder="00.000.000-0" class="glass-input w-full h-[46px] px-4 rounded-[14px] font-sans">
             </div>
           </div>
           <div>
             <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">WhatsApp (Atleta) *</label>
-    
             <input type="text" id="formAtletaWpp" required placeholder="(XX) XXXXX-XXXX" class="glass-input w-full h-[46px] px-4 rounded-[14px] font-sans">
           </div>
           
           <div class="p-4 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 space-y-4">
             <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Dados do Responsável (se menor)</p>
             <div>
-          
               <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">Nome do Responsável</label>
               <input type="text" id="formAtletaResp" class="glass-input w-full h-[46px] px-4 rounded-[14px] font-sans">
             </div>
@@ -947,7 +793,6 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
               <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">Equipe / Categoria</label>
               <input type="text" id="formAtletaPosicao" placeholder="Ex: Equipe Borman" class="glass-input w-full h-[46px] px-4 rounded-[14px] font-sans">
             </div>
-         
           </div>
           <div>
             <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">Status</label>
@@ -955,7 +800,6 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
               <option value="ativo">Ativo</option>
               <option value="inativo">Inativo</option>
             </select>
-         
           </div>
         </form>
       </div>
@@ -968,7 +812,6 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg> Salvar
         </button>
       </div>
-  
     </div>
   </div>
 
@@ -986,11 +829,11 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
   </div>
 
   <script>
-   
     /* ============================================
        SISTEMA DE LOG AVANÇADO
     =========================================== */
     let debugHistory = [];
+
     function appLog(msg, level = 'ok', details = null) {
       const d = new Date();
       const ts = d.toLocaleTimeString('pt-BR', { hour12: false }) + '.' + String(d.getMilliseconds()).padStart(3, '0');
@@ -1000,17 +843,15 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
 
       if (details) {
         try {
-          const detailStr = typeof details === 'object' ?
-            JSON.stringify(details, null, 2) : String(details);
+          const detailStr = typeof details === 'object' ? JSON.stringify(details, null, 2) : String(details);
           logStr += `\nDetalhes:\n${detailStr}`;
           detailHtml = `<pre style="margin-top:6px; padding:6px; background:rgba(0,0,0,0.3); border-radius:6px; color:#cbd5e1; font-size:10px; max-height:150px; overflow:auto;">${detailStr.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>`;
         } catch(e) { 
-          logStr += `\nDetalhes: [Erro ao serializar detalhes]`;
+          logStr += `\nDetalhes: [Erro ao serializar detalhes]`; 
         }
       }
       
-      console[level === 'err' ?
-        'error' : level === 'warn' ? 'warn' : 'log'](logStr);
+      console[level === 'err' ? 'error' : level === 'warn' ? 'warn' : 'log'](logStr);
       debugHistory.push(logStr);
       
       const content = document.getElementById('debug-content');
@@ -1050,6 +891,7 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
     const iconPhone = `<svg class="w-5 h-5 opacity-80 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>`;
     const iconCal   = `<svg class="w-5 h-5 opacity-80 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>`;
     const iconTeam  = `<svg class="w-5 h-5 opacity-80 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>`;
+
     function getSupabaseHeaders() {
       return {
         'apikey': SUPABASE_ANON_KEY,
@@ -1085,9 +927,13 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
       document.querySelectorAll('.sidebar-btn').forEach(btn => btn.classList.remove('active'));
       const activeBtn = document.getElementById('btn-' + viewId);
       if (activeBtn) activeBtn.classList.add('active');
-      const titles = { 'agendamentos': 'Gestão de Agendamentos', 'atletas': 'Gestão de Atletas', 'chatbot-feeder': 'Chatbot Feeder' };
+      const titles = { 'agendamentos': 'Gestão de Agendamentos', 'atletas': 'Gestão de Atletas', 'chat-feeder': 'Chatbot Feeder' };
       document.getElementById('header-title').innerText = titles[viewId] || viewId;
-      if (viewId === 'chatbot-feeder' && !window._feederLoaded) { window._feederLoaded = true; loadChatbotFeeder(); }
+      
+      // Inicializar view do Chatbot Feeder se for ela
+      if(viewId === 'chat-feeder' && cfTeams.length > 0 && !cfActiveId) {
+          cfSelectTeam(cfTeams[0].id);
+      }
     }
 
     /* ============================================
@@ -1102,15 +948,13 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
         document.getElementById('login-overlay').style.display = 'none';
         initApp();
       }
-     
       
       document.getElementById('formAtletaCpf').addEventListener('input', function(e) {
         let v = e.target.value.replace(/\D/g, ''); if (v.length > 11) v = v.slice(0, 11);
         v = v.replace(/(\d{3})(\d)/, '$1.$2'); v = v.replace(/(\d{3})(\d)/, '$1.$2'); v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2'); e.target.value = v;
       });
       document.getElementById('formAtletaWpp').addEventListener('input', function(e) {
-        let v = e.target.value.replace(/\D/g, '');
-        if (v.length > 11) v = v.slice(0, 11);
+        let v = e.target.value.replace(/\D/g, ''); if (v.length > 11) v = v.slice(0, 11);
         v = v.replace(/^(\d{2})(\d)/g, '($1) $2'); v = v.replace(/(\d)(\d{4})$/, '$1-$2'); e.target.value = v;
       });
       document.getElementById('formAtletaRespWpp').addEventListener('input', function(e) {
@@ -1129,11 +973,13 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
       btn.disabled = true; errorMsg.classList.add('hidden');
       
       appLog(`Iniciando tentativa de login para: ${email}`, 'info');
+
       try {
         const response = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
           method: 'POST', headers: { 'apikey': SUPABASE_ANON_KEY, 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password: senha })
         });
+        
         const rawText = await response.text();
         
         let data;
@@ -1175,8 +1021,7 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
         carregarDadosDoSupabase();
         carregarTeamPadrao();
         carregarAtletasDoSupabase();
-      } catch (e) { tratarErro('Erro na inicialização: ' + String(e));
-      }
+      } catch (e) { tratarErro('Erro na inicialização: ' + String(e)); }
     }
 
     /* ============================================
@@ -1192,18 +1037,15 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
       "Escolinha A - terças e quintas, 14h - 15h": { minors: true, local: "Ginásio Apollo", days: [2,4], time: "14:00" },
       "Escolinha B - sábados, 13h30 - 14h30": { minors: true, local: "Ginásio Apollo", days: [6], time: "13:30" },
       "Escolinha C - terças e sextas, 18h - 19h": { minors: true, local: "Ginásio Apollo", days: [2,5], time: "18:00" },
-      "Pré-equipe - terças e quintas, 14h - 15h": { minors: true, local: "Ginásio Apollo", 
-      days: [2,4], time: "14:00" },
+      "Pré-equipe - terças e quintas, 14h - 15h": { minors: true, local: "Ginásio Apollo", days: [2,4], time: "14:00" },
       "Equipe Feminino - terças, quintas e sextas (15h - 16h30)": { minors: true, local: "Ginásio Apollo", days: [2,4,5], time: "15:00" },
       "Equipe Masculino - terças e quintas (16h30-18h)": { minors: true, local: "Ginásio Apollo", days: [2,4], time: "16:30" },
       "Equipe Armstrong - segundas e quartas (19h - 20h) e sábados (9h - 10h15)": { minors: false, local: "Ginásio PUC", days: [1,3,6], timeMap: {1:"19:00",3:"19:00",6:"09:00"} },
-      "Equipe Aldrin - sábados, 10h - 12h": { minors: false, local: 
-      "Ginásio PUC", days: [6], time: "10:00" },
+      "Equipe Aldrin - sábados, 10h - 12h": { minors: false, local: "Ginásio PUC", days: [6], time: "10:00" },
       "Equipe Collins - sextas, 20h - 22h": { minors: false, local: "Ginásio PUC", days: [5], time: "20:00" },
       "Equipe Borman - sábados, 10h30 - 12h30": { minors: false, local: "Ginásio Apollo", days: [6], time: "10:30" },
       "Equipe Johnson - sábados, 12h30 - 14h30": { minors: false, local: "Ginásio Apollo", days: [6], time: "12:30" },
       "Equipe Hooper - quartas, 20h - 22h": { minors: false, local: "Ginásio PUC", days: [3], time: "20:00" },
-  
     };
 
     /* ============================================
@@ -1231,21 +1073,17 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
         if (!res.ok) throw new Error(`HTTP ${res.status}: ${JSON.stringify(data)}`);
         appLog('Sucesso. Total: ' + data.length, 'ok');
         processarDados(data);
-      } catch (e) { tratarErro('Falha ao carregar dados: ' + e.message);
-      }
+      } catch (e) { tratarErro('Falha ao carregar dados: ' + e.message); }
     }
 
     async function salvarNoSupabase(id, payload) {
-      const url = id ?
-      `${SUPABASE_URL}/rest/v1/tryouts?id=eq.${id}` : `${SUPABASE_URL}/rest/v1/tryouts`;
+      const url = id ? `${SUPABASE_URL}/rest/v1/tryouts?id=eq.${id}` : `${SUPABASE_URL}/rest/v1/tryouts`;
       const method = id ? 'PATCH' : 'POST';
       try {
         const res = await fetch(url, { method, headers: getSupabaseHeaders(), body: JSON.stringify(payload) });
         const rawText = await res.text();
         let data;
-        try { data = JSON.parse(rawText);
-        } catch(e) { throw new Error('HTML inesperado: ' + rawText.substring(0, 100));
-        }
+        try { data = JSON.parse(rawText); } catch(e) { throw new Error('HTML inesperado: ' + rawText.substring(0, 100)); }
         
         if (!res.ok) throw new Error(JSON.stringify(data));
         salvoSucesso();
@@ -1257,10 +1095,8 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
         const res = await fetch(`${SUPABASE_URL}/rest/v1/tryouts?id=eq.${id}`, { method: 'DELETE', headers: getSupabaseHeaders() });
         const rawText = await res.text();
         if (rawText.length > 0 && !res.ok) {
-           try { const data = JSON.parse(rawText);
-           throw new Error(JSON.stringify(data)); } 
-           catch(e) { throw new Error('HTML inesperado: ' + rawText.substring(0, 100));
-           }
+           try { const data = JSON.parse(rawText); throw new Error(JSON.stringify(data)); } 
+           catch(e) { throw new Error('HTML inesperado: ' + rawText.substring(0, 100)); }
         }
         if (!res.ok) throw new Error('HTTP ' + res.status);
         salvoSucesso();
@@ -1273,13 +1109,12 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
         const res = await fetch(`${SUPABASE_URL}/rest/v1/chatlogs?select=*`, { method: 'GET', headers: getSupabaseHeaders() });
         const rawText = await res.text();
         let data;
-        try { data = JSON.parse(rawText); } catch(e) { throw new Error('Resposta HTML recebida');
-        }
+        try { data = JSON.parse(rawText); } catch(e) { throw new Error('Resposta HTML recebida'); }
         if (!res.ok) throw new Error(JSON.stringify(data));
+        
         const chatlog = data.find(c => String(c.whatsapp).replace(/\D/g, '') === wppLimpo);
         renderChatlog({ status: 'success', data: chatlog || null });
-      } catch (e) { renderChatlog({ status: 'error', message: e.message });
-      }
+      } catch (e) { renderChatlog({ status: 'error', message: e.message }); }
     }
 
     /* ============================================
@@ -1320,16 +1155,14 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
 
     function processarDados(dados) {
       document.getElementById('loading').classList.add('hidden');
-      const dataArr = Array.isArray(dados) ?
-      dados.map(function(d) {
+      const dataArr = Array.isArray(dados) ? dados.map(function(d) {
         let rawStat = d.status || 'PENDING';
         let sUp = rawStat.toUpperCase();
         let uiStatus = 'Pendente';
         if (sUp === 'CONFIRMED') uiStatus = 'Agendado';
         else if (sUp === 'CANCELED' || sUp === 'CANCELLED') uiStatus = 'Cancelado';
         else if (sUp === 'IN_EVALUATION') uiStatus = 'Em avaliação';
-        else if (sUp === 'IN_REGISTRATION') uiStatus = 
-        'Em cadastro';
+        else if (sUp === 'IN_REGISTRATION') uiStatus = 'Em cadastro';
         else if (sUp === 'TECNOFIT') uiStatus = 'Tecnofit';
         else if (sUp === 'PENDING') uiStatus = 'Pendente';
         else uiStatus = rawStat;
@@ -1338,13 +1171,10 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
         let cleanDate = rawDate ? String(rawDate).replace(/\+00(:00)?|Z/g, '').replace(' ', 'T') : null;
 
         return {
-          id: d.id, nome: d.name || d.nome, nome_menor: d.minor_name 
-          !== undefined ? d.minor_name : d.nome_menor,
+          id: d.id, nome: d.name || d.nome, nome_menor: d.minor_name !== undefined ? d.minor_name : d.nome_menor,
           whatsapp: d.whatsapp_phone || d.whatsapp, data_agendamento: cleanDate,
-          equipe: d.target_team ||
-          d.equipe, local: d.target_location || d.local, status: uiStatus, raw_status: rawStat,
-          qtd_reagendamentos: d.reschedule_count ||
-          0, created_at: d.created_at
+          equipe: d.target_team || d.equipe, local: d.target_location || d.local, status: uiStatus, raw_status: rawStat,
+          qtd_reagendamentos: d.reschedule_count || 0, created_at: d.created_at
         };
       }) : [];
       const agora = new Date();
@@ -1377,15 +1207,13 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
       document.getElementById('kpi-reagendados').textContent = tReag;
       document.getElementById('kpi-cancelados').textContent = tCanc;
       const calcW = (filterFn) => {
-        const w = [0,0,0,0];
-        const now = new Date();
+        const w = [0,0,0,0]; const now = new Date();
         dados.filter(filterFn).forEach(d => {
           if (!d.created_at) return;
           const dt = new Date(d.created_at); if (isNaN(dt.getTime())) return;
           const diffDays = Math.ceil(Math.abs(now - dt) / (1000*60*60*24));
           if (diffDays <= 7) w[3]++; else if (diffDays <= 14) w[2]++; else if (diffDays <= 21) w[1]++; else if (diffDays <= 28) w[0]++;
-        });
-        return w;
+        }); return w;
       };
       const wTotal = calcW(() => true);
       const wConf  = calcW(d => String(d.status).toLowerCase() === 'agendado');
@@ -1456,12 +1284,8 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
         }
       } catch(e) {}
       let text = isTom
-        ?
-        `Olá, ${nome}! Estou passando pra te lembrar que o seu agendamento está marcado para amanhã, às ${hFormat}.
-        O endereço é ${local}. Até breve! 👋`
-        : `Olá, ${nome}, tudo bem?
-        Espero que sim! O seu agendamento para fazer parte da nossa equipe está marcado para o dia ${dFormat}, às ${hFormat}.
-        Relembro que o endereço é ${local}. Te aguardamos! Até breve 👋`;
+        ? `Olá, ${nome}! Estou passando pra te lembrar que o seu agendamento está marcado para amanhã, às ${hFormat}. O endereço é ${local}. Até breve! 👋`
+        : `Olá, ${nome}, tudo bem? Espero que sim! O seu agendamento para fazer parte da nossa equipe está marcado para o dia ${dFormat}, às ${hFormat}. Relembro que o endereço é ${local}. Te aguardamos! Até breve 👋`;
       let rNum = String(tel||'').replace(/\D/g,''); if (rNum.length===10||rNum.length===11) rNum='55'+rNum;
       navigator.clipboard.writeText(text).then(()=>window.open(`https://wa.me/${rNum}`,'_blank')).catch(()=>window.open(`https://wa.me/${rNum}?text=${encodeURIComponent(text)}`,'_blank'));
     }
@@ -1490,13 +1314,11 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
           const dEvento = cleanStr ? new Date(cleanStr) : new Date(0);
           const agora = new Date();
           /* Destaque se o evento está dentro das próximas 48h */
-          const is48h 
-          = dEvento > agora && dEvento <= limite48h;
+          const is48h = dEvento > agora && dEvento <= limite48h;
           const isTomorrow = (() => { const d = new Date(dEvento.getFullYear(), dEvento.getMonth(), dEvento.getDate()); return d.getTime() === amanha.getTime(); })();
           const isMinor = typeof row.nome_menor === 'string' && row.nome_menor.trim() !== '';
           let nomeDisplay = isMinor
             ? `<div class="flex items-center gap-3">${iconChild}<div class="flex flex-col justify-center"><span class="font-bold text-[14px] md:text-[15px] leading-tight">${row.nome_menor}</span><span class="text-[11px] md:text-[12px] opacity-60 leading-tight mt-0.5">Resp: ${row.nome}</span></div></div>`
-    
             : `<div class="flex items-center gap-3">${iconAdult}<span class="font-bold text-[14px] md:text-[15px]">${row.nome || '—'}</span></div>`;
           let linkWA = row.whatsapp ? `<a href="#" onclick="actionContato('${(row.nome||'').replace(/'/g,"\\'")}', '${row.data_agendamento}', '${(row.local||'Ginásio').replace(/'/g,"\\'")}', '${row.whatsapp}', ${isTomorrow}, event)" class="inline-flex items-center justify-center gap-1.5 bg-[#25D366] text-white px-2 py-1 rounded-[8px] text-[10px] font-bold uppercase tracking-widest hover:bg-[#1ebd5a] transition-all shadow-sm shrink-0">CONTATAR</a>` : '';
           let badgeReag = Number(row.qtd_reagendamentos) > 0 ? `<span class="ml-2 inline-flex items-center justify-center w-[18px] h-[18px] rounded-full bg-[#EE4036] text-white text-[9px] font-bold shadow-sm shrink-0">${row.qtd_reagendamentos}</span>` : '';
@@ -1508,11 +1330,8 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
             <td class="px-5 py-4">${nomeDisplay}</td>
             <td class="px-5 py-4"><div class="flex items-center gap-2">${iconPhone}<span class="text-[14px] w-[125px] shrink-0 font-medium">${formatarWhatsApp(row.whatsapp)}</span>${linkWA}</div></td>
             <td class="px-5 py-4"><div class="flex items-center font-medium text-[14px] gap-2">${iconCal} <span>${formatarDataSimples(row.data_agendamento)}</span> ${badgeReag}</div></td>
-            <td class="px-5 py-4"><div class="flex items-center gap-2 font-bold text-[13px]">${iconTeam}<span class="truncate max-w-[200px]">${row.equipe ||
-            '—'}</span></div><div class="text-[11px] opacity-60 leading-tight mt-1 whitespace-normal md:whitespace-nowrap max-w-[300px] truncate ml-7">${row.local ||
-            '—'}</div></td>
-            <td class="px-5 py-4"><span class="status-badge ${getBadgeClass(row.status)}">${row.status ||
-            'Pendente'}</span></td>
+            <td class="px-5 py-4"><div class="flex items-center gap-2 font-bold text-[13px]">${iconTeam}<span class="truncate max-w-[200px]">${row.equipe || '—'}</span></div><div class="text-[11px] opacity-60 leading-tight mt-1 whitespace-normal md:whitespace-nowrap max-w-[300px] truncate ml-7">${row.local || '—'}</div></td>
+            <td class="px-5 py-4"><span class="status-badge ${getBadgeClass(row.status)}">${row.status || 'Pendente'}</span></td>
           `;
           tbody.appendChild(tr);
         });
@@ -1548,34 +1367,26 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
         if (column==='data') { 
           let cleanA = a.data_agendamento ? String(a.data_agendamento).replace(/\+00(:00)?|Z/g, '').replace(' ', 'T') : null;
           let cleanB = b.data_agendamento ? String(b.data_agendamento).replace(/\+00(:00)?|Z/g, '').replace(' ', 'T') : null;
-         
           vA=cleanA?new Date(cleanA):new Date(0); 
           vB=cleanB?new Date(cleanB):new Date(0); 
         }
         if (column==='equipe') { vA=String(a.equipe||'').toLowerCase(); vB=String(b.equipe||'').toLowerCase(); }
         if (vA<vB) return dir==='asc'?-1:1; if (vA>vB) return dir==='asc'?1:-1; return 0;
-      });
-      aplicarFiltros();
+      }); aplicarFiltros();
     }
 
-    function toggleFilterMenu(e, id) { e.stopPropagation(); document.querySelectorAll('.filter-popover').forEach(p => p.classList.remove('open')); document.getElementById('popover-'+id).classList.toggle('open');
-    }
-    function showRowActions(data) { selectedRowData = data; document.getElementById('modal-actions').classList.add('open');
-    }
-    function closeModals() { document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('open')); isFormDirty = false;
-    }
+    function toggleFilterMenu(e, id) { e.stopPropagation(); document.querySelectorAll('.filter-popover').forEach(p => p.classList.remove('open')); document.getElementById('popover-'+id).classList.toggle('open'); }
+    function showRowActions(data) { selectedRowData = data; document.getElementById('modal-actions').classList.add('open'); }
+    function closeModals() { document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('open')); isFormDirty = false; }
     function attemptCloseFormModal() { if (isFormDirty) document.getElementById('modal-dirty').classList.add('open'); else forceCloseForm(); }
-    function forceCloseForm() { document.getElementById('modal-dirty').classList.remove('open');
-      document.getElementById('modal-form').classList.remove('open'); isFormDirty = false; }
+    function forceCloseForm() { document.getElementById('modal-dirty').classList.remove('open'); document.getElementById('modal-form').classList.remove('open'); isFormDirty = false; }
 
     function openAddModal() {
-      selectedRowData = null; document.getElementById('formAgendamento').reset();
-      document.getElementById('formId').value = '';
+      selectedRowData = null; document.getElementById('formAgendamento').reset(); document.getElementById('formId').value = '';
       document.getElementById('modal-form-title').innerText = 'Novo Agendamento'; document.getElementById('containerStatus').classList.add('hidden');
       document.getElementById('wppError').classList.add('hidden'); document.getElementById('formWpp').classList.remove('error');
       document.getElementById('btnExcluirModal').classList.add('hidden'); document.getElementById('formStatus').innerHTML = '<option value="Agendado">Agendado</option><option value="Cancelado">Cancelado</option>';
-      syncFormFields(); document.getElementById('modal-form').classList.add('open');
-      isFormDirty = false;
+      syncFormFields(); document.getElementById('modal-form').classList.add('open'); isFormDirty = false;
     }
 
     function openEditModal() {
@@ -1586,6 +1397,7 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
       document.getElementById('formNome').value = selectedRowData.nome || '';
       if (document.getElementById('formNomeMenor')) document.getElementById('formNomeMenor').value = selectedRowData.nome_menor || '';
       document.getElementById('formWpp').value = formatarWhatsApp(selectedRowData.whatsapp || '');
+      
       // BLOCO CORRIGIDO: ignorando o fuso horário automático do navegador extraindo os números da string
       if (selectedRowData.data_agendamento) {
         try { 
@@ -1597,8 +1409,7 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
         } catch(e) {}
       }
       
-      document.getElementById('containerStatus').classList.remove('hidden');
-      document.getElementById('btnExcluirModal').classList.remove('hidden');
+      document.getElementById('containerStatus').classList.remove('hidden'); document.getElementById('btnExcluirModal').classList.remove('hidden');
       const cStat = selectedRowData.status || 'Agendado'; const fStat = document.getElementById('formStatus');
       fStat.innerHTML = '<option value="Agendado">Agendado</option><option value="Cancelado">Cancelado</option>';
       if (cStat !== 'Agendado' && cStat !== 'Cancelado') fStat.innerHTML += `<option value="${cStat}" hidden>${cStat}</option>`;
@@ -1608,43 +1419,32 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
     function syncFormFields() {
       const eq = document.getElementById('formEquipe').value; const conf = TEAM_CONFIG[eq];
       const lbl = document.getElementById('labelNomePrincipal'); const box = document.getElementById('containerNomeMenor');
-      if (conf && conf.minors) { lbl.innerText = 'Nome do Responsável'; box.classList.remove('hidden');
-      }
-      else { lbl.innerText = 'Nome do Atleta'; box.classList.add('hidden'); document.getElementById('formNomeMenor').value = '';
-      }
+      if (conf && conf.minors) { lbl.innerText = 'Nome do Responsável'; box.classList.remove('hidden'); }
+      else { lbl.innerText = 'Nome do Atleta'; box.classList.add('hidden'); document.getElementById('formNomeMenor').value = ''; }
       document.getElementById('formData').value = ''; renderCalendar();
     }
 
-    function changeMonth(dir) { currentCalDate.setMonth(currentCalDate.getMonth() + dir);
-      renderCalendar(); }
+    function changeMonth(dir) { currentCalDate.setMonth(currentCalDate.getMonth() + dir); renderCalendar(); }
 
     function renderCalendar() {
-      const y = currentCalDate.getFullYear();
-      const m = currentCalDate.getMonth();
+      const y = currentCalDate.getFullYear(); const m = currentCalDate.getMonth();
       document.getElementById('cal-month-year').innerText = monthNames[m] + ' ' + y;
-      const fDay = new Date(y, m, 1).getDay();
-      const dMonth = new Date(y, m+1, 0).getDate();
+      const fDay = new Date(y, m, 1).getDay(); const dMonth = new Date(y, m+1, 0).getDate();
       const calDays = document.getElementById('cal-days'); calDays.innerHTML = '';
-      const eq = document.getElementById('formEquipe').value;
-      const conf = TEAM_CONFIG[eq]; const aDays = conf ? conf.days : [0,1,2,3,4,5,6];
+      const eq = document.getElementById('formEquipe').value; const conf = TEAM_CONFIG[eq]; const aDays = conf ? conf.days : [0,1,2,3,4,5,6];
       for (let i = 0; i < fDay; i++) calDays.innerHTML += '<div></div>';
       for (let i = 1; i <= dMonth; i++) {
-        const d = new Date(y, m, i);
-        const dW = d.getDay(); const isV = aDays.includes(dW) && d >= new Date(new Date().setHours(0,0,0,0));
+        const d = new Date(y, m, i); const dW = d.getDay(); const isV = aDays.includes(dW) && d >= new Date(new Date().setHours(0,0,0,0));
         let c = 'cal-day' + (isV ? '' : ' disabled'); const inV = document.getElementById('formData').value;
-        if (inV) { const p = inV.split(' ')[0].split('/'); if (parseInt(p[0])===i && parseInt(p[1])===m+1 && parseInt(p[2])===y) c += ' selected';
-        }
+        if (inV) { const p = inV.split(' ')[0].split('/'); if (parseInt(p[0])===i && parseInt(p[1])===m+1 && parseInt(p[2])===y) c += ' selected'; }
         calDays.innerHTML += `<div class="${c}" onclick="selectDate(${i},${m},${y},${dW})">${i}</div>`;
       }
     }
 
     function selectDate(d, m, y, dw) {
-      const eq = document.getElementById('formEquipe').value;
-      const conf = TEAM_CONFIG[eq];
+      const eq = document.getElementById('formEquipe').value; const conf = TEAM_CONFIG[eq];
       if (conf && !conf.days.includes(dw)) return;
-      let t = '00:00';
-      if (conf) { if (conf.time) t = conf.time; else if (conf.timeMap && conf.timeMap[dw]) t = conf.timeMap[dw];
-      }
+      let t = '00:00'; if (conf) { if (conf.time) t = conf.time; else if (conf.timeMap && conf.timeMap[dw]) t = conf.timeMap[dw]; }
       document.getElementById('formData').value = String(d).padStart(2,'0')+'/'+String(m+1).padStart(2,'0')+'/'+y+' '+t;
       document.getElementById('custom-calendar').classList.remove('open'); isFormDirty = true;
     }
@@ -1653,17 +1453,13 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
       const id = document.getElementById('formId').value; const eq = document.getElementById('formEquipe').value;
       const nome = document.getElementById('formNome').value; const nMenor = document.getElementById('formNomeMenor') ? document.getElementById('formNomeMenor').value : '';
       const wpp = document.getElementById('formWpp').value.replace(/\D/g,''); const dStr = document.getElementById('formData').value;
-      if (!eq || !nome || !wpp || !dStr) { alert('Preencha todos os campos obrigatórios!'); return;
-      }
-      if (wpp.length < 10) { alert('Número de WhatsApp inválido!'); return;
-      }
+      if (!eq || !nome || !wpp || !dStr) { alert('Preencha todos os campos obrigatórios!'); return; }
+      if (wpp.length < 10) { alert('Número de WhatsApp inválido!'); return; }
       const btn = document.getElementById('btnSalvarModal'); btn.innerHTML = 'Salvando...'; btn.disabled = true;
       const pts = dStr.split(' '); const dPt = pts[0].split('/'); const tPt = pts[1] || '00:00'; const iso = `${dPt[2]}-${dPt[1]}-${dPt[0]}T${tPt}:00`;
       let dbStat = selectedRowData ? selectedRowData.raw_status : 'PENDING';
-      if (id) { const fs = document.getElementById('formStatus').value; if(fs==='Agendado') dbStat='CONFIRMED'; else if(fs==='Cancelado') dbStat='CANCELLED';
-      }
-      const pay = { name: nome, minor_name: nMenor, whatsapp_phone: wpp, scheduled_at: iso, target_team: eq, target_location: TEAM_CONFIG[eq] ?
-      TEAM_CONFIG[eq].local : 'Ginásio Apollo' };
+      if (id) { const fs = document.getElementById('formStatus').value; if(fs==='Agendado') dbStat='CONFIRMED'; else if(fs==='Cancelado') dbStat='CANCELLED'; }
+      const pay = { name: nome, minor_name: nMenor, whatsapp_phone: wpp, scheduled_at: iso, target_team: eq, target_location: TEAM_CONFIG[eq] ? TEAM_CONFIG[eq].local : 'Ginásio Apollo' };
       if (id) pay.status = dbStat;
       salvarNoSupabase(id, pay);
     }
@@ -1671,47 +1467,38 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
     function handleExcluir() {
       const id = document.getElementById('formId').value; if (!id) return;
       if (confirm('Deseja EXCLUIR este agendamento?')) {
-        const btn = document.getElementById('btnExcluirModal'); btn.innerHTML = 'Excluindo...';
-        btn.disabled = true; excluirNoSupabase(id);
+        const btn = document.getElementById('btnExcluirModal'); btn.innerHTML = 'Excluindo...'; btn.disabled = true; excluirNoSupabase(id);
       }
     }
 
     function salvoSucesso() {
-      forceCloseForm();
-      document.getElementById('btnSalvarModal').innerHTML = 'Salvar'; document.getElementById('btnSalvarModal').disabled = false;
+      forceCloseForm(); document.getElementById('btnSalvarModal').innerHTML = 'Salvar'; document.getElementById('btnSalvarModal').disabled = false;
       document.getElementById('btnExcluirModal').innerHTML = 'Excluir'; document.getElementById('btnExcluirModal').disabled = false; carregarDadosDoSupabase();
     }
     function salvoErro(err) {
-      alert('Erro: ' + err); document.getElementById('btnSalvarModal').innerHTML = 'Salvar';
-      document.getElementById('btnSalvarModal').disabled = false;
+      alert('Erro: ' + err); document.getElementById('btnSalvarModal').innerHTML = 'Salvar'; document.getElementById('btnSalvarModal').disabled = false;
       document.getElementById('btnExcluirModal').innerHTML = 'Excluir'; document.getElementById('btnExcluirModal').disabled = false;
     }
 
     function openChatlogModal() {
-      if (!selectedRowData) return;
-      document.getElementById('modal-actions').classList.remove('open');
+      if (!selectedRowData) return; document.getElementById('modal-actions').classList.remove('open');
       document.getElementById('chat-nome').innerText = selectedRowData.nome; document.getElementById('chatlog-container').innerHTML = '<div class="loader m-auto"></div>';
       document.getElementById('modal-chatlog').classList.add('open'); carregarChatlogSupabase(selectedRowData.whatsapp);
     }
 
     function renderChatlog(res) {
       const c = document.getElementById('chatlog-container'); c.innerHTML = '';
-      if (res && res.status === 'error') { c.innerHTML = `<div class="text-red-500 text-center mt-10 text-sm px-4">${res.message}</div>`; return;
-      }
+      if (res && res.status === 'error') { c.innerHTML = `<div class="text-red-500 text-center mt-10 text-sm px-4">${res.message}</div>`; return; }
       const dat = res.data;
-      if (!dat || !dat.history) { c.innerHTML = '<div class="bg-white dark:bg-white/10 p-4 rounded-xl text-center text-sm font-medium mx-auto mt-10 text-gray-500">Sem histórico.</div>'; return;
-      }
+      if (!dat || !dat.history) { c.innerHTML = '<div class="bg-white dark:bg-white/10 p-4 rounded-xl text-center text-sm font-medium mx-auto mt-10 text-gray-500">Sem histórico.</div>'; return; }
       try {
-        let hist = typeof dat.history === 'string' ?
-        JSON.parse(dat.history) : dat.history;
+        let hist = typeof dat.history === 'string' ? JSON.parse(dat.history) : dat.history;
         hist.forEach(msg => {
           const isB = msg.role === 'model'; const txt = msg.parts[0].text.replace(/\n/g,'<br>');
           const b = document.createElement('div'); b.className = 'chat-bubble '+(isB?'bot':'user')+' animate__animated animate__fadeInUp animate__faster';
           b.innerHTML = `<div>${txt}</div><div class="chat-time text-[9px] ${isB?'text-gray-400':'text-white/70'}">${msg.timestamp||''}</div>`; c.appendChild(b);
-        });
-        setTimeout(() => { c.scrollTop = c.scrollHeight; }, 100);
-      } catch(e) { c.innerHTML = `<div class="text-red-500 text-center mt-10">Erro: ${e}</div>`;
-      }
+        }); setTimeout(() => { c.scrollTop = c.scrollHeight; }, 100);
+      } catch(e) { c.innerHTML = `<div class="text-red-500 text-center mt-10">Erro: ${e}</div>`; }
     }
 
     /* ============================================
@@ -1724,7 +1511,6 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
           card.style.setProperty('--x-rotation', ((0.5-yP)*15)+'deg'); card.style.setProperty('--y-rotation', ((xP-0.5)*15)+'deg');
         });
         card.addEventListener('mouseleave', () => { card.style.setProperty('--x-rotation','0deg'); card.style.setProperty('--y-rotation','0deg'); });
- 
       });
     }
 
@@ -1747,11 +1533,9 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
         const res = await fetch(`${SUPABASE_URL}/rest/v1/teams?select=id&limit=1`, { headers: getSupabaseHeaders() });
         const rawText = await res.text();
         let data;
-        try { data = JSON.parse(rawText); } catch(e) { throw new Error('Resposta HTML recebida');
-        }
+        try { data = JSON.parse(rawText); } catch(e) { throw new Error('Resposta HTML recebida'); }
         if(data && data.length > 0) defaultTeamId = data[0].id;
-      } catch(e) { appLog('Erro buscando team default: ' + e, 'warn');
-      }
+      } catch(e) { appLog('Erro buscando team default: ' + e, 'warn'); }
     }
 
     async function carregarAtletasDoSupabase() {
@@ -1773,8 +1557,10 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
         }
 
         if (!res.ok) throw new Error(`HTTP ${res.status}: ${JSON.stringify(data)}`);
+        
         atletasDB = data;
         appLog('Sucesso Atletas. Total: ' + atletasDB.length, 'ok');
+        
         if (atletasDB.length === 0) {
             appLog('Atenção: A API retornou uma lista vazia. Se você sabe que existem registros na tabela "athletes", certifique-se de configurar o RLS (Row Level Security) no Supabase.', 'warn');
             alert('Aviso: O painel conseguiu conectar no Supabase, mas a tabela de atletas retornou vazia (Total: 0).\n\nSe você possui atletas cadastrados no banco de dados, isso significa que o seu "RLS - Row Level Security" no Supabase está bloqueando a leitura destes dados.\n\nVá em Authentication > Policies no seu projeto Supabase e adicione uma política permitindo o SELECT na tabela "athletes".');
@@ -1808,6 +1594,7 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
       
       if (!dados || dados.length === 0) { emptyState.classList.remove('hidden'); return; }
       emptyState.classList.add('hidden');
+
       dados.forEach(atl => {
         const tr = document.createElement('tr');
         tr.className = 'table-row animate__animated animate__fadeIn animate__faster';
@@ -1816,21 +1603,20 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
         const isMinor = typeof atl.parent_name === 'string' && atl.parent_name.trim() !== '';
         const nomeAtleta = atl.full_name || '—';
         const nomeResp = atl.parent_name || '—';
-        const cpfDisplay 
-        = formatarCPF(atl.cpf) || 'Sem CPF';
+        const cpfDisplay = formatarCPF(atl.cpf) || 'Sem CPF';
         const wppDisplay = formatarTelAtleta(atl.phone || '');
         const planoDisplay = atl.payment_plan || 'Sem plano';
         const catDisplay = atl.position || 'Não definida';
         const isActive = atl.is_active !== false;
         
         const nomeDisplayHTML = isMinor
-          ? `<div class="flex items-center gap-3">${iconChild}<div class="flex flex-col justify-center"><span class="font-bold text-[14px] md:text-[15px] leading-tight text-gray-900 
-          dark:text-slate-200">${nomeAtleta}</span><span class="text-[11px] md:text-[12px] opacity-60 leading-tight mt-0.5">Resp: ${nomeResp}</span></div></div>`
+          ? `<div class="flex items-center gap-3">${iconChild}<div class="flex flex-col justify-center"><span class="font-bold text-[14px] md:text-[15px] leading-tight text-gray-900 dark:text-slate-200">${nomeAtleta}</span><span class="text-[11px] md:text-[12px] opacity-60 leading-tight mt-0.5">Resp: ${nomeResp}</span></div></div>`
           : `<div class="flex items-center gap-3">${iconAdult}<span class="font-bold text-[14px] md:text-[15px] text-gray-900 dark:text-slate-200">${nomeAtleta}</span></div>`;
+          
         const statusBadge = isActive
-          ?
-          `<span class="status-badge status-agendado">Ativo</span>`
+          ? `<span class="status-badge status-agendado">Ativo</span>`
           : `<span class="status-badge status-cancelado">Inativo</span>`;
+
         tr.innerHTML = `
           <td class="px-5 py-4">${nomeDisplayHTML}</td>
           <td class="px-5 py-4"><div class="flex flex-col text-[14px] font-medium text-gray-700 dark:text-gray-300"><span>${wppDisplay}</span><span class="text-[11px] opacity-70">${cpfDisplay}</span></div></td>
@@ -1853,7 +1639,6 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
             (a.phone || '').includes(termo);
 
         let matchStatus = true;
-       
         const isActive = a.is_active !== false;
         if (statusFiltro === 'ativo') matchStatus = isActive;
         if (statusFiltro === 'inativo') matchStatus = !isActive;
@@ -1888,31 +1673,27 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
       let wppResp = document.getElementById('formAtletaRespWpp'); 
       wppResp.value = atl.parent_phone || ''; wppResp.dispatchEvent(new Event('input'));
 
-      let cInp = document.getElementById('formAtletaCpf');
+      let cInp = document.getElementById('formAtletaCpf'); 
       cInp.value = atl.cpf || ''; cInp.dispatchEvent(new Event('input'));
       
       document.getElementById('formAtletaRg').value = atl.rg || '';
 
       let wInp = document.getElementById('formAtletaWpp'); 
-      wInp.value = atl.phone ||
-      ''; wInp.dispatchEvent(new Event('input'));
+      wInp.value = atl.phone || ''; wInp.dispatchEvent(new Event('input'));
       
       document.getElementById('formAtletaPlano').value = atl.payment_plan || '';
       if(document.getElementById('formAtletaPosicao')) document.getElementById('formAtletaPosicao').value = atl.position || '';
-      document.getElementById('formAtletaStatus').value = atl.is_active !== false ?
-      'ativo' : 'inativo';
+      document.getElementById('formAtletaStatus').value = atl.is_active !== false ? 'ativo' : 'inativo';
       
       document.getElementById('btnExcluirAtleta').classList.remove('hidden');
       document.getElementById('modal-atleta-form').classList.add('open');
     }
 
-    function closeAtletaModal() { document.getElementById('modal-atleta-form').classList.remove('open');
-    }
+    function closeAtletaModal() { document.getElementById('modal-atleta-form').classList.remove('open'); }
 
     async function salvarAtleta() {
       const form = document.getElementById('formAtleta');
-      if(!form.checkValidity()){ form.reportValidity(); return;
-      }
+      if(!form.checkValidity()){ form.reportValidity(); return; }
 
       const id = document.getElementById('formAtletaId').value;
       const btn = document.getElementById('btnSalvarAtleta');
@@ -1920,25 +1701,21 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
       btn.innerHTML = '<div class="loader w-5 h-5 border-2 border-t-white m-0"></div>'; btn.disabled = true;
 
       const pos = document.getElementById('formAtletaPosicao');
+
       const payload = {
         full_name: document.getElementById('formAtletaNome').value,
-        birth_date: document.getElementById('formAtletaNascimento').value ||
-        null,
-        email: document.getElementById('formAtletaEmail').value ||
-        null,
-        parent_name: document.getElementById('formAtletaResp').value ||
-        null,
-        parent_phone: document.getElementById('formAtletaRespWpp').value.replace(/\D/g,'') ||
-        null,
+        birth_date: document.getElementById('formAtletaNascimento').value || null,
+        email: document.getElementById('formAtletaEmail').value || null,
+        parent_name: document.getElementById('formAtletaResp').value || null,
+        parent_phone: document.getElementById('formAtletaRespWpp').value.replace(/\D/g,'') || null,
         cpf: document.getElementById('formAtletaCpf').value.replace(/\D/g,''),
-        rg: document.getElementById('formAtletaRg').value ||
-        null,
+        rg: document.getElementById('formAtletaRg').value || null,
         phone: document.getElementById('formAtletaWpp').value.replace(/\D/g,''),
         payment_plan: document.getElementById('formAtletaPlano').value,
-        position: pos ?
-        pos.value : null,
+        position: pos ? pos.value : null,
         is_active: document.getElementById('formAtletaStatus').value === 'ativo'
       };
+
       if (!id) {
           if (!defaultTeamId) {
               alert("Erro: Não foi possível obter um team_id padrão. Crie ao menos uma equipe no banco primeiro.");
@@ -1949,16 +1726,13 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
       }
 
       const url = id ? `${SUPABASE_URL}/rest/v1/athletes?id=eq.${id}` : `${SUPABASE_URL}/rest/v1/athletes`;
-      const method = id ?
-      'PATCH' : 'POST';
+      const method = id ? 'PATCH' : 'POST';
 
       try {
         const res = await fetch(url, { method, headers: getSupabaseHeaders(), body: JSON.stringify(payload) });
         const rawText = await res.text();
         let data;
-        try { data = JSON.parse(rawText);
-        } catch(e) { throw new Error('HTML inesperado: ' + rawText.substring(0,100));
-        }
+        try { data = JSON.parse(rawText); } catch(e) { throw new Error('HTML inesperado: ' + rawText.substring(0,100)); }
         
         if (!res.ok) throw new Error(JSON.stringify(data));
         closeAtletaModal();
@@ -1978,14 +1752,13 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
         const btn = document.getElementById('btnExcluirAtleta');
         const textoOriginal = btn.innerHTML;
         btn.innerHTML = '<div class="loader w-5 h-5 border-2 border-t-white m-0"></div>'; btn.disabled = true;
+
         try {
           const res = await fetch(`${SUPABASE_URL}/rest/v1/athletes?id=eq.${id}`, { method: 'DELETE', headers: getSupabaseHeaders() });
           const rawText = await res.text();
           if (rawText.length > 0 && !res.ok) {
-             try { const data = JSON.parse(rawText);
-             throw new Error(JSON.stringify(data)); } 
-             catch(e) { throw new Error('HTML inesperado: ' + rawText.substring(0,100));
-             }
+             try { const data = JSON.parse(rawText); throw new Error(JSON.stringify(data)); } 
+             catch(e) { throw new Error('HTML inesperado: ' + rawText.substring(0,100)); }
           }
           if (!res.ok) throw new Error('HTTP ' + res.status);
           closeAtletaModal();
@@ -1999,373 +1772,237 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
     }
 
     /* ============================================
-       CHATBOT FEEDER
+       LOGIC: CHAT FEEDER (NOVO)
     ============================================ */
-    let feederTeams = [];
-    let feederSelectedTeam = null;
-    let feederCalYear = new Date().getFullYear();
-    let feederCalMonth = new Date().getMonth();
-    let feederUnavailableDates = [];
-    let feederIsDirty = false;
+    const cfDayNames = ['DOM','SEG','TER','QUA','QUI','SEX','SÁB'];
+    let cfTeams = [
+        { id: '1', name: 'Equipe Aldrin', desc: 'Equipe de nível competitivo (equivalente ao nível prata masculino). Destinado a atletas com fundamentos consolidados, com foco no desenvolvimento tático e visão de jogo. Treinos aos sábados.', local: 'Núcleo PUC - Ginásio da PUC', schedules: { 6: { start: '10:00', end: '12:00' } }, unavail: [] },
+        { id: '2', name: 'Equipe Armstrong', desc: 'Equipe competitiva...', local: 'Ginásio PUC', schedules: { 1: { start: '19:00', end: '20:00' }, 3: { start: '19:00', end: '20:00' }, 6: { start: '09:00', end: '10:15' } }, unavail: ['2026-06-13', '2026-06-17'] },
+        { id: '3', name: 'Escolinha A', desc: 'Turma base...', local: 'Ginásio Apollo', schedules: { 2: { start: '14:00', end: '15:00' }, 4: { start: '14:00', end: '15:00' } }, unavail: [] }
+    ];
+    let cfActiveId = null;
+    let cfSubTab = 'dados';
+    let cfSelectedDay = null;
+    let cfDirty = false;
+    let cfIsNew = false;
+    let cfCalDate = new Date(2026, 5, 1); 
+    let cfTempTeam = null;
 
-    const DIAS_SEMANA = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
-
-    function pad2(n) { return String(n).padStart(2, '0'); }
-    function escHtml(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-
-    function getHeadCoach(team) {
-      if (!team.team_coaches || team.team_coaches.length === 0) return null;
-      return (team.team_coaches.find(c => c.is_head) || team.team_coaches[0]).profiles;
-    }
-
-    async function loadChatbotFeeder() {
-      const listEl = document.getElementById('feeder-team-list');
-      listEl.innerHTML = '<div class="loader mx-auto my-6"></div>';
-      try {
-        const [teamsRes, locsRes] = await Promise.all([
-          fetch(`${SUPABASE_URL}/rest/v1/teams?select=id,name,description,training_schedule,location_id,training_locations(*),team_coaches(*,profiles(*))&is_active=eq.true&order=name.asc`, { headers: getSupabaseHeaders() }),
-          fetch(`${SUPABASE_URL}/rest/v1/training_locations?select=id,name,address&order=name.asc`, { headers: getSupabaseHeaders() })
-        ]);
-        const teamsData = await teamsRes.json();
-        const locsData  = await locsRes.json();
-        appLog('[Feeder] teams HTTP ' + teamsRes.status + ' | resposta: ' + JSON.stringify(teamsData).substring(0, 300), teamsRes.ok ? 'ok' : 'err');
-        if (!teamsRes.ok) {
-          listEl.innerHTML = `<p class="text-red-500 text-sm p-4">Erro ${teamsRes.status} ao buscar equipes: ${escHtml(JSON.stringify(teamsData))}</p>`;
-          return;
-        }
-        if (!Array.isArray(teamsData)) {
-          listEl.innerHTML = `<p class="text-red-500 text-sm p-4">Resposta inesperada: ${escHtml(JSON.stringify(teamsData).substring(0, 200))}</p>`;
-          return;
-        }
-        feederTeams = teamsData;
-        window._feederLocations = Array.isArray(locsData) ? locsData : [];
-        renderFeederTeamList(feederTeams);
-      } catch(e) {
-        listEl.innerHTML = `<p class="text-red-500 text-sm p-4">Erro ao carregar equipes: ${escHtml(e.message)}</p>`;
-        appLog('[Feeder] exceção: ' + e.message, 'err');
-      }
-    }
-
-    function renderFeederTeamList(teams) {
-      const listEl = document.getElementById('feeder-team-list');
-      if (!teams || teams.length === 0) { listEl.innerHTML = '<p class="text-gray-400 text-sm p-4">Nenhuma equipe ativa.</p>'; return; }
-      listEl.innerHTML = teams.map(t => {
-        const coach = getHeadCoach(t);
-        const coachName = coach ? escHtml(coach.full_name || '') : '—';
-        const hasSchedule = t.training_schedule && Array.isArray(t.training_schedule) && t.training_schedule.length > 0;
-        const alertIcon = !hasSchedule ? `<svg class="w-4 h-4 text-yellow-500 animate-pulse shrink-0 drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24" title="Sem horário definido"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>` : '';
-        
-        return `<button id="feeder-btn-${t.id}" class="feeder-team-btn sidebar-btn w-full text-left flex items-center justify-between py-3" onclick="selectFeederTeam('${t.id}')">
-          <div class="flex flex-col gap-0.5 min-w-0 pr-2">
-            <span class="font-semibold text-[13px] text-gray-900 dark:text-slate-200 sidebar-label truncate">${escHtml(t.name)}</span>
-            <span class="text-[11px] text-gray-400 sidebar-label truncate">${coachName}</span>
-          </div>
-          ${alertIcon}
-        </button>`;
-      }).join('');
-    }
-
-    function createNewFeederTeam() {
-      feederSelectedTeam = {
-        id: null,
-        name: 'Nova Equipe',
-        description: '',
-        training_schedule: [],
-        location_id: ''
-      };
-      document.querySelectorAll('.feeder-team-btn').forEach(b => b.classList.remove('active'));
-      feederCalYear = new Date().getFullYear();
-      feederCalMonth = new Date().getMonth();
-      feederUnavailableDates = [];
-      feederIsDirty = true;
-      renderFeederEditor(feederSelectedTeam, feederUnavailableDates);
-    }
-
-    async function selectFeederTeam(teamId) {
-      feederSelectedTeam = feederTeams.find(t => t.id === teamId) || null;
-      if (!feederSelectedTeam) return;
-      document.querySelectorAll('.feeder-team-btn').forEach(b => b.classList.remove('active'));
-      const btn = document.getElementById('feeder-btn-' + teamId);
-      if (btn) btn.classList.add('active');
-      feederCalYear = new Date().getFullYear();
-      feederCalMonth = new Date().getMonth();
-      const editorEl = document.getElementById('feeder-editor');
-      editorEl.innerHTML = '<div class="loader mx-auto my-10"></div>';
-      feederUnavailableDates = await loadUnavailableDates(teamId, feederCalYear, feederCalMonth);
-      feederIsDirty = false;
-      renderFeederEditor(feederSelectedTeam, feederUnavailableDates);
-    }
-
-    async function loadUnavailableDates(teamId, year, month) {
-      if (!teamId) return [];
-      const start = `${year}-${pad2(month+1)}-01`;
-      const lastDay = new Date(year, month+1, 0).getDate();
-      const end = `${year}-${pad2(month+1)}-${pad2(lastDay)}`;
-      try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/team_unavailable_dates?team_id=eq.${teamId}&date=gte.${start}&date=lte.${end}&select=date`, { headers: getSupabaseHeaders() });
-        const data = await res.json();
-        return Array.isArray(data) ? data.map(d => d.date) : [];
-      } catch(e) { return []; }
-    }
-
-    function renderFeederEditor(team, unavailableDates) {
-      const editorEl = document.getElementById('feeder-editor');
-      editorEl.className = 'flex-1 flex flex-col h-full';
-      editorEl.innerHTML = `
-        <div class="px-6 py-4 border-b border-gray-200/30 dark:border-white/08 shrink-0 bg-white/20 dark:bg-black/10 backdrop-blur-sm flex justify-between items-center">
-          <h3 class="font-bold text-[17px] text-gray-900 dark:text-slate-200">${escHtml(team.name)}</h3>
-          ${!team.id ? '<span class="status-badge status-em-cadastro">Novo</span>' : ''}
-        </div>
-        <div class="flex border-b border-gray-200/30 dark:border-white/08 shrink-0 bg-white/10 dark:bg-black/5">
-          <button id="feeder-tab-dados" onclick="switchFeederTab('dados')" class="flex-1 py-3 text-[13px] font-semibold text-[#EE4036] border-b-2 border-[#EE4036] hover:bg-black/05 dark:hover:bg-white/05 transition-colors">Dados</button>
-          <button id="feeder-tab-calendario" onclick="switchFeederTab('calendario')" class="flex-1 py-3 text-[13px] font-medium text-gray-500 dark:text-slate-400 border-b-2 border-transparent hover:bg-black/05 dark:hover:bg-white/05 transition-colors">Datas Indisponíveis</button>
-        </div>
-        <div id="feeder-tab-content" class="flex-1 overflow-y-auto p-6 relative"></div>
-      `;
-      switchFeederTab('dados');
-    }
-
-    function markFeederDirty() {
-      feederIsDirty = true;
-      const btn = document.getElementById('feeder-save-btn');
-      if (btn) btn.classList.remove('hidden');
-    }
-
-    function switchFeederTab(tab) {
-      if (tab === 'calendario' && !feederSelectedTeam.id) {
-        alert('Salve a equipe primeiro para gerenciar o calendário de indisponibilidade.');
-        return;
-      }
-      
-      const dadosBtn = document.getElementById('feeder-tab-dados');
-      const calBtn = document.getElementById('feeder-tab-calendario');
-      
-      if (tab === 'dados') {
-        dadosBtn.className = 'flex-1 py-3 text-[13px] font-semibold text-[#EE4036] border-b-2 border-[#EE4036] hover:bg-black/05 dark:hover:bg-white/05 transition-colors';
-        calBtn.className = 'flex-1 py-3 text-[13px] font-medium text-gray-500 dark:text-slate-400 border-b-2 border-transparent hover:bg-black/05 dark:hover:bg-white/05 transition-colors';
-        document.getElementById('feeder-tab-content').innerHTML = buildDadosForm(feederSelectedTeam);
-      } else {
-        dadosBtn.className = 'flex-1 py-3 text-[13px] font-medium text-gray-500 dark:text-slate-400 border-b-2 border-transparent hover:bg-black/05 dark:hover:bg-white/05 transition-colors';
-        calBtn.className = 'flex-1 py-3 text-[13px] font-semibold text-[#EE4036] border-b-2 border-[#EE4036] hover:bg-black/05 dark:hover:bg-white/05 transition-colors';
-        const content = document.getElementById('feeder-tab-content');
-        content.innerHTML = buildCalendarShell(feederCalYear, feederCalMonth);
-        renderFeederCalendar(feederCalYear, feederCalMonth, feederSelectedTeam.training_schedule || [], feederUnavailableDates);
-      }
-    }
-
-    function buildDadosForm(team) {
-      const sched = Array.isArray(team.training_schedule) ? team.training_schedule : [];
-      const schedRows = sched.map((s,i) => buildScheduleRow(s.day, s.start, s.end, i)).join('');
-      const locOpts = buildLocationOptions(window._feederLocations || [], team.location_id);
-      const isNew = !team.id;
-      
-      const nameField = isNew ? `
-        <div>
-          <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">Nome da Equipe *</label>
-          <input type="text" id="feeder-name" value="${escHtml(team.name === 'Nova Equipe' ? '' : team.name)}" class="glass-input w-full h-[46px] px-4 rounded-[14px] text-[14px] font-sans" oninput="markFeederDirty()">
-        </div>
-      ` : `<input type="hidden" id="feeder-name" value="${escHtml(team.name)}">`;
-
-      return `
-        <div class="space-y-5 animate__animated animate__fadeIn animate__faster">
-          ${nameField}
-          <div>
-            <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">Descrição</label>
-            <textarea id="feeder-desc" rows="3" class="glass-input w-full px-4 py-3 rounded-[14px] text-[14px] font-sans resize-none" oninput="markFeederDirty()">${escHtml(team.description || '')}</textarea>
-          </div>
-          <div>
-            <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">Local de Treino</label>
-            <select id="feeder-location" class="glass-input w-full h-[46px] px-4 rounded-[14px] text-[14px] font-sans appearance-none" onchange="markFeederDirty()">${locOpts}</select>
-          </div>
-          <div>
-            <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">Horários de Treino</label>
-            <div id="feeder-schedule-rows" class="space-y-2">${schedRows}</div>
-            <button onclick="addScheduleRow()" class="mt-3 flex items-center gap-1 text-[12px] font-bold text-[#EE4036] hover:text-[#FF554A] transition-colors">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg> Adicionar horário
-            </button>
-          </div>
-          <div class="flex items-center gap-3 pt-4 border-t border-gray-200/30 dark:border-white/10">
-            <button id="feeder-save-btn" onclick="saveTeamData()" class="bg-[#16a34a] hover:bg-[#15803d] text-white font-bold px-6 py-2.5 rounded-[12px] text-[13px] shadow-lg transition-all flex items-center gap-2 ${feederIsDirty ? '' : 'hidden'}">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Salvar Alterações
-            </button>
-            <span id="feeder-save-status" class="text-[12px] font-medium"></span>
-          </div>
-        </div>
-      `;
-    }
-
-    function buildLocationOptions(locs, selectedId) {
-      return (locs || []).map(l => `<option value="${escHtml(l.id)}"${l.id === selectedId ? ' selected' : ''}>${escHtml(l.name)} — ${escHtml(l.address)}</option>`).join('');
-    }
-
-    function buildScheduleRow(day, start, end, index) {
-      const dayOpts = DIAS_SEMANA.map((d,i) => `<option value="${i}"${i == day ? ' selected' : ''}>${d}</option>`).join('');
-      return `<div class="feeder-schedule-row flex gap-2 items-center animate__animated animate__fadeIn animate__faster">
-        <select class="glass-input h-[38px] px-2 rounded-[10px] text-[13px] font-sans appearance-none feeder-sched-day" onchange="markFeederDirty()">${dayOpts}</select>
-        <input type="time" required value="${escHtml(start||'')}" class="glass-input h-[38px] px-2 rounded-[10px] text-[13px] font-sans feeder-sched-start [&::-webkit-calendar-picker-indicator]:dark:invert" oninput="markFeederDirty()">
-        <span class="text-gray-400 text-[12px] font-medium">às</span>
-        <input type="time" required value="${escHtml(end||'')}" class="glass-input h-[38px] px-2 rounded-[10px] text-[13px] font-sans feeder-sched-end [&::-webkit-calendar-picker-indicator]:dark:invert" oninput="markFeederDirty()">
-        <button onclick="removeScheduleRow(this)" class="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-[#EE4036] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all ml-1" title="Remover">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-        </button>
-      </div>`;
-    }
-
-    function addScheduleRow() {
-      const container = document.getElementById('feeder-schedule-rows');
-      if (!container) return;
-      const div = document.createElement('div');
-      div.innerHTML = buildScheduleRow(1, '19:00', '20:00', container.children.length);
-      container.appendChild(div.firstElementChild);
-      markFeederDirty();
-    }
-
-    function removeScheduleRow(btn) {
-      btn.closest('.feeder-schedule-row').remove();
-      markFeederDirty();
-    }
-
-    function readScheduleFromForm() {
-      return Array.from(document.querySelectorAll('.feeder-schedule-row')).map(row => ({
-        day: parseInt(row.querySelector('.feeder-sched-day').value),
-        start: row.querySelector('.feeder-sched-start').value,
-        end: row.querySelector('.feeder-sched-end').value
-      }));
-    }
-
-    async function saveTeamData() {
-      if (!feederSelectedTeam) return;
-      const statusEl = document.getElementById('feeder-save-status');
-      const nameInput = document.getElementById('feeder-name');
-      const nameVal = nameInput ? nameInput.value.trim() : feederSelectedTeam.name;
-
-      if (!nameVal) { alert('Nome da equipe é obrigatório!'); return; }
-
-      statusEl.textContent = 'Salvando...'; statusEl.className = 'text-[12px] font-medium text-gray-500';
-      const payload = {
-        name: nameVal,
-        description: document.getElementById('feeder-desc').value,
-        training_schedule: readScheduleFromForm(),
-        location_id: document.getElementById('feeder-location').value
-      };
-      
-      const isNew = !feederSelectedTeam.id;
-      const url = isNew ? `${SUPABASE_URL}/rest/v1/teams` : `${SUPABASE_URL}/rest/v1/teams?id=eq.${feederSelectedTeam.id}`;
-      const method = isNew ? 'POST' : 'PATCH';
-      
-      try {
-        const res = await fetch(url, {
-          method: method, headers: getSupabaseHeaders(), body: JSON.stringify(payload)
+    function renderCFTabs() {
+        const container = document.getElementById('cf-tabs-container');
+        container.innerHTML = '';
+        cfTeams.forEach(t => {
+            const displayName = t.name.replace(/^Equipe\s+/i, '');
+            const isActive = t.id === cfActiveId;
+            const classes = isActive ? 'cf-tab active' : 'cf-tab inactive';
+            container.innerHTML += `<div class="${classes}" onclick="cfSelectTeam('${t.id}')">${displayName}</div>`;
         });
-        if (!res.ok) { const err = await res.json(); throw new Error(JSON.stringify(err)); }
-        
-        statusEl.textContent = 'Salvo com sucesso!'; statusEl.className = 'text-[12px] font-semibold text-green-600 dark:text-green-400';
-        feederIsDirty = false;
-        document.getElementById('feeder-save-btn').classList.add('hidden');
-        setTimeout(() => { if(statusEl) statusEl.textContent = ''; }, 3000);
-        
-        await loadChatbotFeeder();
-      } catch(e) {
-        statusEl.textContent = 'Erro: ' + e.message; statusEl.className = 'text-[12px] font-semibold text-red-500';
-      }
-    }
-
-    function buildCalendarShell(year, month) {
-      const mNames = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
-      return `
-        <div class="flex items-center justify-between mb-4">
-          <button onclick="feederCalPrev()" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-black/05 dark:hover:bg-white/05 text-gray-500 transition-all">&lt;</button>
-          <span id="feeder-cal-title" class="font-bold text-[15px] text-gray-900 dark:text-slate-200 uppercase tracking-wide">${mNames[month]} ${year}</span>
-          <button onclick="feederCalNext()" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-black/05 dark:hover:bg-white/05 text-gray-500 transition-all">&gt;</button>
-        </div>
-        <div class="bg-gray-200 dark:bg-white/10 border border-gray-200 dark:border-white/10 rounded-xl overflow-hidden animate__animated animate__fadeIn animate__faster">
-          <div id="feeder-cal-grid" class="grid grid-cols-7 gap-px bg-gray-200 dark:bg-white/10">
-            </div>
-        </div>
-      `;
-    }
-
-    function renderFeederCalendar(year, month, trainingSchedule, unavailableDates) {
-      const titleEl = document.getElementById('feeder-cal-title');
-      if (titleEl) {
-        const mNames = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
-        titleEl.textContent = mNames[month] + ' ' + year;
-      }
-      const grid = document.getElementById('feeder-cal-grid');
-      if (!grid) return;
-      const trainDays = (trainingSchedule || []).map(s => parseInt(s.day));
-      const firstDay = new Date(year, month, 1).getDay();
-      const daysInMonth = new Date(year, month+1, 0).getDate();
-      const today = new Date(); today.setHours(0,0,0,0);
-      
-      const headers = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'].map(d => `<div class="bg-gray-50 dark:bg-[#0f1332] text-center text-[10px] font-bold text-gray-400 uppercase py-2">${d}</div>`).join('');
-      let cells = headers;
-      
-      for (let i = 0; i < firstDay; i++) {
-        cells += '<div class="bg-white dark:bg-[#0f1332] opacity-50"></div>';
-      }
-      
-      for (let day = 1; day <= daysInMonth; day++) {
-        const date = new Date(year, month, day);
-        const dateStr = `${year}-${pad2(month+1)}-${pad2(day)}`;
-        const isTrainDay = trainDays.includes(date.getDay());
-        const isPast = date < today;
-        const isBlocked = unavailableDates.includes(dateStr);
-        let cellClass, cellContent, onclick = '';
-        
-        let baseClass = "bg-white dark:bg-[#0f1332] aspect-square flex items-center justify-center relative text-[14px] transition-all ";
-        
-        if (!isTrainDay || isPast) {
-          cellClass = baseClass + 'text-gray-300 dark:text-gray-600 cursor-default';
-          cellContent = `<span>${day}</span>`;
-        } else if (isBlocked) {
-          cellClass = baseClass + 'font-bold text-red-600 dark:text-red-400 cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20';
-          cellContent = `<span>${day}</span><span class="absolute inset-0 flex items-center justify-center text-[#EE4036] text-4xl opacity-60 font-light drop-shadow-md">✕</span>`;
-          onclick = `onclick="toggleUnavailableDate('${feederSelectedTeam.id}','${dateStr}',true)"`;
-        } else {
-          cellClass = baseClass + 'font-medium text-gray-700 dark:text-slate-300 cursor-pointer hover:bg-[#EE4036]/10 hover:text-[#EE4036] hover:font-bold';
-          cellContent = `<span>${day}</span>`;
-          onclick = `onclick="toggleUnavailableDate('${feederSelectedTeam.id}','${dateStr}',false)"`;
+        if(cfIsNew) {
+            container.innerHTML += `<div class="cf-tab active italic" style="color: #EE4036">Nova Equipe...</div>`;
         }
-        cells += `<div class="${cellClass}" ${onclick}>${cellContent}</div>`;
-      }
-      grid.innerHTML = cells;
     }
 
-    async function feederCalPrev() {
-      feederCalMonth--;
-      if (feederCalMonth < 0) { feederCalMonth = 11; feederCalYear--; }
-      feederUnavailableDates = await loadUnavailableDates(feederSelectedTeam.id, feederCalYear, feederCalMonth);
-      const content = document.getElementById('feeder-tab-content');
-      content.innerHTML = buildCalendarShell(feederCalYear, feederCalMonth);
-      renderFeederCalendar(feederCalYear, feederCalMonth, feederSelectedTeam.training_schedule || [], feederUnavailableDates);
-    }
-
-    async function feederCalNext() {
-      feederCalMonth++;
-      if (feederCalMonth > 11) { feederCalMonth = 0; feederCalYear++; }
-      feederUnavailableDates = await loadUnavailableDates(feederSelectedTeam.id, feederCalYear, feederCalMonth);
-      const content = document.getElementById('feeder-tab-content');
-      content.innerHTML = buildCalendarShell(feederCalYear, feederCalMonth);
-      renderFeederCalendar(feederCalYear, feederCalMonth, feederSelectedTeam.training_schedule || [], feederUnavailableDates);
-    }
-
-    async function toggleUnavailableDate(teamId, dateStr, currentlyBlocked) {
-      try {
-        if (currentlyBlocked) {
-          const res = await fetch(`${SUPABASE_URL}/rest/v1/team_unavailable_dates?team_id=eq.${teamId}&date=eq.${dateStr}`, { method: 'DELETE', headers: getSupabaseHeaders() });
-          if (!res.ok) throw new Error('HTTP ' + res.status);
-          feederUnavailableDates = feederUnavailableDates.filter(d => d !== dateStr);
-        } else {
-          const res = await fetch(`${SUPABASE_URL}/rest/v1/team_unavailable_dates`, { method: 'POST', headers: getSupabaseHeaders(), body: JSON.stringify({ team_id: teamId, date: dateStr }) });
-          if (!res.ok) { const err = await res.json(); throw new Error(JSON.stringify(err)); }
-          feederUnavailableDates = [...feederUnavailableDates, dateStr];
+    function cfSelectTeam(id) {
+        if(cfDirty) {
+            if(!confirm('Existem alterações não salvas. Deseja descartar?')) return;
         }
-        renderFeederCalendar(feederCalYear, feederCalMonth, feederSelectedTeam.training_schedule || [], feederUnavailableDates);
-      } catch(e) {
-        appLog('Erro ao toggle data: ' + e.message, 'err');
-        alert('Erro: ' + e.message);
-      }
+        cfActiveId = id;
+        cfIsNew = false;
+        cfDirty = false;
+        cfSelectedDay = null;
+        cfSubTab = 'dados';
+        cfTempTeam = null;
+        cfUpdateSubTabsUI();
+        document.getElementById('cf-time-panel').classList.add('hidden');
+        renderCFTabs();
+        renderCFContent();
+        cfToggleActions(false);
+    }
+    
+    function cfNewTeam() {
+        if(cfDirty) {
+            if(!confirm('Existem alterações não salvas. Deseja descartar?')) return;
+        }
+        cfActiveId = 'new';
+        cfIsNew = true;
+        cfDirty = true;
+        cfSelectedDay = null;
+        cfSubTab = 'dados';
+        
+        cfTempTeam = { id: 'new', name: 'Nova Equipe', desc: '', local: '', schedules: {}, unavail: [] };
+        
+        cfUpdateSubTabsUI();
+        document.getElementById('cf-time-panel').classList.add('hidden');
+        renderCFTabs();
+        renderCFContent();
+        cfToggleActions(true);
+    }
+
+    function cfSetSubTab(tab) {
+        cfSubTab = tab;
+        cfUpdateSubTabsUI();
+        if(tab === 'dados') {
+            document.getElementById('cf-view-dados').classList.remove('hidden');
+            document.getElementById('cf-view-datas').classList.add('hidden');
+        } else {
+            document.getElementById('cf-view-dados').classList.add('hidden');
+            document.getElementById('cf-view-datas').classList.remove('hidden');
+            renderCFCalendar();
+        }
+    }
+
+    function cfUpdateSubTabsUI() {
+        const btnDados = document.getElementById('cf-subtab-dados');
+        const btnDatas = document.getElementById('cf-subtab-datas');
+        if(cfSubTab === 'dados') {
+            btnDados.className = 'flex-1 pb-3 text-sm font-bold border-b-2 border-[#EE4036] text-[#EE4036] transition-all';
+            btnDatas.className = 'flex-1 pb-3 text-sm font-bold text-gray-500 border-b-2 border-transparent hover:text-gray-700 dark:hover:text-gray-300 transition-all';
+        } else {
+            btnDatas.className = 'flex-1 pb-3 text-sm font-bold border-b-2 border-[#EE4036] text-[#EE4036] transition-all';
+            btnDados.className = 'flex-1 pb-3 text-sm font-bold text-gray-500 border-b-2 border-transparent hover:text-gray-700 dark:hover:text-gray-300 transition-all';
+        }
+    }
+
+    function renderCFContent() {
+        const team = cfIsNew ? cfTempTeam : cfTeams.find(t => t.id === cfActiveId);
+        if(!team) return;
+        document.getElementById('cf-desc').value = team.desc || '';
+        document.getElementById('cf-local').value = team.local || '';
+        renderCFDays(team);
+        if(cfSubTab === 'datas') renderCFCalendar();
+    }
+
+    function renderCFDays(team) {
+        const container = document.getElementById('cf-days-container');
+        container.innerHTML = '';
+        for(let i=0; i<7; i++) {
+            const hasTime = team.schedules && team.schedules[i] && team.schedules[i].start;
+            const isSel = cfSelectedDay === i;
+            let c = 'day-btn ' + (isSel ? 'selected' : 'unselected');
+            const dot = hasTime ? `<div class="w-1.5 h-1.5 rounded-full bg-current mx-auto mt-0.5"></div>` : '';
+            container.innerHTML += `<button class="${c} relative" onclick="cfSelectDay(${i})">${cfDayNames[i]}${dot}</button>`;
+        }
+    }
+
+    function cfSelectDay(dayIdx) {
+        cfSelectedDay = dayIdx;
+        const team = cfIsNew ? cfTempTeam : cfTeams.find(t => t.id === cfActiveId);
+        renderCFDays(team);
+        
+        const panel = document.getElementById('cf-time-panel');
+        panel.classList.remove('hidden');
+        document.getElementById('cf-time-title').innerText = `HORÁRIO DE TREINO: ${cfDayNames[dayIdx]}`;
+        
+        const sched = team.schedules && team.schedules[dayIdx] ? team.schedules[dayIdx] : {start:'', end:''};
+        document.getElementById('cf-time-start').value = sched.start || '';
+        document.getElementById('cf-time-end').value = sched.end || '';
+    }
+
+    function cfUpdateTime() {
+        cfMarkDirty();
+        const start = document.getElementById('cf-time-start').value;
+        const end = document.getElementById('cf-time-end').value;
+        
+        let team = cfIsNew ? cfTempTeam : cfTeams.find(t => t.id === cfActiveId);
+        if(team) {
+            if(!team.schedules) team.schedules = {};
+            if(start || end) team.schedules[cfSelectedDay] = {start, end};
+            else delete team.schedules[cfSelectedDay];
+        }
+        renderCFDays(team);
+    }
+
+    function renderCFCalendar() {
+        const y = cfCalDate.getFullYear(); const m = cfCalDate.getMonth();
+        document.getElementById('cf-cal-month-year').innerText = monthNames[m] + ' ' + y;
+        
+        const grid = document.getElementById('cf-cal-grid');
+        grid.innerHTML = '';
+        cfDayNames.forEach(dn => grid.innerHTML += `<div class="cf-cal-day-header">${dn}</div>`);
+        
+        const fDay = new Date(y, m, 1).getDay();
+        const dMonth = new Date(y, m+1, 0).getDate();
+        
+        let team = cfIsNew ? cfTempTeam : cfTeams.find(t => t.id === cfActiveId);
+        if(!team) team = {unavail:[]};
+        const unavail = team.unavail || [];
+
+        for (let i = 0; i < fDay; i++) grid.innerHTML += '<div class="cf-cal-day empty"></div>';
+        
+        for (let i = 1; i <= dMonth; i++) {
+            const dateStr = `${y}-${String(m+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
+            const isUn = unavail.includes(dateStr);
+            const c = isUn ? 'unavailable' : 'available';
+            grid.innerHTML += `<div class="cf-cal-day ${c}" onclick="cfToggleDate('${dateStr}')">${i}</div>`;
+        }
+    }
+
+    function cfChangeMonth(dir) {
+        cfCalDate.setMonth(cfCalDate.getMonth() + dir);
+        renderCFCalendar();
+    }
+    
+    function cfToggleDate(dateStr) {
+        cfMarkDirty();
+        let team = cfIsNew ? cfTempTeam : cfTeams.find(t => t.id === cfActiveId);
+        if(!team) return;
+        if(!team.unavail) team.unavail = [];
+        const idx = team.unavail.indexOf(dateStr);
+        if(idx > -1) team.unavail.splice(idx, 1);
+        else team.unavail.push(dateStr);
+        renderCFCalendar();
+    }
+
+    function cfMarkDirty() {
+        cfDirty = true;
+        cfToggleActions(true);
+    }
+
+    function cfToggleActions(show) {
+        const box = document.getElementById('cf-actions');
+        const btnSave = document.getElementById('cf-btn-save');
+        if(show) {
+            box.classList.remove('opacity-0', 'pointer-events-none');
+            box.classList.add('opacity-100', 'pointer-events-auto');
+            btnSave.innerHTML = cfIsNew 
+                ? '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg><span>Salvar</span>'
+                : '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg><span>Salvar alterações</span>';
+        } else {
+            box.classList.add('opacity-0', 'pointer-events-none');
+            box.classList.remove('opacity-100', 'pointer-events-auto');
+        }
+    }
+
+    function cfDiscard() {
+        if(cfIsNew) {
+            cfSelectTeam(cfTeams[0].id);
+        } else {
+            cfDirty = false;
+            cfSelectedDay = null;
+            document.getElementById('cf-time-panel').classList.add('hidden');
+            renderCFContent();
+            cfToggleActions(false);
+        }
+    }
+
+    function cfSave() {
+        let team = cfIsNew ? cfTempTeam : cfTeams.find(t => t.id === cfActiveId);
+        team.desc = document.getElementById('cf-desc').value;
+        team.local = document.getElementById('cf-local').value;
+        
+        if(cfIsNew) {
+            team.id = Date.now().toString();
+            // Lógica simples para pegar um nome (isso seria inputável, mas vou pegar um fixo caso não tenha nome real para demo)
+            team.name = prompt("Nome da equipe:", "Equipe Apollo") || "Equipe Sem Nome";
+            cfTeams.push(team);
+        }
+        
+        cfDirty = false;
+        cfIsNew = false;
+        cfActiveId = team.id;
+        cfToggleActions(false);
+        renderCFTabs();
+        alert('Equipe salva com sucesso!');
     }
   </script>
 </body>
