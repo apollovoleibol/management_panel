@@ -721,18 +721,21 @@
         </div>
       </div>
 
-      <div id="view-chatbot-feeder" class="view-section hidden animate__animated animate__fadeIn animate__faster h-full flex gap-4">
+      <div id="view-chatbot-feeder" class="view-section hidden animate__animated animate__fadeIn animate__faster h-full flex flex-col md:flex-row gap-4 md:gap-6">
 
-        <div class="w-72 shrink-0 glass-panel rounded-[20px] flex flex-col overflow-hidden">
-          <div class="px-5 py-4 border-b border-gray-200/30 dark:border-white/08 shrink-0">
-            <h3 class="font-bold text-[15px] text-gray-900 dark:text-slate-200">Equipes Ativas</h3>
-            <p class="text-[11px] text-gray-500 mt-0.5">Selecione para editar</p>
+        <div class="w-full md:w-80 shrink-0 glass-input rounded-[16px] flex flex-col overflow-hidden relative bg-transparent md:bg-white/20 dark:md:bg-black/10 border-none md:border-solid">
+          <div class="px-5 py-4 border-b border-gray-200/30 dark:border-white/08 shrink-0 flex justify-between items-center bg-white/20 dark:bg-black/10 backdrop-blur-sm">
+            <div>
+              <h3 class="font-bold text-[15px] text-gray-900 dark:text-slate-200">Equipes Ativas</h3>
+              <p class="text-[11px] text-gray-500 mt-0.5">Selecione para editar</p>
+            </div>
+            <button onclick="createNewFeederTeam()" class="w-8 h-8 bg-[#EE4036] hover:bg-[#FF554A] text-white rounded-lg shadow-md flex items-center justify-center text-lg font-light hover:scale-105 active:scale-95 transition-all" title="Nova Equipe">+</button>
           </div>
           <div id="feeder-team-list" class="flex-1 overflow-y-auto py-2"></div>
         </div>
 
-        <div class="flex-1 flex flex-col min-w-0">
-          <div id="feeder-editor" class="flex-1 glass-panel rounded-[20px] flex flex-col items-center justify-center text-gray-400 dark:text-slate-600">
+        <div class="flex-1 flex flex-col min-w-0 glass-input rounded-[16px] overflow-hidden relative bg-transparent md:bg-white/20 dark:md:bg-black/10 border-none md:border-solid">
+          <div id="feeder-editor" class="flex-1 flex flex-col items-center justify-center text-gray-400 dark:text-slate-600 h-full">
             <svg class="w-12 h-12 mb-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
             <p class="text-[14px] font-medium">Selecione uma equipe</p>
           </div>
@@ -2003,6 +2006,7 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
     let feederCalYear = new Date().getFullYear();
     let feederCalMonth = new Date().getMonth();
     let feederUnavailableDates = [];
+    let feederIsDirty = false;
 
     const DIAS_SEMANA = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
 
@@ -2048,11 +2052,33 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
       listEl.innerHTML = teams.map(t => {
         const coach = getHeadCoach(t);
         const coachName = coach ? escHtml(coach.full_name || '') : '—';
-        return `<button id="feeder-btn-${t.id}" class="feeder-team-btn sidebar-btn w-full text-left flex flex-col gap-0.5 py-3" onclick="selectFeederTeam('${t.id}')">
-          <span class="font-semibold text-[13px] text-gray-900 dark:text-slate-200 sidebar-label">${escHtml(t.name)}</span>
-          <span class="text-[11px] text-gray-400 sidebar-label">${coachName}</span>
+        const hasSchedule = t.training_schedule && Array.isArray(t.training_schedule) && t.training_schedule.length > 0;
+        const alertIcon = !hasSchedule ? `<svg class="w-4 h-4 text-yellow-500 animate-pulse shrink-0 drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24" title="Sem horário definido"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>` : '';
+        
+        return `<button id="feeder-btn-${t.id}" class="feeder-team-btn sidebar-btn w-full text-left flex items-center justify-between py-3" onclick="selectFeederTeam('${t.id}')">
+          <div class="flex flex-col gap-0.5 min-w-0 pr-2">
+            <span class="font-semibold text-[13px] text-gray-900 dark:text-slate-200 sidebar-label truncate">${escHtml(t.name)}</span>
+            <span class="text-[11px] text-gray-400 sidebar-label truncate">${coachName}</span>
+          </div>
+          ${alertIcon}
         </button>`;
       }).join('');
+    }
+
+    function createNewFeederTeam() {
+      feederSelectedTeam = {
+        id: null,
+        name: 'Nova Equipe',
+        description: '',
+        training_schedule: [],
+        location_id: ''
+      };
+      document.querySelectorAll('.feeder-team-btn').forEach(b => b.classList.remove('active'));
+      feederCalYear = new Date().getFullYear();
+      feederCalMonth = new Date().getMonth();
+      feederUnavailableDates = [];
+      feederIsDirty = true;
+      renderFeederEditor(feederSelectedTeam, feederUnavailableDates);
     }
 
     async function selectFeederTeam(teamId) {
@@ -2066,10 +2092,12 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
       const editorEl = document.getElementById('feeder-editor');
       editorEl.innerHTML = '<div class="loader mx-auto my-10"></div>';
       feederUnavailableDates = await loadUnavailableDates(teamId, feederCalYear, feederCalMonth);
+      feederIsDirty = false;
       renderFeederEditor(feederSelectedTeam, feederUnavailableDates);
     }
 
     async function loadUnavailableDates(teamId, year, month) {
+      if (!teamId) return [];
       const start = `${year}-${pad2(month+1)}-01`;
       const lastDay = new Date(year, month+1, 0).getDate();
       const end = `${year}-${pad2(month+1)}-${pad2(lastDay)}`;
@@ -2082,32 +2110,43 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
 
     function renderFeederEditor(team, unavailableDates) {
       const editorEl = document.getElementById('feeder-editor');
-      editorEl.className = 'flex-1 glass-panel rounded-[20px] flex flex-col overflow-hidden';
+      editorEl.className = 'flex-1 flex flex-col h-full';
       editorEl.innerHTML = `
-        <div class="px-6 py-4 border-b border-gray-200/30 dark:border-white/08 shrink-0">
+        <div class="px-6 py-4 border-b border-gray-200/30 dark:border-white/08 shrink-0 bg-white/20 dark:bg-black/10 backdrop-blur-sm flex justify-between items-center">
           <h3 class="font-bold text-[17px] text-gray-900 dark:text-slate-200">${escHtml(team.name)}</h3>
+          ${!team.id ? '<span class="status-badge status-em-cadastro">Novo</span>' : ''}
         </div>
-        <div class="flex border-b border-gray-200/30 dark:border-white/08 shrink-0">
-          <button id="feeder-tab-dados" onclick="switchFeederTab('dados')" class="flex-1 py-3 text-[13px] font-semibold text-[#EE4036] border-b-2 border-[#EE4036]">Dados</button>
-          <button id="feeder-tab-calendario" onclick="switchFeederTab('calendario')" class="flex-1 py-3 text-[13px] font-medium text-gray-500 dark:text-slate-400 border-b-2 border-transparent">Datas Indisponíveis</button>
+        <div class="flex border-b border-gray-200/30 dark:border-white/08 shrink-0 bg-white/10 dark:bg-black/5">
+          <button id="feeder-tab-dados" onclick="switchFeederTab('dados')" class="flex-1 py-3 text-[13px] font-semibold text-[#EE4036] border-b-2 border-[#EE4036] hover:bg-black/05 dark:hover:bg-white/05 transition-colors">Dados</button>
+          <button id="feeder-tab-calendario" onclick="switchFeederTab('calendario')" class="flex-1 py-3 text-[13px] font-medium text-gray-500 dark:text-slate-400 border-b-2 border-transparent hover:bg-black/05 dark:hover:bg-white/05 transition-colors">Datas Indisponíveis</button>
         </div>
-        <div id="feeder-tab-content" class="flex-1 overflow-y-auto p-6"></div>
+        <div id="feeder-tab-content" class="flex-1 overflow-y-auto p-6 relative"></div>
       `;
       switchFeederTab('dados');
     }
 
+    function markFeederDirty() {
+      feederIsDirty = true;
+      const btn = document.getElementById('feeder-save-btn');
+      if (btn) btn.classList.remove('hidden');
+    }
+
     function switchFeederTab(tab) {
+      if (tab === 'calendario' && !feederSelectedTeam.id) {
+        alert('Salve a equipe primeiro para gerenciar o calendário de indisponibilidade.');
+        return;
+      }
+      
       const dadosBtn = document.getElementById('feeder-tab-dados');
       const calBtn = document.getElementById('feeder-tab-calendario');
-      const activeClass = ['text-[#EE4036]','border-b-2','border-[#EE4036]'];
-      const inactiveClass = ['text-gray-500','dark:text-slate-400','border-b-2','border-transparent'];
+      
       if (tab === 'dados') {
-        dadosBtn.className = 'flex-1 py-3 text-[13px] font-semibold text-[#EE4036] border-b-2 border-[#EE4036]';
-        calBtn.className = 'flex-1 py-3 text-[13px] font-medium text-gray-500 dark:text-slate-400 border-b-2 border-transparent';
+        dadosBtn.className = 'flex-1 py-3 text-[13px] font-semibold text-[#EE4036] border-b-2 border-[#EE4036] hover:bg-black/05 dark:hover:bg-white/05 transition-colors';
+        calBtn.className = 'flex-1 py-3 text-[13px] font-medium text-gray-500 dark:text-slate-400 border-b-2 border-transparent hover:bg-black/05 dark:hover:bg-white/05 transition-colors';
         document.getElementById('feeder-tab-content').innerHTML = buildDadosForm(feederSelectedTeam);
       } else {
-        dadosBtn.className = 'flex-1 py-3 text-[13px] font-medium text-gray-500 dark:text-slate-400 border-b-2 border-transparent';
-        calBtn.className = 'flex-1 py-3 text-[13px] font-semibold text-[#EE4036] border-b-2 border-[#EE4036]';
+        dadosBtn.className = 'flex-1 py-3 text-[13px] font-medium text-gray-500 dark:text-slate-400 border-b-2 border-transparent hover:bg-black/05 dark:hover:bg-white/05 transition-colors';
+        calBtn.className = 'flex-1 py-3 text-[13px] font-semibold text-[#EE4036] border-b-2 border-[#EE4036] hover:bg-black/05 dark:hover:bg-white/05 transition-colors';
         const content = document.getElementById('feeder-tab-content');
         content.innerHTML = buildCalendarShell(feederCalYear, feederCalMonth);
         renderFeederCalendar(feederCalYear, feederCalMonth, feederSelectedTeam.training_schedule || [], feederUnavailableDates);
@@ -2118,23 +2157,37 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
       const sched = Array.isArray(team.training_schedule) ? team.training_schedule : [];
       const schedRows = sched.map((s,i) => buildScheduleRow(s.day, s.start, s.end, i)).join('');
       const locOpts = buildLocationOptions(window._feederLocations || [], team.location_id);
+      const isNew = !team.id;
+      
+      const nameField = isNew ? `
+        <div>
+          <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">Nome da Equipe *</label>
+          <input type="text" id="feeder-name" value="${escHtml(team.name === 'Nova Equipe' ? '' : team.name)}" class="glass-input w-full h-[46px] px-4 rounded-[14px] text-[14px] font-sans" oninput="markFeederDirty()">
+        </div>
+      ` : `<input type="hidden" id="feeder-name" value="${escHtml(team.name)}">`;
+
       return `
-        <div class="space-y-5">
+        <div class="space-y-5 animate__animated animate__fadeIn animate__faster">
+          ${nameField}
           <div>
             <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">Descrição</label>
-            <textarea id="feeder-desc" rows="4" class="glass-input w-full px-4 py-3 rounded-[14px] text-[14px] font-sans resize-none">${escHtml(team.description || '')}</textarea>
+            <textarea id="feeder-desc" rows="3" class="glass-input w-full px-4 py-3 rounded-[14px] text-[14px] font-sans resize-none" oninput="markFeederDirty()">${escHtml(team.description || '')}</textarea>
           </div>
           <div>
             <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">Local de Treino</label>
-            <select id="feeder-location" class="glass-input w-full h-[46px] px-4 rounded-[14px] text-[14px] font-sans appearance-none">${locOpts}</select>
+            <select id="feeder-location" class="glass-input w-full h-[46px] px-4 rounded-[14px] text-[14px] font-sans appearance-none" onchange="markFeederDirty()">${locOpts}</select>
           </div>
           <div>
             <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">Horários de Treino</label>
             <div id="feeder-schedule-rows" class="space-y-2">${schedRows}</div>
-            <button onclick="addScheduleRow()" class="mt-2 text-[12px] font-semibold text-[#EE4036] hover:underline">+ Adicionar horário</button>
+            <button onclick="addScheduleRow()" class="mt-3 flex items-center gap-1 text-[12px] font-bold text-[#EE4036] hover:text-[#FF554A] transition-colors">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg> Adicionar horário
+            </button>
           </div>
-          <div class="flex items-center gap-3">
-            <button onclick="saveTeamData()" class="bg-[#EE4036] hover:bg-[#FF554A] text-white font-bold px-6 py-2.5 rounded-[12px] text-[13px] shadow-lg transition-all">Salvar</button>
+          <div class="flex items-center gap-3 pt-4 border-t border-gray-200/30 dark:border-white/10">
+            <button id="feeder-save-btn" onclick="saveTeamData()" class="bg-[#16a34a] hover:bg-[#15803d] text-white font-bold px-6 py-2.5 rounded-[12px] text-[13px] shadow-lg transition-all flex items-center gap-2 ${feederIsDirty ? '' : 'hidden'}">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Salvar Alterações
+            </button>
             <span id="feeder-save-status" class="text-[12px] font-medium"></span>
           </div>
         </div>
@@ -2147,12 +2200,12 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
 
     function buildScheduleRow(day, start, end, index) {
       const dayOpts = DIAS_SEMANA.map((d,i) => `<option value="${i}"${i == day ? ' selected' : ''}>${d}</option>`).join('');
-      return `<div class="feeder-schedule-row flex gap-2 items-center">
-        <select class="glass-input h-[38px] px-2 rounded-[10px] text-[13px] font-sans appearance-none feeder-sched-day">${dayOpts}</select>
-        <input type="time" value="${escHtml(start||'')}" class="glass-input h-[38px] px-2 rounded-[10px] text-[13px] font-sans feeder-sched-start">
-        <span class="text-gray-400 text-[12px]">às</span>
-        <input type="time" value="${escHtml(end||'')}" class="glass-input h-[38px] px-2 rounded-[10px] text-[13px] font-sans feeder-sched-end">
-        <button onclick="removeScheduleRow(this)" class="text-gray-400 hover:text-[#EE4036] transition-colors ml-1">
+      return `<div class="feeder-schedule-row flex gap-2 items-center animate__animated animate__fadeIn animate__faster">
+        <select class="glass-input h-[38px] px-2 rounded-[10px] text-[13px] font-sans appearance-none feeder-sched-day" onchange="markFeederDirty()">${dayOpts}</select>
+        <input type="time" required value="${escHtml(start||'')}" class="glass-input h-[38px] px-2 rounded-[10px] text-[13px] font-sans feeder-sched-start [&::-webkit-calendar-picker-indicator]:dark:invert" oninput="markFeederDirty()">
+        <span class="text-gray-400 text-[12px] font-medium">às</span>
+        <input type="time" required value="${escHtml(end||'')}" class="glass-input h-[38px] px-2 rounded-[10px] text-[13px] font-sans feeder-sched-end [&::-webkit-calendar-picker-indicator]:dark:invert" oninput="markFeederDirty()">
+        <button onclick="removeScheduleRow(this)" class="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-[#EE4036] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all ml-1" title="Remover">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </div>`;
@@ -2164,10 +2217,12 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
       const div = document.createElement('div');
       div.innerHTML = buildScheduleRow(1, '19:00', '20:00', container.children.length);
       container.appendChild(div.firstElementChild);
+      markFeederDirty();
     }
 
     function removeScheduleRow(btn) {
       btn.closest('.feeder-schedule-row').remove();
+      markFeederDirty();
     }
 
     function readScheduleFromForm() {
@@ -2181,22 +2236,35 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
     async function saveTeamData() {
       if (!feederSelectedTeam) return;
       const statusEl = document.getElementById('feeder-save-status');
+      const nameInput = document.getElementById('feeder-name');
+      const nameVal = nameInput ? nameInput.value.trim() : feederSelectedTeam.name;
+
+      if (!nameVal) { alert('Nome da equipe é obrigatório!'); return; }
+
       statusEl.textContent = 'Salvando...'; statusEl.className = 'text-[12px] font-medium text-gray-500';
       const payload = {
+        name: nameVal,
         description: document.getElementById('feeder-desc').value,
         training_schedule: readScheduleFromForm(),
         location_id: document.getElementById('feeder-location').value
       };
+      
+      const isNew = !feederSelectedTeam.id;
+      const url = isNew ? `${SUPABASE_URL}/rest/v1/teams` : `${SUPABASE_URL}/rest/v1/teams?id=eq.${feederSelectedTeam.id}`;
+      const method = isNew ? 'POST' : 'PATCH';
+      
       try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/teams?id=eq.${feederSelectedTeam.id}`, {
-          method: 'PATCH', headers: getSupabaseHeaders(), body: JSON.stringify(payload)
+        const res = await fetch(url, {
+          method: method, headers: getSupabaseHeaders(), body: JSON.stringify(payload)
         });
         if (!res.ok) { const err = await res.json(); throw new Error(JSON.stringify(err)); }
-        feederSelectedTeam.description = payload.description;
-        feederSelectedTeam.training_schedule = payload.training_schedule;
-        feederSelectedTeam.location_id = payload.location_id;
+        
         statusEl.textContent = 'Salvo com sucesso!'; statusEl.className = 'text-[12px] font-semibold text-green-600 dark:text-green-400';
+        feederIsDirty = false;
+        document.getElementById('feeder-save-btn').classList.add('hidden');
         setTimeout(() => { if(statusEl) statusEl.textContent = ''; }, 3000);
+        
+        await loadChatbotFeeder();
       } catch(e) {
         statusEl.textContent = 'Erro: ' + e.message; statusEl.className = 'text-[12px] font-semibold text-red-500';
       }
@@ -2207,28 +2275,36 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
       return `
         <div class="flex items-center justify-between mb-4">
           <button onclick="feederCalPrev()" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-black/05 dark:hover:bg-white/05 text-gray-500 transition-all">&lt;</button>
-          <span id="feeder-cal-title" class="font-bold text-[15px] text-gray-900 dark:text-slate-200">${mNames[month]} ${year}</span>
+          <span id="feeder-cal-title" class="font-bold text-[15px] text-gray-900 dark:text-slate-200 uppercase tracking-wide">${mNames[month]} ${year}</span>
           <button onclick="feederCalNext()" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-black/05 dark:hover:bg-white/05 text-gray-500 transition-all">&gt;</button>
         </div>
-        <div id="feeder-cal-grid" class="grid grid-cols-7 gap-1">
-          ${['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'].map(d => `<div class="text-center text-[10px] font-bold text-gray-400 uppercase py-1">${d}</div>`).join('')}
+        <div class="bg-gray-200 dark:bg-white/10 border border-gray-200 dark:border-white/10 rounded-xl overflow-hidden animate__animated animate__fadeIn animate__faster">
+          <div id="feeder-cal-grid" class="grid grid-cols-7 gap-px bg-gray-200 dark:bg-white/10">
+            </div>
         </div>
       `;
     }
 
     function renderFeederCalendar(year, month, trainingSchedule, unavailableDates) {
-      const mNames = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
       const titleEl = document.getElementById('feeder-cal-title');
-      if (titleEl) titleEl.textContent = mNames[month] + ' ' + year;
+      if (titleEl) {
+        const mNames = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+        titleEl.textContent = mNames[month] + ' ' + year;
+      }
       const grid = document.getElementById('feeder-cal-grid');
       if (!grid) return;
-      const trainDays = (trainingSchedule || []).map(s => s.day);
+      const trainDays = (trainingSchedule || []).map(s => parseInt(s.day));
       const firstDay = new Date(year, month, 1).getDay();
       const daysInMonth = new Date(year, month+1, 0).getDate();
       const today = new Date(); today.setHours(0,0,0,0);
-      const headers = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'].map(d => `<div class="text-center text-[10px] font-bold text-gray-400 uppercase py-1">${d}</div>`).join('');
+      
+      const headers = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'].map(d => `<div class="bg-gray-50 dark:bg-[#0f1332] text-center text-[10px] font-bold text-gray-400 uppercase py-2">${d}</div>`).join('');
       let cells = headers;
-      for (let i = 0; i < firstDay; i++) cells += '<div></div>';
+      
+      for (let i = 0; i < firstDay; i++) {
+        cells += '<div class="bg-white dark:bg-[#0f1332] opacity-50"></div>';
+      }
+      
       for (let day = 1; day <= daysInMonth; day++) {
         const date = new Date(year, month, day);
         const dateStr = `${year}-${pad2(month+1)}-${pad2(day)}`;
@@ -2236,16 +2312,19 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
         const isPast = date < today;
         const isBlocked = unavailableDates.includes(dateStr);
         let cellClass, cellContent, onclick = '';
+        
+        let baseClass = "bg-white dark:bg-[#0f1332] aspect-square flex items-center justify-center relative text-[14px] transition-all ";
+        
         if (!isTrainDay || isPast) {
-          cellClass = 'rounded-lg py-2 text-center text-[13px] text-gray-300 dark:text-gray-600 cursor-default';
-          cellContent = day;
+          cellClass = baseClass + 'text-gray-300 dark:text-gray-600 cursor-default';
+          cellContent = `<span>${day}</span>`;
         } else if (isBlocked) {
-          cellClass = 'rounded-lg py-2 text-center text-[13px] font-bold bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 cursor-pointer hover:bg-red-200 dark:hover:bg-red-900/50 transition-all';
-          cellContent = `${day}<span class="block text-[10px] leading-none">✕</span>`;
+          cellClass = baseClass + 'font-bold text-red-600 dark:text-red-400 cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20';
+          cellContent = `<span>${day}</span><span class="absolute inset-0 flex items-center justify-center text-[#EE4036] text-4xl opacity-60 font-light drop-shadow-md">✕</span>`;
           onclick = `onclick="toggleUnavailableDate('${feederSelectedTeam.id}','${dateStr}',true)"`;
         } else {
-          cellClass = 'rounded-lg py-2 text-center text-[13px] font-medium text-gray-700 dark:text-slate-300 cursor-pointer hover:bg-[#EE4036]/10 hover:text-[#EE4036] transition-all';
-          cellContent = day;
+          cellClass = baseClass + 'font-medium text-gray-700 dark:text-slate-300 cursor-pointer hover:bg-[#EE4036]/10 hover:text-[#EE4036] hover:font-bold';
+          cellContent = `<span>${day}</span>`;
           onclick = `onclick="toggleUnavailableDate('${feederSelectedTeam.id}','${dateStr}',false)"`;
         }
         cells += `<div class="${cellClass}" ${onclick}>${cellContent}</div>`;
