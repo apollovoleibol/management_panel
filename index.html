@@ -2022,11 +2022,23 @@ document.getElementById('modal-dirty').classList.remove('open');" class="flex-1 
           fetch(`${SUPABASE_URL}/rest/v1/teams?select=id,name,description,training_schedule,location_id,training_locations(*),team_coaches(*,profiles(*))&is_active=eq.true&order=name.asc`, { headers: getSupabaseHeaders() }),
           fetch(`${SUPABASE_URL}/rest/v1/training_locations?select=id,name,address&order=name.asc`, { headers: getSupabaseHeaders() })
         ]);
-        feederTeams = await teamsRes.json();
-        window._feederLocations = await locsRes.json();
+        const teamsData = await teamsRes.json();
+        const locsData  = await locsRes.json();
+        appLog('[Feeder] teams HTTP ' + teamsRes.status + ' | resposta: ' + JSON.stringify(teamsData).substring(0, 300), teamsRes.ok ? 'ok' : 'err');
+        if (!teamsRes.ok) {
+          listEl.innerHTML = `<p class="text-red-500 text-sm p-4">Erro ${teamsRes.status} ao buscar equipes: ${escHtml(JSON.stringify(teamsData))}</p>`;
+          return;
+        }
+        if (!Array.isArray(teamsData)) {
+          listEl.innerHTML = `<p class="text-red-500 text-sm p-4">Resposta inesperada: ${escHtml(JSON.stringify(teamsData).substring(0, 200))}</p>`;
+          return;
+        }
+        feederTeams = teamsData;
+        window._feederLocations = Array.isArray(locsData) ? locsData : [];
         renderFeederTeamList(feederTeams);
       } catch(e) {
         listEl.innerHTML = `<p class="text-red-500 text-sm p-4">Erro ao carregar equipes: ${escHtml(e.message)}</p>`;
+        appLog('[Feeder] exceção: ' + e.message, 'err');
       }
     }
 
