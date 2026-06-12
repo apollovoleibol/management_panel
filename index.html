@@ -10,7 +10,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -270,31 +271,128 @@
     .dark .cf-cal-day.inactive { background: rgba(255,255,255,0.02); color: #6b7280; }
     
     .cf-cal-day.empty { visibility: hidden; pointer-events: none; }
+
+    /* ==========================================
+       LOGIN OVERLAY — Animação splash → panel
+    ========================================== */
+    .login-logo-wrapper {
+      width: 100%; display: flex; justify-content: center;
+      transition: margin-top 900ms cubic-bezier(0.34,1.56,0.64,1),
+                  margin-bottom 900ms cubic-bezier(0.34,1.56,0.64,1);
+      position: relative; z-index: 10;
+    }
+    #loginLogoEl {
+      transition: width 800ms cubic-bezier(0.34,1.56,0.64,1),
+                  height 800ms cubic-bezier(0.34,1.56,0.64,1),
+                  border-radius 800ms ease, opacity 700ms ease;
+      opacity: 0;
+    }
+    .login-logo-wrapper.phase-splash  { margin-top: 32vh; margin-bottom: 0; }
+    .login-logo-wrapper.phase-splash  #loginLogoEl { width: 100px; height: 100px; opacity: 1; border-radius: 22px; }
+    .login-logo-wrapper.phase-panel-in { margin-top: 4vh; margin-bottom: 3vh; }
+    .login-logo-wrapper.phase-panel-in #loginLogoEl { width: 68px; height: 68px; opacity: 1; border-radius: 16px; }
+    @media (max-height: 700px) {
+      .login-logo-wrapper.phase-splash   { margin-top: 22vh; }
+      .login-logo-wrapper.phase-splash   #loginLogoEl { width: 80px; height: 80px; }
+      .login-logo-wrapper.phase-panel-in { margin-top: 2vh; margin-bottom: 2vh; }
+      .login-logo-wrapper.phase-panel-in #loginLogoEl { width: 54px; height: 54px; }
+    }
+
+    /* Formas flutuantes do login */
+    .login-shape { position: absolute; border-radius: 50%; filter: blur(80px); pointer-events: none; animation: loginFloat 12s ease-in-out infinite; }
+    .login-shape-1 { width:50vw; height:50vw; max-width:500px; max-height:500px; background:#EE4036; opacity:0.12; top:-10%; left:-15%; }
+    .login-shape-2 { width:45vw; height:45vw; max-width:450px; max-height:450px; background:#4F46E5; opacity:0.12; bottom:-10%; right:-15%; animation-delay:-6s; }
+    .login-shape-3 { width:35vw; height:35vw; max-width:350px; max-height:350px; background:#c026d3; opacity:0.08; top:50%; left:50%; animation-name:loginFloatCenter; animation-duration:15s; animation-direction:reverse; }
+    @keyframes loginFloat { 0%,100%{transform:translateY(0) scale(1);} 50%{transform:translateY(-20px) scale(1.05);} }
+    @keyframes loginFloatCenter { 0%,100%{transform:translate(-50%,-50%) scale(1);} 50%{transform:translate(-50%,calc(-50% - 20px)) scale(1.05);} }
+
+    .login-input-dark {
+      display:block; width:100%; height:44px; padding:0 14px; border-radius:10px;
+      font-size:14px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.12);
+      color:white; transition:border-color 0.2s, box-shadow 0.2s; box-sizing:border-box;
+      font-family: inherit;
+    }
+    .login-input-dark:focus { outline:none; border-color:#EE4036; box-shadow:0 0 0 3px rgba(238,64,54,0.2); }
+    .login-input-dark::placeholder { color:rgba(255,255,255,0.3); }
   </style>
 </head>
 <body class="flex h-[100dvh] overflow-hidden selection:bg-red-200 selection:text-red-900">
 
-  <div id="login-overlay" class="fixed inset-0 z-[100] flex items-center justify-center bg-[#0F1332] bg-cover bg-center">
-    <div class="absolute inset-0 bg-black/40 backdrop-blur-md"></div>
-    <div class="glass-panel relative z-10 w-full max-w-md p-8 m-4 rounded-[32px] flex flex-col items-center animate__animated animate__fadeInUp">
-      <div class="w-16 h-16 rounded-full mb-4 flex items-center justify-center shadow-lg border-[1.5px] border-white bg-white shrink-0">
-        <span style="color:#EE4036;font-weight:800;font-size:24px;">A</span>
+  <div id="login-overlay" class="fixed inset-0 z-[100] flex flex-col px-4 pt-6 pb-4 overflow-hidden"
+       style="background: linear-gradient(135deg, #0a0e1b 0%, #0f132e 100%);">
+
+    <!-- Formas flutuantes de fundo -->
+    <div class="login-shape login-shape-1"></div>
+    <div class="login-shape login-shape-2"></div>
+    <div class="login-shape login-shape-3"></div>
+
+    <!-- Logo (fase splash → fase panel-in) -->
+    <div class="login-logo-wrapper" id="loginLogoWrapper">
+      <div id="loginLogoEl" style="background: linear-gradient(135deg, #FF554A 0%, #CC2F26 100%); display:flex; align-items:center; justify-content:center; box-shadow: 0 12px 40px rgba(238,64,54,0.35); flex-shrink:0;">
+        <span style="color:white; font-weight:900; font-size:2.3em; line-height:1; font-family:Inter,sans-serif;">A</span>
       </div>
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Painel Apollo</h2>
-      <p class="text-gray-600 dark:text-white/60 text-sm mb-8 text-center">Faça login para gerenciar o sistema</p>
-      <form id="formLogin" class="w-full space-y-4" onsubmit="realizarLogin(event)">
-        <div>
-          <label class="block text-[11px] font-bold text-gray-500 dark:text-white/70 uppercase tracking-widest mb-1">E-mail</label>
-          <input type="email" id="loginEmail" required class="glass-input w-full h-[50px] px-4 rounded-[16px] placeholder-gray-400 dark:placeholder-white/40" placeholder="seu@email.com">
-        </div>
-        <div>
-          <label class="block text-[11px] font-bold text-gray-500 dark:text-white/70 uppercase tracking-widest mb-1">Senha</label>
-          <input type="password" id="loginSenha" required class="glass-input w-full h-[50px] px-4 rounded-[16px] placeholder-gray-400 dark:placeholder-white/40" placeholder="••••••••">
-        </div>
-        <div id="loginError" class="hidden text-[#EE4036] text-xs font-bold text-center bg-[#EE4036]/10 py-2 rounded-lg mt-2">Credenciais inválidas.</div>
-        <button type="submit" id="btnLogin" class="w-full h-[50px] mt-6 bg-[#EE4036] hover:bg-[#FF554A] text-white font-bold rounded-[16px] shadow-lg flex justify-center items-center gap-2 transition-all active:scale-95">Acessar Painel</button>
-      </form>
     </div>
+
+    <!-- Painel de login -->
+    <div id="loginPanel" class="w-full max-w-sm relative z-10 mx-auto"
+         style="opacity:0; transform:translateY(16px); transition:opacity 0.7s ease, transform 0.7s ease; pointer-events:none;">
+      <div style="background:rgba(15,19,50,0.38); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px); border:1px solid rgba(255,255,255,0.1); box-shadow:0 8px 32px rgba(0,0,0,0.4); border-radius:20px; padding:24px; display:flex; flex-direction:column; gap:13px;">
+
+        <!-- Erro global (profile inválido, etc.) -->
+        <div id="loginGlobalError" style="display:none; font-size:12px; font-weight:600; color:#ff7070; text-align:center; background:rgba(238,64,54,0.13); padding:10px 14px; border-radius:10px; border:1px solid rgba(238,64,54,0.3);"></div>
+
+        <!-- Entrar com Google -->
+        <button id="btnGoogle" onclick="loginComGoogle()"
+                style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); color:white; font-weight:500; width:100%; padding:13px 16px; border-radius:12px; display:flex; align-items:center; justify-content:center; gap:10px; font-size:14px; cursor:pointer; transition:all 0.2s ease;">
+          <svg id="googleIcon" width="18" height="18" viewBox="0 0 24 24">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+          <svg id="googleSpinner" style="display:none;" class="animate-spin" width="18" height="18" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="white" stroke-width="4" fill="none"></circle><path class="opacity-75" fill="white" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+          <span id="googleBtnText">Entrar com Google</span>
+        </button>
+
+        <!-- Acessar com senha -->
+        <button onclick="toggleSenhaForm()"
+                style="background:linear-gradient(135deg, #FF554A 0%, #EE4036 100%); color:white; font-weight:600; width:100%; padding:13px 16px; border-radius:12px; display:flex; align-items:center; justify-content:center; gap:8px; font-size:14px; cursor:pointer; box-shadow:0 4px 15px rgba(238,64,54,0.3); transition:all 0.2s ease;">
+          <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
+          <span>Acessar com senha</span>
+        </button>
+
+        <!-- Formulário de senha (oculto por padrão) -->
+        <div id="formSenhaContainer" style="display:none;">
+          <form id="formLoginSenha" onsubmit="realizarLoginSenha(event)" style="display:flex; flex-direction:column; gap:10px;">
+            <div>
+              <label style="display:block; font-size:10px; font-weight:700; color:rgba(255,255,255,0.5); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:6px;">E-mail</label>
+              <input type="email" id="loginEmailInput" required class="login-input-dark" placeholder="seu@email.com">
+            </div>
+            <div>
+              <label style="display:block; font-size:10px; font-weight:700; color:rgba(255,255,255,0.5); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:6px;">Senha</label>
+              <input type="password" id="loginSenhaInput" required class="login-input-dark" placeholder="••••••••">
+            </div>
+            <div id="loginSenhaError" style="display:none; font-size:11px; font-weight:600; color:#ff7070; text-align:center; background:rgba(238,64,54,0.12); padding:8px 12px; border-radius:8px;"></div>
+            <button type="submit" id="btnLoginSenha"
+                    style="height:44px; background:#EE4036; color:white; font-weight:700; border-radius:10px; font-size:14px; cursor:pointer; transition:all 0.2s; display:flex; align-items:center; justify-content:center; gap:8px; border:none; width:100%;">
+              Entrar
+            </button>
+          </form>
+        </div>
+
+        <p style="color:rgba(255,255,255,0.25); font-size:11px; text-align:center; padding-top:2px; line-height:1.5;">
+          Use a conta Google cadastrada pela administração
+        </p>
+      </div>
+    </div>
+
+    <!-- Spinner de callback OAuth -->
+    <div id="loginCallbackState" style="display:none; position:absolute; inset:0; z-index:20; background:rgba(10,14,27,0.95); flex-direction:column; align-items:center; justify-content:center; gap:16px;">
+      <svg class="animate-spin" width="40" height="40" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="white" stroke-width="4" fill="none"></circle><path class="opacity-75" fill="#EE4036" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+      <p style="color:rgba(255,255,255,0.65); font-size:14px; font-family:Inter,sans-serif;">Autenticando...</p>
+    </div>
+
+    <div style="flex:1;"></div>
   </div>
 
   <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
@@ -349,14 +447,17 @@
           <svg class="icon-moon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
         </button>
         <div class="h-8 w-px bg-gray-300 dark:bg-slate-700"></div>
-        <div class="flex items-center gap-3 cursor-pointer group">
+        <div class="flex items-center gap-2">
           <div class="text-right hidden sm:block">
-            <p class="text-sm font-bold text-gray-900 dark:text-slate-200">Admin Apollo</p>
-            <p class="text-[11px] text-gray-500" id="userEmailDisplay">Aguardando login...</p>
+            <p class="text-sm font-bold text-gray-900 dark:text-slate-200" id="userNameDisplay">—</p>
+            <p class="text-[11px] text-gray-500 dark:text-gray-400" id="userEmailDisplay">Aguardando login...</p>
           </div>
-          <div class="w-9 h-9 rounded-full bg-white/60 dark:bg-black/30 border border-gray-200 dark:border-white/10 flex items-center justify-center text-gray-500">
+          <div class="w-9 h-9 rounded-full bg-white/60 dark:bg-black/30 border border-gray-200 dark:border-white/10 flex items-center justify-center text-gray-500" id="userAvatarEl">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
           </div>
+          <button onclick="fazerLogout()" title="Sair" class="w-9 h-9 flex items-center justify-center rounded-full bg-white/50 dark:bg-black/30 hover:bg-red-50 dark:hover:bg-red-500/10 text-gray-400 hover:text-[#EE4036] transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+          </button>
         </div>
       </div>
     </header>
@@ -984,6 +1085,10 @@
     const SUPABASE_URL = 'https://hrakdydodcmllwnkmrkg.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhyYWtkeWRvZGNtbGx3bmttcmtnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1MDEwNTAsImV4cCI6MjA5MTA3NzA1MH0.LFDcJNf2_uWzmj6zRyc7xUSww7G7mIpgta-1ro4oPFc';
     let tokenAcesso = null;
+    let supabaseClient = null;
+    let currentUserRole = null;
+    let currentUserProfile = null;
+    let _loginProcessed = false;
 
     const iconAdult = `<svg class="w-5 h-5 opacity-80 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>`;
     const iconChild = `<svg class="w-5 h-5 opacity-80 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>`;
@@ -1045,20 +1150,50 @@
     }
 
     /* ============================================
-       AUTH
+       AUTH — Google OAuth + Senha (Supabase SDK)
     ============================================ */
-    document.addEventListener('DOMContentLoaded', function() {
-      appLog('DOM Carregado - Verificando sessão...', 'info');
-      const savedToken = sessionStorage.getItem('apolloToken');
-      const savedEmail = sessionStorage.getItem('apolloUserEmail');
-      if (savedToken) {
-        tokenAcesso = savedToken;
-        document.getElementById('userEmailDisplay').innerText = savedEmail || '';
-        document.getElementById('login-overlay').style.display = 'none';
-        appLog('Sessão encontrada. Inicializando app.', 'ok');
-        initApp();
+    document.addEventListener('DOMContentLoaded', async function() {
+      appLog('DOM Carregado — iniciando auth', 'info');
+
+      // Inicializa cliente Supabase com suporte a OAuth PKCE
+      const { createClient } = window.supabase;
+      supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+        auth: { autoRefreshToken: true, persistSession: true, detectSessionInUrl: true, flowType: 'pkce' }
+      });
+
+      // Detecta se veio de callback OAuth (Google redirect)
+      const isCallback = new URLSearchParams(window.location.search).has('code')
+                      || window.location.hash.includes('access_token=');
+      if (isCallback) {
+        document.getElementById('loginCallbackState').style.display = 'flex';
+        document.getElementById('loginLogoWrapper').style.display = 'none';
+        document.getElementById('loginPanel').style.display = 'none';
+      } else {
+        startLoginSplash();
       }
-      
+
+      // Listener de estado de autenticação
+      supabaseClient.auth.onAuthStateChange(async (event, session) => {
+        appLog(`[Auth] ${event} — ${session?.user?.email || 'sem sessão'}`, 'info');
+        if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && session && !_loginProcessed) {
+          _loginProcessed = true;
+          tokenAcesso = session.access_token;
+          if (window.location.search.includes('code=')) {
+            window.history.replaceState({}, document.title, window.location.pathname);
+          }
+          await postLogin(session);
+        } else if (event === 'TOKEN_REFRESHED' && session) {
+          tokenAcesso = session.access_token;
+        } else if (event === 'SIGNED_OUT') {
+          _loginProcessed = false;
+          tokenAcesso = null;
+          currentUserRole = null;
+          currentUserProfile = null;
+          mostrarLoginOverlay();
+        }
+      });
+
+      // Máscaras de input
       document.getElementById('formAtletaCpf').addEventListener('input', function(e) {
         let v = e.target.value.replace(/\D/g, ''); if (v.length > 11) v = v.slice(0, 11);
         v = v.replace(/(\d{3})(\d)/, '$1.$2'); v = v.replace(/(\d{3})(\d)/, '$1.$2'); v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2'); e.target.value = v;
@@ -1073,54 +1208,164 @@
       });
     });
 
-    async function realizarLogin(event) {
-      event.preventDefault();
-      const email = document.getElementById('loginEmail').value;
-      const senha = document.getElementById('loginSenha').value;
-      const btn = document.getElementById('btnLogin');
-      const errorMsg = document.getElementById('loginError');
-      btn.innerHTML = '<div class="loader w-5 h-5 border-2 border-t-white m-0"></div> Aguarde...';
-      btn.disabled = true; errorMsg.classList.add('hidden');
-      
-      appLog(`Iniciando tentativa de login para: ${email}`, 'info');
+    // ─── Animação de splash ───
+    function startLoginSplash() {
+      const wrapper = document.getElementById('loginLogoWrapper');
+      if (!wrapper) return;
+      wrapper.className = 'login-logo-wrapper phase-splash';
+      setTimeout(() => {
+        wrapper.className = 'login-logo-wrapper phase-panel-in';
+        const panel = document.getElementById('loginPanel');
+        if (panel) { panel.style.opacity = '1'; panel.style.transform = 'translateY(0)'; panel.style.pointerEvents = 'auto'; }
+      }, 1200);
+    }
 
+    // ─── Login com Google ───
+    async function loginComGoogle() {
+      const btn = document.getElementById('btnGoogle');
+      if (btn.disabled) return;
+      btn.disabled = true;
+      document.getElementById('googleIcon').style.display = 'none';
+      document.getElementById('googleSpinner').style.display = 'block';
+      document.getElementById('googleBtnText').innerText = 'Redirecionando...';
       try {
-        const response = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
-          method: 'POST', headers: { 'apikey': SUPABASE_ANON_KEY, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password: senha })
+        const redirectTo = window.location.origin + window.location.pathname;
+        const { data, error } = await supabaseClient.auth.signInWithOAuth({
+          provider: 'google',
+          options: { redirectTo, queryParams: { access_type: 'offline', prompt: 'select_account' } }
         });
-        
-        const rawText = await response.text();
-        
-        let data;
-        try {
-          data = JSON.parse(rawText);
-        } catch (e) {
-          appLog('Falha no JSON.parse do Login (Resposta HTML/Inesperada)', 'err', {
-            status: response.status,
-            statusText: response.statusText,
-            url: response.url,
-            corpo: rawText
-          });
-          throw new Error('Servidor retornou resposta não-JSON (verifique o log)');
-        }
-        
-        if (!response.ok) throw new Error(data.error_description || data.msg || 'Erro ao fazer login');
-        tokenAcesso = data.access_token;
-        document.getElementById('userEmailDisplay').innerText = data.user.email;
-        sessionStorage.setItem('apolloToken', tokenAcesso);
-        sessionStorage.setItem('apolloUserEmail', data.user.email);
-        
-        appLog('Login realizado com sucesso', 'ok');
-        const overlay = document.getElementById('login-overlay');
-        overlay.classList.add('animate__fadeOut');
-        setTimeout(() => { overlay.style.display = 'none'; initApp(); }, 500);
-      } catch (error) {
-        appLog('Exceção capturada no processo de login', 'err', error.message);
-        errorMsg.innerText = 'E-mail ou senha incorretos ou erro de rede.';
-        errorMsg.classList.remove('hidden');
-        btn.innerHTML = 'Acessar Painel'; btn.disabled = false;
+        if (error) throw error;
+        if (data?.url) window.location.href = data.url;
+      } catch (e) {
+        appLog('[Auth] Erro Google OAuth: ' + e.message, 'err');
+        btn.disabled = false;
+        document.getElementById('googleIcon').style.display = '';
+        document.getElementById('googleSpinner').style.display = 'none';
+        document.getElementById('googleBtnText').innerText = 'Entrar com Google';
+        exibirLoginErro('Erro ao iniciar login: ' + (e.message || 'tente novamente'));
       }
+    }
+
+    // ─── Login com e-mail + senha ───
+    async function realizarLoginSenha(event) {
+      event.preventDefault();
+      const email = document.getElementById('loginEmailInput').value.trim();
+      const senha = document.getElementById('loginSenhaInput').value;
+      const btn = document.getElementById('btnLoginSenha');
+      const errEl = document.getElementById('loginSenhaError');
+      btn.innerHTML = '<svg class="animate-spin" width="14" height="14" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg> Aguarde...';
+      btn.disabled = true; errEl.style.display = 'none';
+      appLog(`Login com senha para: ${email}`, 'info');
+      try {
+        const { error } = await supabaseClient.auth.signInWithPassword({ email, password: senha });
+        if (error) throw error;
+        // onAuthStateChange(SIGNED_IN) assume daqui
+      } catch (e) {
+        appLog('[Auth] Erro login senha: ' + e.message, 'err');
+        const msg = (e.message || '').toLowerCase();
+        errEl.innerText = msg.includes('invalid') || msg.includes('credentials')
+          ? 'E-mail ou senha incorretos.' : (e.message || 'Erro ao fazer login.');
+        errEl.style.display = 'block';
+        btn.innerHTML = 'Entrar'; btn.disabled = false;
+      }
+    }
+
+    // ─── Toggle formulário de senha ───
+    function toggleSenhaForm() {
+      const c = document.getElementById('formSenhaContainer');
+      c.style.display = c.style.display === 'none' ? 'block' : 'none';
+    }
+
+    // ─── Pós-login: carregar perfil e aplicar permissões ───
+    async function postLogin(session) {
+      appLog('postLogin: verificando perfil', 'info');
+      const profile = await carregarPerfilUsuario(session.user);
+      if (!profile) return;
+      currentUserRole = profile.role;
+      currentUserProfile = profile;
+      const nameEl = document.getElementById('userNameDisplay');
+      const emailEl = document.getElementById('userEmailDisplay');
+      if (nameEl) nameEl.innerText = profile.full_name || session.user.email;
+      if (emailEl) emailEl.innerText = profile.email || session.user.email;
+      aplicarNavPorRole(profile.role);
+      const overlay = document.getElementById('login-overlay');
+      overlay.style.transition = 'opacity 0.45s ease';
+      overlay.style.opacity = '0';
+      setTimeout(() => { overlay.style.display = 'none'; }, 450);
+      initApp();
+    }
+
+    // ─── Carrega perfil da tabela profiles ───
+    async function carregarPerfilUsuario(user) {
+      try {
+        const res = await fetch(
+          `${SUPABASE_URL}/rest/v1/profiles?id=eq.${user.id}&select=id,full_name,email,role,is_active&limit=1`,
+          { headers: getSupabaseHeaders() }
+        );
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        if (!data || data.length === 0) {
+          exibirLoginErro('Perfil não encontrado. Contate o administrador.');
+          await supabaseClient.auth.signOut(); return null;
+        }
+        const p = data[0];
+        if (!p.is_active) {
+          exibirLoginErro('Conta inativa. Contate o administrador.');
+          await supabaseClient.auth.signOut(); return null;
+        }
+        if (!['admin', 'coach', 'customer'].includes(p.role)) {
+          exibirLoginErro('Perfil sem permissão de acesso ao painel.');
+          await supabaseClient.auth.signOut(); return null;
+        }
+        return p;
+      } catch (e) {
+        appLog('[Auth] carregarPerfilUsuario erro: ' + e.message, 'err');
+        exibirLoginErro('Erro ao verificar perfil. Tente novamente.');
+        return null;
+      }
+    }
+
+    // ─── Aplica navegação conforme role ───
+    function aplicarNavPorRole(role) {
+      const btnCF = document.getElementById('btn-chat-feeder');
+      if (!btnCF) return;
+      // customer: sem acesso ao Chat Feeder
+      btnCF.style.display = (role === 'customer') ? 'none' : '';
+      // Se customer estiver na view do Chat Feeder, redireciona
+      if (role === 'customer') {
+        const cfView = document.getElementById('view-chat-feeder');
+        if (cfView && !cfView.classList.contains('hidden')) switchView('agendamentos');
+      }
+    }
+
+    // ─── Exibe erro no overlay de login ───
+    function exibirLoginErro(msg) {
+      const el = document.getElementById('loginGlobalError');
+      if (el) { el.innerText = msg; el.style.display = 'block'; }
+      mostrarLoginOverlay();
+    }
+
+    // ─── Mostra overlay de login ───
+    function mostrarLoginOverlay() {
+      const overlay = document.getElementById('login-overlay');
+      overlay.style.display = 'flex';
+      overlay.style.opacity = '1';
+      overlay.style.transition = '';
+      document.getElementById('loginCallbackState').style.display = 'none';
+      const wrapper = document.getElementById('loginLogoWrapper');
+      if (wrapper) { wrapper.style.display = ''; wrapper.className = 'login-logo-wrapper phase-panel-in'; }
+      const panel = document.getElementById('loginPanel');
+      if (panel) { panel.style.display = ''; panel.style.opacity = '1'; panel.style.transform = 'translateY(0)'; panel.style.pointerEvents = 'auto'; }
+    }
+
+    // ─── Logout ───
+    async function fazerLogout() {
+      if (!confirm('Deseja sair do painel?')) return;
+      _loginProcessed = false;
+      try { await supabaseClient.auth.signOut(); } catch (e) { console.warn('[Auth] signOut:', e.message); }
+      tokenAcesso = null; currentUserRole = null; currentUserProfile = null;
+      mostrarLoginOverlay();
+      startLoginSplash();
     }
 
     function initApp() {
