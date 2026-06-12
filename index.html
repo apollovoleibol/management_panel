@@ -227,16 +227,17 @@
     
     .cf-tab { position: relative; border-radius: 12px 12px 0 0; margin-right: 4px; padding: 12px 24px; font-weight: 600; cursor: pointer; transition: all 0.2s; white-space: nowrap; font-size: 13px; z-index: 10; border: 1px solid transparent; border-bottom: none; }
     
-    /* Integração Aba e Container */
-    .cf-tab.active { background: rgba(255,255,255,0.5); color: #0F1332; border-color: rgba(255,255,255,0.4); opacity: 1; border-top: 3px solid #EE4036; }
-    .dark .cf-tab.active { background: rgba(15,19,50,0.5); color: #fff; border-color: rgba(255,255,255,0.08); border-top: 3px solid #EE4036; }
-    
-    .cf-tab.inactive { background: rgba(255,255,255,0.2); color: #6b7280; opacity: 0.6; }
-    .dark .cf-tab.inactive { background: rgba(255,255,255,0.02); color: #9ca3af; }
-    .cf-tab.inactive:hover { opacity: 0.9; background: rgba(255,255,255,0.4); }
-    .dark .cf-tab.inactive:hover { background: rgba(255,255,255,0.06); }
+    /* Integração Aba e Container — mesma cor das tabelas */
+    .cf-tab.active { background: rgba(255,255,255,0.2); color: #0F1332; border-color: rgba(255,255,255,0.4); opacity: 1; border-top: 3px solid #EE4036; }
+    .dark .cf-tab.active { background: rgba(0,0,0,0.1); color: #fff; border-color: rgba(255,255,255,0.08); border-top: 3px solid #EE4036; }
 
-    .cf-content-panel { border-radius: 0 0 24px 24px; border-top: none; }
+    .cf-tab.inactive { background: rgba(255,255,255,0.08); color: #6b7280; opacity: 0.6; }
+    .dark .cf-tab.inactive { background: rgba(255,255,255,0.02); color: #9ca3af; }
+    .cf-tab.inactive:hover { opacity: 0.9; background: rgba(255,255,255,0.2); }
+    .dark .cf-tab.inactive:hover { background: rgba(255,255,255,0.05); }
+
+    .cf-content-panel { border-radius: 0 0 24px 24px; border-top: none; background: rgba(255,255,255,0.2) !important; backdrop-filter: blur(24px) !important; -webkit-backdrop-filter: blur(24px) !important; border: 1px solid rgba(255,255,255,0.4) !important; box-shadow: 0 4px 24px rgba(0,0,0,0.04) !important; }
+    .dark .cf-content-panel { background: rgba(0,0,0,0.1) !important; border-color: rgba(255,255,255,0.08) !important; box-shadow: 0 4px 24px rgba(0,0,0,0.2) !important; }
 
     /* Day Selector: expandido com nome completo e prévia de horário */
     .day-btn { min-width: 100px; border-radius: 12px; font-size: 11px; font-weight: 700; transition: all 0.2s; border: 2px solid transparent; flex-shrink: 0; padding: 10px 8px; display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; position: relative; }
@@ -248,9 +249,9 @@
     .dark .day-btn.unselected:hover { background: rgba(255,255,255,0.1); }
     .day-name-full { font-size: 10px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; line-height: 1; }
     .day-time-preview { font-size: 9px; font-weight: 600; opacity: 0.85; line-height: 1; white-space: nowrap; }
-    .day-trash-btn { position: absolute; top: 4px; right: 4px; width: 16px; height: 16px; border-radius: 50%; background: rgba(0,0,0,0.15); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; z-index: 5; }
-    .day-trash-btn:hover { background: rgba(238,64,54,0.4); color: #EE4036; transform: scale(1.1); }
-    .day-btn.editing .day-trash-btn { display: none; }
+    .cf-scroll-btn { flex-shrink: 0; width: 28px; display: flex; align-items: center; justify-content: center; color: #9ca3af; cursor: pointer; background: none; border: none; padding: 0; transition: transform 0.2s, color 0.2s; }
+    .cf-scroll-btn:hover { transform: scale(1.25); color: #EE4036; }
+    .cf-scroll-btn.hidden { display: none; }
 
     /* Calendário */
     .cf-cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); grid-template-rows: auto repeat(6, minmax(0, 1fr)); height: 100%; gap: 6px; }
@@ -317,8 +318,6 @@
     </div>
 
     <nav class="flex-1 overflow-y-auto py-4 space-y-0">
-      <p class="sidebar-section-label px-4 text-[10px] font-semibold text-gray-400 dark:text-slate-600 tracking-wider mb-2 uppercase">Operação</p>
-
       <button id="btn-agendamentos" onclick="switchView('agendamentos')" class="sidebar-btn active">
         <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
         <span class="sidebar-label">Agendamentos</span>
@@ -566,16 +565,26 @@
         </div>
       </div>
 
-      <div id="view-chat-feeder" class="view-section hidden h-full flex flex-col relative animate__animated animate__fadeIn animate__faster min-h-0">
-        
-        <div class="relative flex items-end shrink-0">
-            <button id="cf-tabs-scroll-left" onclick="cfScrollTabsLeft()" class="hidden absolute left-0 top-0 bottom-0 px-3 bg-gradient-to-r from-[#ebedee] via-[#ebedee]/80 dark:from-[#0a0e1b] dark:via-[#0a0e1b]/80 to-transparent text-gray-500 hover:text-[#EE4036] z-10 flex items-center justify-center">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+      <div id="view-chat-feeder" class="view-section hidden h-full flex flex-col animate__animated animate__fadeIn animate__faster min-h-0">
+
+        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4 shrink-0 mb-4">
+          <div>
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-1">Chatbot Feeder</h2>
+            <p class="text-sm text-gray-500 dark:text-slate-400">Configure as equipes e horários para o chatbot de agendamentos.</p>
+          </div>
+          <button onclick="cfNewTeam()" class="flex items-center justify-center gap-2 bg-[#EE4036] hover:bg-[#FF554A] text-white px-5 py-2.5 rounded-xl text-sm font-bold transition-all shadow-lg shadow-red-500/25 whitespace-nowrap">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Nova equipe
+          </button>
+        </div>
+
+        <div class="flex items-end shrink-0">
+            <button id="cf-tabs-scroll-left" onclick="cfScrollTabsLeft()" class="cf-scroll-btn hidden">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
             </button>
-            <div id="cf-tabs-container" class="flex overflow-x-auto no-scrollbar scroll-smooth w-full px-12 items-end snap-x -mb-[1px]">
+            <div id="cf-tabs-container" class="flex overflow-x-auto no-scrollbar scroll-smooth flex-1 items-end snap-x -mb-[1px]">
                </div>
-            <button onclick="cfScrollTabsRight()" class="absolute right-0 top-0 bottom-0 px-3 bg-gradient-to-l from-[#ebedee] via-[#ebedee]/80 dark:from-[#0a0e1b] dark:via-[#0a0e1b]/80 to-transparent text-gray-500 hover:text-[#EE4036] z-10 flex items-center justify-center">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            <button onclick="cfScrollTabsRight()" class="cf-scroll-btn">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
             </button>
         </div>
         
@@ -609,7 +618,7 @@
                     <div class="flex flex-wrap gap-3" id="cf-days-container"></div>
                     
                     <div id="cf-time-panel" class="hidden mt-4 p-4 rounded-[16px] bg-white/40 dark:bg-black/20 border border-gray-200 dark:border-white/10 animate__animated animate__fadeIn animate__faster">
-                        <h4 class="text-xs font-bold text-gray-700 dark:text-gray-300 mb-3 tracking-widest" id="cf-time-title">SELECIONAR HORÁRIO</h4>
+                        <h4 class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-3" id="cf-time-title">Selecione o horário:</h4>
                         <div class="flex items-center flex-wrap gap-2">
                             <div class="flex items-center gap-1">
                                 <select id="cf-time-start-h" class="glass-input h-[42px] px-2 rounded-xl text-sm" onchange="cfUpdateTime()"></select>
@@ -622,6 +631,9 @@
                                 <span class="font-bold text-gray-500 dark:text-gray-400">:</span>
                                 <select id="cf-time-end-m" class="glass-input h-[42px] px-2 rounded-xl text-sm" onchange="cfUpdateTime()"></select>
                             </div>
+                            <button id="cf-time-delete-btn" onclick="cfDeleteCurrentDaySchedule()" class="hidden ml-2 w-9 h-9 flex items-center justify-center rounded-lg text-gray-400 hover:text-[#EE4036] hover:bg-red-50 dark:hover:bg-red-500/10 transition-all" title="Remover este horário">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -634,6 +646,16 @@
                     <button onclick="cfChangeMonth(1)" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-200 dark:hover:bg-white/10 font-bold">&gt;</button>
                 </div>
                 <div id="cf-cal-grid" class="cf-cal-grid flex-1"></div>
+                <div class="flex items-center gap-6 mt-4 justify-center shrink-0">
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 rounded-sm" style="background:rgba(22,163,74,0.25);border:1px solid rgba(22,163,74,0.4);"></div>
+                        <span class="text-xs font-medium text-gray-500 dark:text-gray-400">Treino previsto</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 rounded-sm" style="background:rgba(238,64,54,0.25);border:1px solid rgba(238,64,54,0.4);"></div>
+                        <span class="text-xs font-medium text-gray-500 dark:text-gray-400">Indisponibilidade</span>
+                    </div>
+                </div>
             </div>
 
             <div id="cf-actions" class="mt-6 pt-6 border-t border-gray-200 dark:border-white/10 flex gap-4 shrink-0 opacity-0 pointer-events-none transition-opacity duration-300">
@@ -648,7 +670,6 @@
             </div>
         </div>
 
-        <button onclick="cfNewTeam()" title="Adicionar nova equipe" class="absolute bottom-6 right-6 w-16 h-16 bg-[#EE4036] hover:bg-[#FF554A] text-white rounded-full shadow-[0_10px_25px_rgba(238,64,54,0.4)] flex items-center justify-center text-4xl font-light hover:scale-105 active:scale-95 transition-all z-40">+</button>
       </div>
 
     </div>
@@ -2076,17 +2097,9 @@
                 timePreview = `<span class="day-time-preview" style="opacity:0.35;">—</span>`;
             }
 
-            let trashBtn = '';
-            if (hasTime && !isSel) {
-                trashBtn = `<span class="day-trash-btn" onclick="cfDeleteDaySchedule(event, ${i})" title="Remover horário de ${cfFullDayNames[i]}">
-                    <svg style="width:10px;height:10px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                </span>`;
-            }
-
             container.innerHTML += `<button class="${c}" onclick="cfSelectDay(${i})">
                 <span class="day-name-full">${cfFullDayNames[i]}</span>
                 ${timePreview}
-                ${trashBtn}
             </button>`;
         }
     }
@@ -2094,10 +2107,13 @@
     function cfSelectDay(dayIdx) {
         const team = cfIsNew ? cfTempTeam : cfTeams.find(t => t.id === cfActiveId);
 
+        const deleteBtn = document.getElementById('cf-time-delete-btn');
+
         // Toggle: if already editing this day, deactivate edit mode
         if (cfSelectedDay === dayIdx) {
             cfSelectedDay = null;
             document.getElementById('cf-time-panel').classList.add('hidden');
+            if (deleteBtn) deleteBtn.classList.add('hidden');
             renderCFDays(team);
             appLog(`Edição do dia ${cfFullDayNames[dayIdx]} desativada.`, 'info');
             return;
@@ -2114,6 +2130,7 @@
         document.getElementById('cf-time-title').innerText = `Selecione o horário de início e término do treino de ${dayLabel}:`;
 
         const sched = team.schedules && team.schedules[dayIdx] ? team.schedules[dayIdx] : {start:'', end:''};
+        const hasExistingSchedule = !!(team.schedules && team.schedules[dayIdx]);
 
         let sH = '', sM = '', eH = '', eM = '';
         if (sched.start && sched.start.includes(':')) [sH, sM] = sched.start.split(':');
@@ -2123,6 +2140,8 @@
         document.getElementById('cf-time-start-m').value = sM;
         document.getElementById('cf-time-end-h').value = eH;
         document.getElementById('cf-time-end-m').value = eM;
+
+        if (deleteBtn) deleteBtn.classList.toggle('hidden', !hasExistingSchedule);
     }
 
     function cfUpdateTime() {
@@ -2137,13 +2156,18 @@
         appLog(`Atualizando horário do dia ${cfDayNames[cfSelectedDay]} para: ${start} às ${end}`, 'info');
 
         cfMarkDirty();
-        
+
         let team = cfIsNew ? cfTempTeam : cfTeams.find(t => t.id === cfActiveId);
         if(team) {
             if(!team.schedules) team.schedules = {};
-            if(start && end) team.schedules[cfSelectedDay] = {start, end};
-            else delete team.schedules[cfSelectedDay];
+            if(start && end) {
+                team.schedules[cfSelectedDay] = {start, end};
+            } else {
+                delete team.schedules[cfSelectedDay];
+            }
         }
+        const deleteBtn = document.getElementById('cf-time-delete-btn');
+        if (deleteBtn) deleteBtn.classList.toggle('hidden', !(team && team.schedules && team.schedules[cfSelectedDay]));
         renderCFDays(team);
     }
 
@@ -2446,17 +2470,17 @@
         }
     }
 
-    function cfDeleteDaySchedule(ev, dayIdx) {
-        ev.stopPropagation();
+    function cfDeleteCurrentDaySchedule() {
+        if (cfSelectedDay === null) return;
         const team = cfIsNew ? cfTempTeam : cfTeams.find(t => t.id === cfActiveId);
         if (!team) return;
-        const dayName = cfFullDayNames[dayIdx].charAt(0) + cfFullDayNames[dayIdx].slice(1).toLowerCase();
+        const dayName = cfFullDayNames[cfSelectedDay].charAt(0) + cfFullDayNames[cfSelectedDay].slice(1).toLowerCase();
         if (confirm(`Deseja remover o horário de treino de ${dayName}?`)) {
-            if (team.schedules) delete team.schedules[dayIdx];
-            if (cfSelectedDay === dayIdx) {
-                cfSelectedDay = null;
-                document.getElementById('cf-time-panel').classList.add('hidden');
-            }
+            if (team.schedules) delete team.schedules[cfSelectedDay];
+            cfSelectedDay = null;
+            document.getElementById('cf-time-panel').classList.add('hidden');
+            const deleteBtn = document.getElementById('cf-time-delete-btn');
+            if (deleteBtn) deleteBtn.classList.add('hidden');
             cfMarkDirty();
             renderCFDays(team);
         }
