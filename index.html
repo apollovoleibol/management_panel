@@ -111,6 +111,8 @@
     .dark .status-em-cadastro { background: rgba(45,212,191,0.12); color: #2dd4bf; border: 1px solid rgba(45,212,191,0.25); }
     .status-tecnofit { background: rgba(139,92,246,0.12); color: #6d28d9; border: 1px solid rgba(139,92,246,0.25); }
     .dark .status-tecnofit { background: rgba(167,139,250,0.12); color: #a78bfa; border: 1px solid rgba(167,139,250,0.25); }
+    .status-ausente { background: rgba(245,158,11,0.15); color: #b45309; border: 1px solid rgba(245,158,11,0.3); }
+    .dark .status-ausente { background: rgba(251,191,36,0.12); color: #fbbf24; border: 1px solid rgba(251,191,36,0.25); }
 
     /* ============================================
        DESTAQUE 24H
@@ -173,7 +175,7 @@
       .table-agendamentos td:nth-of-type(4):before { content: "Local"; }
       .table-agendamentos td:nth-of-type(5):before { content: "Status"; }
       .table-atletas td:nth-of-type(1):before { content: "Nome/Resp"; }
-      .table-atletas td:nth-of-type(2):before { content: "Contato/CPF"; }
+      .table-atletas td:nth-of-type(2):before { content: "Contato"; }
       .table-atletas td:nth-of-type(3):before { content: "Plano"; }
       .table-atletas td:nth-of-type(4):before { content: "Status"; }
     }
@@ -250,6 +252,22 @@
     .dark .day-btn.unselected:hover { background: rgba(255,255,255,0.1); }
     .day-name-full { font-size: 10px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; line-height: 1; }
     .day-time-preview { font-size: 9px; font-weight: 600; opacity: 0.85; line-height: 1; white-space: nowrap; }
+
+    /* ─── Toggle "Disponível para agendamento" ─── */
+    .cf-toggle { position: relative; display: inline-block; width: 44px; height: 24px; flex-shrink: 0; }
+    .cf-toggle input { opacity: 0; width: 0; height: 0; }
+    .cf-toggle-track { position: absolute; cursor: pointer; inset: 0; background: rgba(0,0,0,0.18); border-radius: 999px; transition: background 0.2s; }
+    .dark .cf-toggle-track { background: rgba(255,255,255,0.18); }
+    .cf-toggle-track::before { content: ""; position: absolute; height: 18px; width: 18px; left: 3px; top: 3px; background: white; border-radius: 50%; transition: transform 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+    .cf-toggle input:checked + .cf-toggle-track { background: #16a34a; }
+    .cf-toggle input:checked + .cf-toggle-track::before { transform: translateX(20px); }
+
+    /* ─── Pills de mensalidade ─── */
+    .cf-plan-pill { display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; border-radius: 999px; font-size: 12px; font-weight: 600; cursor: pointer; border: 1.5px solid rgba(0,0,0,0.08); background: rgba(0,0,0,0.03); color: #374151; transition: all 0.15s; user-select: none; }
+    .dark .cf-plan-pill { border-color: rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: #d1d5db; }
+    .cf-plan-pill:hover { border-color: rgba(238,64,54,0.4); }
+    .cf-plan-pill.selected { background: rgba(238,64,54,0.12); color: #EE4036; border-color: rgba(238,64,54,0.5); }
+    .dark .cf-plan-pill.selected { background: rgba(238,64,54,0.18); color: #FF8A80; border-color: rgba(238,64,54,0.5); }
     .cf-scroll-btn { flex-shrink: 0; width: 28px; display: flex; align-items: center; justify-content: center; color: #9ca3af; cursor: pointer; background: none; border: none; padding: 0; transition: transform 0.2s, color 0.2s; }
     .cf-scroll-btn:hover { transform: scale(1.25); color: #EE4036; }
     .cf-scroll-btn.hidden { display: none; }
@@ -561,6 +579,7 @@
               <option value="em avaliação">Em avaliação</option>
               <option value="em cadastro">Em cadastro</option>
               <option value="tecnofit">Tecnofit</option>
+              <option value="ausente">Ausente</option>
             </select>
           </div>
           <div class="w-full md:w-64 shrink-0">
@@ -654,7 +673,7 @@
               <thead class="table-header sticky top-0 z-10 hidden md:table-header-group">
                 <tr>
                   <th class="px-5 py-4 text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Atleta / Responsável</th>
-                  <th class="px-5 py-4 text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Contato / CPF</th>
+                  <th class="px-5 py-4 text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Contato</th>
                   <th class="px-5 py-4 text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Plano / Categoria</th>
                   <th class="px-5 py-4 text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
                 </tr>
@@ -696,6 +715,18 @@
             </div>
             
             <div id="cf-view-dados" class="flex-1 overflow-y-auto flex flex-col gap-6 pr-2 min-h-0">
+                <!-- Toggle: Disponível para agendamento -->
+                <div class="flex items-center justify-between p-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10">
+                    <div>
+                        <p class="text-[13px] font-bold text-gray-800 dark:text-gray-100">Disponível para agendamento</p>
+                        <p class="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5">Quando ativo, o chatbot oferece esta equipe nas conversas de auto-agendamento.</p>
+                    </div>
+                    <label class="cf-toggle">
+                        <input type="checkbox" id="cf-available-booking" onchange="cfMarkDirty()">
+                        <span class="cf-toggle-track"></span>
+                    </label>
+                </div>
+
                 <div>
                     <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-2">Descrição</label>
                     <textarea id="cf-desc" class="glass-input w-full p-4 rounded-xl text-sm min-h-[80px]" oninput="cfMarkDirty()"></textarea>
@@ -708,6 +739,29 @@
                     <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-2">Categoria *</label>
                     <input type="text" id="cf-category" class="glass-input w-full h-[46px] px-4 rounded-[14px] text-sm" oninput="cfMarkDirty()" placeholder="Ex: escolinha, adulto, competitivo...">
                 </div>
+
+                <!-- Faixa Etária + Gênero (lado a lado) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-2">Faixa Etária</label>
+                        <div class="flex items-center gap-2">
+                            <input type="number" min="0" max="120" id="cf-age-min" oninput="cfHandleAgeMinChange()" placeholder="Mín." class="glass-input flex-1 h-[46px] px-3 rounded-[14px] text-sm text-center">
+                            <span class="text-gray-400 font-bold">—</span>
+                            <input type="number" min="0" max="120" id="cf-age-max" oninput="cfMarkDirty()" placeholder="Máx." class="glass-input flex-1 h-[46px] px-3 rounded-[14px] text-sm text-center">
+                        </div>
+                        <p class="text-[10px] text-gray-400 mt-1">Se a idade mínima for 18+, o campo máximo fica inativo.</p>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-2">Gênero</label>
+                        <select id="cf-gender" class="glass-input w-full h-[46px] px-4 rounded-[14px] text-sm" onchange="cfMarkDirty()">
+                            <option value="">Selecione...</option>
+                            <option value="Misto">Misto</option>
+                            <option value="F">Feminino</option>
+                            <option value="M">Masculino</option>
+                        </select>
+                    </div>
+                </div>
+
                 <div>
                     <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-2">Local de Treino</label>
                     <select id="cf-local" class="glass-input w-full h-[46px] px-4 rounded-[14px] text-sm" onchange="cfHandleLocalChange()">
@@ -737,6 +791,13 @@
                             </button>
                         </div>
                     </div>
+                </div>
+
+                <!-- Mensalidades disponíveis (pills) -->
+                <div>
+                    <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-2">Mensalidades Disponíveis</label>
+                    <p class="text-[10px] text-gray-400 mb-2">Selecione quais planos esta equipe oferece. No cadastro de atletas, somente os planos marcados aqui ficam disponíveis no dropdown.</p>
+                    <div id="cf-plans-container" class="flex flex-wrap gap-2"></div>
                 </div>
             </div>
             
@@ -934,12 +995,12 @@
             </div>
           </div>
           <div>
-            <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">WhatsApp (Atleta) *</label>
-            <input type="text" id="formAtletaWpp" required placeholder="(XX) XXXXX-XXXX" class="glass-input w-full h-[46px] px-4 rounded-[14px] font-sans">
+            <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1" id="labelAtletaWpp">WhatsApp (Atleta) *</label>
+            <input type="text" id="formAtletaWpp" placeholder="(XX) XXXXX-XXXX" class="glass-input w-full h-[46px] px-4 rounded-[14px] font-sans">
           </div>
-          
-          <div class="p-4 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 space-y-4">
-            <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Dados do Responsável (se menor)</p>
+
+          <div id="containerRespAtleta" class="p-4 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 space-y-4 hidden">
+            <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Dados do Responsável (atleta menor de idade)</p>
             <div>
               <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">Nome do Responsável</label>
               <input type="text" id="formAtletaResp" class="glass-input w-full h-[46px] px-4 rounded-[14px] font-sans">
@@ -950,15 +1011,18 @@
             </div>
           </div>
 
-          <div class="flex gap-4">
-            <div class="flex-1">
-              <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">Plano / Mensalidade *</label>
-              <input type="text" id="formAtletaPlano" required placeholder="Ex: 1x semana - R$ 98,90" class="glass-input w-full h-[46px] px-4 rounded-[14px] font-sans">
-            </div>
-            <div class="flex-1">
-              <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">Equipe / Categoria</label>
-              <input type="text" id="formAtletaPosicao" placeholder="Ex: Equipe Borman" class="glass-input w-full h-[46px] px-4 rounded-[14px] font-sans">
-            </div>
+          <div>
+            <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">Equipe *</label>
+            <select id="formAtletaEquipe" required class="glass-input w-full h-[46px] px-4 rounded-[14px] text-[13px] leading-tight font-sans">
+              <option value="">Selecione uma equipe...</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">Plano / Mensalidade *</label>
+            <select id="formAtletaPlano" required class="glass-input w-full h-[46px] px-4 rounded-[14px] text-[13px] leading-tight font-sans">
+              <option value="">Selecione uma equipe primeiro...</option>
+            </select>
           </div>
           <div>
             <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">Status</label>
@@ -1375,9 +1439,12 @@
         vincularEventos();
         carregarDadosDoSupabase();
         carregarTeamPadrao();
-        carregarAtletasDoSupabase();
         populateTimeSelects();
-        loadTrainingLocations().then(() => loadCFTeams());
+        // Carrega equipes ANTES dos atletas para que o nome da equipe apareça
+        // na coluna "Plano / Categoria" da tabela de atletas já no primeiro render.
+        loadTrainingLocations()
+          .then(() => loadCFTeams())
+          .then(() => carregarAtletasDoSupabase());
       } catch (e) { tratarErro('Erro na inicialização: ' + String(e)); }
     }
 
@@ -1497,6 +1564,7 @@
       document.getElementById('formAgendamento').addEventListener('input', () => { isFormDirty = true; });
       document.getElementById('formAgendamento').addEventListener('change', () => { isFormDirty = true; });
       document.getElementById('formEquipe').addEventListener('change', syncFormFields);
+      document.getElementById('formAtletaEquipe').addEventListener('change', syncAtletaFormByTeam);
       document.getElementById('formWpp').addEventListener('input', function(e) {
         let x = String(e.target.value).replace(/\D/g,'').match(/(\d{0,2})(\d{0,5})(\d{0,4})/);
         if (!x) return;
@@ -1530,6 +1598,7 @@
         else if (sUp === 'IN_EVALUATION') uiStatus = 'Em avaliação';
         else if (sUp === 'IN_REGISTRATION') uiStatus = 'Em cadastro';
         else if (sUp === 'TECNOFIT') uiStatus = 'Tecnofit';
+        else if (sUp === 'MISSED') uiStatus = 'Ausente';
         else if (sUp === 'PENDING') uiStatus = 'Pendente';
         else uiStatus = rawStat;
 
@@ -1636,6 +1705,7 @@
       if (s==='em avaliação') return 'status-em-avaliacao';
       if (s==='em cadastro') return 'status-em-cadastro';
       if (s==='tecnofit') return 'status-tecnofit';
+      if (s==='ausente') return 'status-ausente';
       return 'status-pendente';
     }
 
@@ -1974,23 +2044,29 @@
         const isMinor = typeof atl.parent_name === 'string' && atl.parent_name.trim() !== '';
         const nomeAtleta = atl.full_name || '—';
         const nomeResp = atl.parent_name || '—';
-        const cpfDisplay = formatarCPF(atl.cpf) || 'Sem CPF';
         const wppDisplay = formatarTelAtleta(atl.phone || '');
         const planoDisplay = atl.payment_plan || 'Sem plano';
-        const catDisplay = atl.position || 'Não definida';
+        const teamName = atl.team_id ? ((cfTeams.find(t => t.id === atl.team_id) || {}).name || '') : '';
+        const catDisplay = teamName || atl.position || 'Não definida';
         const isActive = atl.is_active !== false;
-        
+
         const nomeDisplayHTML = isMinor
           ? `<div class="flex items-center gap-3">${iconChild}<div class="flex flex-col justify-center"><span class="font-bold text-[14px] md:text-[15px] leading-tight text-gray-900 dark:text-slate-200">${nomeAtleta}</span><span class="text-[11px] md:text-[12px] opacity-60 leading-tight mt-0.5">Resp: ${nomeResp}</span></div></div>`
           : `<div class="flex items-center gap-3">${iconAdult}<span class="font-bold text-[14px] md:text-[15px] text-gray-900 dark:text-slate-200">${nomeAtleta}</span></div>`;
-          
+
         const statusBadge = isActive
           ? `<span class="status-badge status-agendado">Ativo</span>`
           : `<span class="status-badge status-cancelado">Inativo</span>`;
 
+        const rawTel = String(atl.phone || '').replace(/\D/g,'');
+        const waNum = rawTel ? (rawTel.startsWith('55') ? rawTel : '55' + rawTel) : '';
+        const contatarBtn = waNum
+          ? `<a href="https://wa.me/${waNum}" target="_blank" rel="noopener" onclick="event.stopPropagation();" class="inline-flex items-center justify-center gap-1.5 bg-[#25D366] text-white px-2 py-1 rounded-[8px] text-[10px] font-bold uppercase tracking-widest hover:bg-[#1ebd5a] transition-all shadow-sm shrink-0">CONTATAR</a>`
+          : '';
+
         tr.innerHTML = `
           <td class="px-5 py-4">${nomeDisplayHTML}</td>
-          <td class="px-5 py-4"><div class="flex flex-col text-[14px] font-medium text-gray-700 dark:text-gray-300"><span>${wppDisplay}</span><span class="text-[11px] opacity-70">${cpfDisplay}</span></div></td>
+          <td class="px-5 py-4"><div class="flex items-center gap-2 text-[14px] font-medium text-gray-700 dark:text-gray-300"><span>${wppDisplay || '—'}</span>${contatarBtn}</div></td>
           <td class="px-5 py-4"><div class="text-[13px] font-bold text-gray-900 dark:text-slate-200">${catDisplay}</div><div class="text-[11px] opacity-70 leading-tight mt-0.5 whitespace-normal max-w-[250px]">${planoDisplay}</div></td>
           <td class="px-5 py-4">${statusBadge}</td>
         `;
@@ -2021,6 +2097,66 @@
 
     let selectedAtleta = null;
 
+    // ─── Equipe → escolinha/base? (mostra responsável; WhatsApp atleta opcional)
+    function isTeamMinor(team) {
+      if (!team) return false;
+      // Sem idade configurada → assume adulto (compat. com dados antigos)
+      if (team.age_min === null || team.age_min === undefined) return false;
+      return Number(team.age_min) < 18;
+    }
+
+    // Popula o <select> de Equipe a partir de cfTeams (já carregadas no initApp)
+    function popularSelectEquipeAtleta() {
+      const sel = document.getElementById('formAtletaEquipe');
+      const prev = sel.value;
+      sel.innerHTML = '<option value="">Selecione uma equipe...</option>';
+      (cfTeams || []).forEach(t => {
+        const opt = document.createElement('option');
+        opt.value = t.id;
+        opt.textContent = t.name;
+        sel.appendChild(opt);
+      });
+      if (prev) sel.value = prev;
+    }
+
+    // Atualiza o <select> de Plano com as mensalidades disponíveis da equipe
+    // selecionada e ajusta visibilidade/obrigatoriedade dos campos dependentes.
+    function syncAtletaFormByTeam() {
+      const sel = document.getElementById('formAtletaEquipe');
+      const teamId = sel.value;
+      const team = teamId ? (cfTeams || []).find(t => t.id === teamId) : null;
+
+      // Plano: opções dinâmicas conforme a equipe escolhida
+      const planSel = document.getElementById('formAtletaPlano');
+      const prevPlan = planSel.value;
+      planSel.innerHTML = '';
+      const plans = (team && Array.isArray(team.available_payment_plans)) ? team.available_payment_plans : [];
+      if (!team) {
+        planSel.innerHTML = '<option value="">Selecione uma equipe primeiro...</option>';
+      } else if (plans.length === 0) {
+        planSel.innerHTML = '<option value="">Nenhum plano cadastrado para esta equipe</option>';
+      } else {
+        planSel.appendChild(new Option('Selecione...', ''));
+        plans.forEach(p => planSel.appendChild(new Option(p, p)));
+        if (prevPlan && plans.includes(prevPlan)) planSel.value = prevPlan;
+      }
+
+      // Equipe de base/escolinha → mostra responsável; WhatsApp do atleta opcional
+      const isMinor = isTeamMinor(team);
+      const respBox = document.getElementById('containerRespAtleta');
+      const wppLabel = document.getElementById('labelAtletaWpp');
+      const wppInp = document.getElementById('formAtletaWpp');
+      if (isMinor) {
+        respBox.classList.remove('hidden');
+        wppLabel.innerText = 'WhatsApp (Atleta)';
+        wppInp.required = false;
+      } else {
+        respBox.classList.add('hidden');
+        wppLabel.innerText = 'WhatsApp (Atleta) *';
+        wppInp.required = !!team; // só obriga quando uma equipe está escolhida
+      }
+    }
+
     function openAddAtletaModal() {
       appLog('Abrindo modal Novo Atleta', 'info');
       selectedAtleta = null;
@@ -2028,6 +2164,8 @@
       document.getElementById('formAtletaId').value = '';
       document.getElementById('modal-atleta-title').innerText = 'Novo Atleta';
       document.getElementById('btnExcluirAtleta').classList.add('hidden');
+      popularSelectEquipeAtleta();
+      syncAtletaFormByTeam();
       document.getElementById('modal-atleta-form').classList.add('open');
     }
 
@@ -2037,27 +2175,37 @@
       document.getElementById('formAtleta').reset();
       document.getElementById('formAtletaId').value = atl.id;
       document.getElementById('modal-atleta-title').innerText = 'Editar Atleta';
-      
+
       document.getElementById('formAtletaNome').value = atl.full_name || '';
       document.getElementById('formAtletaNascimento').value = atl.birth_date || '';
       document.getElementById('formAtletaEmail').value = atl.email || '';
       document.getElementById('formAtletaResp').value = atl.parent_name || '';
-      
-      let wppResp = document.getElementById('formAtletaRespWpp'); 
+
+      let wppResp = document.getElementById('formAtletaRespWpp');
       wppResp.value = atl.parent_phone || ''; wppResp.dispatchEvent(new Event('input'));
 
-      let cInp = document.getElementById('formAtletaCpf'); 
+      let cInp = document.getElementById('formAtletaCpf');
       cInp.value = atl.cpf || ''; cInp.dispatchEvent(new Event('input'));
-      
+
       document.getElementById('formAtletaRg').value = atl.rg || '';
 
-      let wInp = document.getElementById('formAtletaWpp'); 
+      let wInp = document.getElementById('formAtletaWpp');
       wInp.value = atl.phone || ''; wInp.dispatchEvent(new Event('input'));
-      
-      document.getElementById('formAtletaPlano').value = atl.payment_plan || '';
-      if(document.getElementById('formAtletaPosicao')) document.getElementById('formAtletaPosicao').value = atl.position || '';
+
+      popularSelectEquipeAtleta();
+      document.getElementById('formAtletaEquipe').value = atl.team_id || '';
+      syncAtletaFormByTeam();
+      // Plan vem depois do sync para que as opções estejam populadas
+      const planSel = document.getElementById('formAtletaPlano');
+      if (atl.payment_plan) {
+        if (!Array.from(planSel.options).some(o => o.value === atl.payment_plan)) {
+          // Plano legado fora da lista → preserva como opção exclusiva
+          planSel.appendChild(new Option(atl.payment_plan, atl.payment_plan));
+        }
+        planSel.value = atl.payment_plan;
+      }
       document.getElementById('formAtletaStatus').value = atl.is_active !== false ? 'ativo' : 'inativo';
-      
+
       document.getElementById('btnExcluirAtleta').classList.remove('hidden');
       document.getElementById('modal-atleta-form').classList.add('open');
     }
@@ -2074,7 +2222,17 @@
       const textoOriginal = btn.innerHTML;
       btn.innerHTML = '<div class="loader w-5 h-5 border-2 border-t-white m-0"></div>'; btn.disabled = true;
 
-      const pos = document.getElementById('formAtletaPosicao');
+      const teamId = document.getElementById('formAtletaEquipe').value || null;
+      const phoneRaw = document.getElementById('formAtletaWpp').value.replace(/\D/g,'');
+      const team = teamId ? (cfTeams || []).find(t => t.id === teamId) : null;
+      const isMinor = isTeamMinor(team);
+
+      // WhatsApp obrigatório apenas para equipes adultas
+      if (!isMinor && !phoneRaw) {
+        alert('WhatsApp do atleta é obrigatório para equipes adultas.');
+        btn.innerHTML = textoOriginal; btn.disabled = false;
+        return;
+      }
 
       const payload = {
         full_name: document.getElementById('formAtletaNome').value,
@@ -2084,16 +2242,16 @@
         parent_phone: document.getElementById('formAtletaRespWpp').value.replace(/\D/g,'') || null,
         cpf: document.getElementById('formAtletaCpf').value.replace(/\D/g,''),
         rg: document.getElementById('formAtletaRg').value || null,
-        phone: document.getElementById('formAtletaWpp').value.replace(/\D/g,''),
+        phone: phoneRaw || null,
         payment_plan: document.getElementById('formAtletaPlano').value,
-        position: pos ? pos.value : null,
         is_active: document.getElementById('formAtletaStatus').value === 'ativo'
       };
 
-      if (!id) {
+      if (teamId) payload.team_id = teamId;
+      else if (!id) {
           if (!defaultTeamId) {
-              appLog('Erro ao salvar novo atleta: team_id padrão ausente', 'err');
-              alert("Erro: Não foi possível obter um team_id padrão. Crie ao menos uma equipe no banco primeiro.");
+              appLog('Erro ao salvar novo atleta: nenhuma equipe selecionada e team_id padrão ausente', 'err');
+              alert("Selecione uma equipe para o atleta.");
               btn.innerHTML = textoOriginal; btn.disabled = false;
               return;
           }
@@ -2156,6 +2314,20 @@
     ============================================ */
     const cfDayNames = ['DOM','SEG','TER','QUA','QUI','SEX','SÁB'];
     const cfFullDayNames = ['DOMINGO','SEGUNDA','TERÇA','QUARTA','QUINTA','SEXTA','SÁBADO'];
+
+    // Planos canônicos disponíveis no sistema (regras de precificação).
+    // Cada equipe seleciona quais aplicam via toggle na página Chatbot Feeder.
+    const CANONICAL_PAYMENT_PLANS = [
+      '1x por semana - R$ 98,90',
+      '1x por semana - R$ 109,90 (sem taxa de matrícula)',
+      '2x por semana - R$ 159,90 (sem taxa de matrícula)',
+      '3x por semana - R$ 189,90 (sem taxa de matrícula)',
+      '1x por semana - R$ 105,90 + matrícula R$ 70,00',
+      '2x por semana - R$ 176,90 + matrícula R$ 70,00',
+      '1x por semana - R$ 109,90 + matrícula R$ 70,00',
+      '2x por semana - R$ 149,90 + matrícula R$ 70,00',
+      '3x por semana - R$ 189,90 + matrícula R$ 70,00'
+    ];
 
     let cfTeams = [];
     let cfTrainingLocations = [];
@@ -2261,7 +2433,14 @@
 
         const firstLocId = cfTrainingLocations.length > 0 ? cfTrainingLocations[0].id : null;
         const firstLocName = cfTrainingLocations.length > 0 ? cfTrainingLocations[0].name : '';
-        cfTempTeam = { id: 'new', name: '', category: '', desc: '', local: firstLocName, location_id: firstLocId, schedules: {}, unavail: [] };
+        cfTempTeam = {
+          id: 'new', name: '', category: '', desc: '',
+          local: firstLocName, location_id: firstLocId,
+          schedules: {}, unavail: [],
+          age_min: '', age_max: '', gender: '',
+          available_for_booking: true,
+          available_payment_plans: []
+        };
 
         document.getElementById('cf-time-panel').classList.add('hidden');
         renderCFTabs();
@@ -2308,6 +2487,18 @@
 
         document.getElementById('cf-desc').value = team.desc || '';
 
+        // Disponível para agendamento
+        document.getElementById('cf-available-booking').checked = team.available_for_booking !== false;
+
+        // Faixa etária + gênero
+        document.getElementById('cf-age-min').value = (team.age_min !== '' && team.age_min !== null && team.age_min !== undefined) ? team.age_min : '';
+        document.getElementById('cf-age-max').value = (team.age_max !== '' && team.age_max !== null && team.age_max !== undefined) ? team.age_max : '';
+        document.getElementById('cf-gender').value = team.gender || '';
+        cfApplyAgeMaxState();
+
+        // Mensalidades
+        renderCFPlans(team.available_payment_plans || []);
+
         // Populate location select
         populateCFLocalSelect(cfIsNew);
         const localSelect = document.getElementById('cf-local');
@@ -2319,6 +2510,49 @@
 
         renderCFDays(team);
         if(cfSubTab === 'datas') renderCFCalendar();
+    }
+
+    // Renderiza os pills de mensalidade; marca os já selecionados na equipe ativa.
+    function renderCFPlans(selectedPlans) {
+        const container = document.getElementById('cf-plans-container');
+        container.innerHTML = '';
+        CANONICAL_PAYMENT_PLANS.forEach(plan => {
+            const isSel = selectedPlans.includes(plan);
+            const el = document.createElement('div');
+            el.className = 'cf-plan-pill' + (isSel ? ' selected' : '');
+            el.dataset.plan = plan;
+            el.textContent = plan;
+            el.onclick = () => {
+                el.classList.toggle('selected');
+                cfMarkDirty();
+            };
+            container.appendChild(el);
+        });
+    }
+
+    // Coleta os planos atualmente marcados nos pills.
+    function cfCollectSelectedPlans() {
+        return Array.from(document.querySelectorAll('#cf-plans-container .cf-plan-pill.selected'))
+            .map(el => el.dataset.plan);
+    }
+
+    // Se age_min >= 18, desativa o campo de idade máxima.
+    function cfApplyAgeMaxState() {
+        const minVal = parseInt(document.getElementById('cf-age-min').value, 10);
+        const maxInp = document.getElementById('cf-age-max');
+        if (!isNaN(minVal) && minVal >= 18) {
+            maxInp.value = '';
+            maxInp.disabled = true;
+            maxInp.classList.add('opacity-50', 'cursor-not-allowed');
+        } else {
+            maxInp.disabled = false;
+            maxInp.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+    }
+
+    function cfHandleAgeMinChange() {
+        cfApplyAgeMaxState();
+        cfMarkDirty();
     }
 
     function renderCFDays(team) {
@@ -2561,6 +2795,24 @@
             day: parseInt(day), start: s.start, end: s.end
         }));
 
+        // Coleta novos campos
+        const ageMinRaw = document.getElementById('cf-age-min').value;
+        const ageMaxRaw = document.getElementById('cf-age-max').value;
+        const ageMin = ageMinRaw === '' ? null : parseInt(ageMinRaw, 10);
+        const ageMax = (ageMin !== null && ageMin >= 18) ? null
+                     : (ageMaxRaw === '' ? null : parseInt(ageMaxRaw, 10));
+        const gender = document.getElementById('cf-gender').value || null;
+        const availableForBooking = document.getElementById('cf-available-booking').checked;
+        const selectedPlans = cfCollectSelectedPlans();
+
+        // Espelha no objeto em memória para que o dropdown de atletas
+        // veja os planos atualizados imediatamente, sem recarregar a página.
+        team.age_min = ageMin === null ? '' : ageMin;
+        team.age_max = ageMax === null ? '' : ageMax;
+        team.gender = gender || '';
+        team.available_for_booking = availableForBooking;
+        team.available_payment_plans = selectedPlans;
+
         const btn = document.getElementById('cf-btn-save');
         const origHTML = btn.innerHTML;
         btn.innerHTML = '<div class="loader w-5 h-5 border-2 border-t-white m-0"></div>'; btn.disabled = true;
@@ -2576,7 +2828,10 @@
             const payload = {
                 name: team.name, category: team.category,
                 description: team.desc, location_id: team.location_id || null,
-                training_schedule: scheduleArray, is_active: true
+                training_schedule: scheduleArray, is_active: true,
+                age_min: ageMin, age_max: ageMax, gender,
+                available_for_booking: availableForBooking,
+                available_payment_plans: selectedPlans
             };
             try {
                 const res = await fetch(`${SUPABASE_URL}/rest/v1/teams`, {
@@ -2598,7 +2853,10 @@
         } else {
             const payload = {
                 description: team.desc, location_id: team.location_id || null,
-                training_schedule: scheduleArray
+                training_schedule: scheduleArray,
+                age_min: ageMin, age_max: ageMax, gender,
+                available_for_booking: availableForBooking,
+                available_payment_plans: selectedPlans
             };
             try {
                 const res = await fetch(`${SUPABASE_URL}/rest/v1/teams?id=eq.${team.id}`, {
@@ -2677,7 +2935,12 @@
                     id: t.id, name: t.name, category: t.category || '',
                     desc: t.description || '', local: locName,
                     location_id: t.location_id || null, schedules,
-                    unavail: unavailByTeam[t.id] || []
+                    unavail: unavailByTeam[t.id] || [],
+                    age_min: (t.age_min === null || t.age_min === undefined) ? '' : t.age_min,
+                    age_max: (t.age_max === null || t.age_max === undefined) ? '' : t.age_max,
+                    gender: t.gender || '',
+                    available_for_booking: t.available_for_booking !== false,
+                    available_payment_plans: Array.isArray(t.available_payment_plans) ? t.available_payment_plans : []
                 };
             });
 
