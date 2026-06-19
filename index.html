@@ -228,7 +228,7 @@
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     
-    .cf-tab { position: relative; border-radius: 12px 12px 0 0; margin-right: 4px; padding: 12px 24px; font-weight: 600; cursor: pointer; transition: all 0.2s; white-space: nowrap; font-size: 13px; z-index: 10; border: 1px solid transparent; border-bottom: none; }
+    .cf-tab { position: relative; border-radius: 12px 12px 0 0; margin-right: 4px; padding: 12px 24px; font-weight: 600; cursor: pointer; transition: all 0.2s; white-space: nowrap; font-size: 14px; z-index: 10; border: 1px solid transparent; border-bottom: none; }
     
     /* Integração Aba e Container — mesma cor das tabelas */
     .cf-tab.active { background: rgba(255,255,255,0.2); color: #0F1332; border-color: rgba(255,255,255,0.4); opacity: 1; border-top: 3px solid #EE4036; }
@@ -243,15 +243,15 @@
     .dark .cf-content-panel { background: rgba(0,0,0,0.1) !important; border-color: rgba(255,255,255,0.08) !important; box-shadow: 0 4px 24px rgba(0,0,0,0.2) !important; }
 
     /* Day Selector: expandido com nome completo e prévia de horário */
-    .day-btn { min-width: 100px; border-radius: 12px; font-size: 11px; font-weight: 700; transition: all 0.2s; border: 2px solid transparent; flex-shrink: 0; padding: 10px 8px; display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; position: relative; }
+    .day-btn { min-width: 100px; border-radius: 12px; font-size: 12px; font-weight: 700; transition: all 0.2s; border: 2px solid transparent; flex-shrink: 0; padding: 10px 8px; display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; position: relative; }
     .day-btn.selected { background: #EE4036; color: white; box-shadow: 0 4px 12px rgba(238,64,54,0.35); border-color: #EE4036; }
     .day-btn.editing { background: #facc15; color: #111827; box-shadow: 0 4px 12px rgba(250,204,21,0.35); border-color: #facc15; }
     .day-btn.unselected { background: rgba(0,0,0,0.04); color: #6b7280; border-color: rgba(0,0,0,0.05); }
     .dark .day-btn.unselected { background: rgba(255,255,255,0.05); color: #d1d5db; border-color: rgba(255,255,255,0.05); }
     .day-btn.unselected:hover { background: rgba(0,0,0,0.08); }
     .dark .day-btn.unselected:hover { background: rgba(255,255,255,0.1); }
-    .day-name-full { font-size: 10px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; line-height: 1; }
-    .day-time-preview { font-size: 9px; font-weight: 600; opacity: 0.85; line-height: 1; white-space: nowrap; }
+    .day-name-full { font-size: 12px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; line-height: 1; }
+    .day-time-preview { font-size: 12px; font-weight: 600; opacity: 0.85; line-height: 1; white-space: nowrap; }
 
     /* ─── Toggle "Disponível para agendamento" ─── */
     .cf-toggle { position: relative; display: inline-block; width: 44px; height: 24px; flex-shrink: 0; }
@@ -714,7 +714,7 @@
                 <button id="cf-subtab-datas" onclick="cfSetSubTab('datas')" class="flex-1 pb-3 text-sm font-bold text-gray-500 border-b-2 border-transparent hover:text-gray-700 dark:hover:text-gray-300 transition-all">Datas Indisponíveis</button>
             </div>
             
-            <div id="cf-view-dados" class="flex-1 overflow-y-auto flex flex-col gap-6 pr-2 min-h-0 max-w-2xl">
+            <div id="cf-view-dados" class="w-1/2 flex-1 overflow-y-auto flex flex-col gap-6 pr-2 min-h-0">
                 <!-- Toggle: Disponível para agendamento (toggle à esquerda, texto à direita) -->
                 <div class="flex items-center gap-3 p-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10">
                     <label class="cf-toggle">
@@ -722,37 +722,37 @@
                         <span class="cf-toggle-track"></span>
                     </label>
                     <div>
-                        <p class="text-[13px] font-bold text-gray-800 dark:text-gray-100">Disponível para agendamento</p>
-                        <p class="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5">Quando ativo, o chatbot oferece esta equipe nas conversas de auto-agendamento.</p>
+                        <p class="text-sm font-bold text-gray-800 dark:text-gray-100">Disponível para agendamento</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Quando ativo, o chatbot oferece esta equipe nas conversas de auto-agendamento.</p>
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-2">Descrição</label>
+                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Descrição</label>
                     <textarea id="cf-desc" class="glass-input w-full p-4 rounded-xl text-sm min-h-[80px]" oninput="cfMarkDirty()"></textarea>
                 </div>
                 <div id="cf-name-field" class="hidden">
-                    <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-2">Nome da Equipe *</label>
+                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Nome da Equipe *</label>
                     <input type="text" id="cf-name" class="glass-input w-full h-[46px] px-4 rounded-[14px] text-sm" oninput="cfMarkDirty()" placeholder="Ex: Equipe Apollo">
                 </div>
                 <div id="cf-category-field" class="hidden">
-                    <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-2">Categoria *</label>
+                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Categoria *</label>
                     <input type="text" id="cf-category" class="glass-input w-full h-[46px] px-4 rounded-[14px] text-sm" oninput="cfMarkDirty()" placeholder="Ex: escolinha, adulto, competitivo...">
                 </div>
 
                 <!-- Faixa Etária + Gênero (lado a lado) -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-2">Faixa Etária</label>
+                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Faixa Etária</label>
                         <div class="flex items-center gap-2">
                             <input type="number" min="0" max="120" id="cf-age-min" oninput="cfHandleAgeMinChange()" placeholder="Mín." class="glass-input flex-1 h-[46px] px-3 rounded-[14px] text-sm text-center">
                             <span class="text-gray-400 font-bold">—</span>
                             <input type="number" min="0" max="120" id="cf-age-max" oninput="cfHandleAgeMaxChange()" placeholder="Máx." class="glass-input flex-1 h-[46px] px-3 rounded-[14px] text-sm text-center">
                         </div>
-                        <p class="text-[10px] text-gray-400 mt-1">Se a idade mínima for 18+, o campo máximo fica inativo.</p>
+                        <p class="text-xs text-gray-400 mt-1">Se a idade mínima for 18+, o campo máximo fica inativo.</p>
                     </div>
                     <div>
-                        <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-2">Gênero</label>
+                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Gênero</label>
                         <select id="cf-gender" class="glass-input w-full h-[46px] px-4 rounded-[14px] text-sm" onchange="cfMarkDirty()">
                             <option value="">Selecione...</option>
                             <option value="Misto">Misto</option>
@@ -763,15 +763,15 @@
                 </div>
 
                 <div>
-                    <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-2">Local de Treino</label>
+                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Local de Treino</label>
                     <select id="cf-local" class="glass-input w-full h-[46px] px-4 rounded-[14px] text-sm" onchange="cfHandleLocalChange()">
                         <option value="">Carregando locais...</option>
                     </select>
                 </div>
                 <div>
-                    <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-3">Horários de Treino</label>
+                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-3">Horários de Treino</label>
                     <div class="flex flex-wrap gap-3" id="cf-days-container"></div>
-                    
+
                     <div id="cf-time-panel" class="hidden mt-4 p-4 rounded-[16px] bg-white/40 dark:bg-black/20 border border-gray-200 dark:border-white/10 animate__animated animate__fadeIn animate__faster">
                         <h4 class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-3" id="cf-time-title">Selecione o horário:</h4>
                         <div class="flex items-center flex-wrap gap-2">
@@ -795,8 +795,8 @@
 
                 <!-- Mensalidades disponíveis (pills) -->
                 <div>
-                    <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-2">Mensalidades Disponíveis</label>
-                    <p class="text-[10px] text-gray-400 mb-2">Selecione quais planos esta equipe oferece. No cadastro de atletas, somente os planos marcados aqui ficam disponíveis no dropdown.</p>
+                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Mensalidades Disponíveis</label>
+                    <p class="text-xs text-gray-400 mb-2">Selecione quais planos esta equipe oferece. No cadastro de atletas, somente os planos marcados aqui ficam disponíveis no dropdown.</p>
                     <div id="cf-plans-container" class="flex flex-wrap gap-2"></div>
                 </div>
             </div>
@@ -820,7 +820,7 @@
                 </div>
             </div>
 
-            <div id="cf-actions" class="mt-6 pt-6 border-t border-gray-200 dark:border-white/10 flex gap-4 shrink-0 opacity-0 pointer-events-none transition-opacity duration-300">
+            <div id="cf-actions" class="hidden mt-6 pt-6 border-t border-gray-200 dark:border-white/10 flex gap-4 shrink-0 opacity-0 pointer-events-none transition-opacity duration-300">
                 <button onclick="cfDiscard()" class="flex-1 py-3 rounded-[14px] bg-white/40 dark:bg-white/10 hover:bg-white/80 dark:hover:bg-white/20 font-bold text-gray-700 dark:text-gray-200 transition-all border border-gray-200 dark:border-white/10 shadow-sm flex items-center justify-center gap-2">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                     Descartar
@@ -2552,15 +2552,28 @@
         return Object.values(team.schedules).filter(s => s && s.start).length;
     }
 
+    // Um plano cobra taxa de matrícula quando contém literalmente "+ matrícula".
+    // CUIDADO: o texto "(sem taxa de matrícula)" também contém a palavra
+    // "matrícula" — por isso o regex precisa exigir o "+" como prefixo.
+    function cfPlanHasEnrollmentFee(plan) {
+        return /\+\s*matr[íi]cula/i.test(plan);
+    }
+
     // Decide se um plano canônico deve ser exibido para a configuração atual.
-    //  - Se idade mínima >= 18 → planos com matrícula somem (matrícula só p/ base).
-    //  - Frequência (1x/2x/3x) extraída do início do texto deve ser <= nº de dias
-    //    selecionados em Horários de Treino. Se nenhum dia foi escolhido ainda,
-    //    todas as opções continuam visíveis.
+    // Aplica os dois filtros combinados (idade + nº de dias):
+    //  - Idade mínima >= 18 → equipe adulta → só planos SEM taxa de matrícula.
+    //  - Idade mínima  < 18 → equipe base/escolinha → só planos COM matrícula.
+    //  - Frequência (1x/2x/3x) extraída do início do texto deve ser <= nº de
+    //    dias selecionados em Horários de Treino. Se nenhum dia foi escolhido
+    //    ainda, esse filtro fica inativo (todas as opções continuam visíveis).
     function cfPlanIsAllowed(plan) {
         const minVal = parseInt(document.getElementById('cf-age-min').value, 10);
-        const isAdult = !isNaN(minVal) && minVal >= 18;
-        if (isAdult && /matrícula/i.test(plan)) return false;
+        const hasMinAge = !isNaN(minVal);
+        const isAdult = hasMinAge && minVal >= 18;
+        const isMinor = hasMinAge && minVal < 18;
+        const hasFee = cfPlanHasEnrollmentFee(plan);
+        if (isAdult && hasFee) return false;
+        if (isMinor && !hasFee) return false;
 
         const freqMatch = plan.match(/^(\d+)x/i);
         const freq = freqMatch ? parseInt(freqMatch[1], 10) : 0;
@@ -2824,13 +2837,17 @@
         const box = document.getElementById('cf-actions');
         const btnSave = document.getElementById('cf-btn-save');
         if(show) {
-            box.classList.remove('opacity-0', 'pointer-events-none');
+            // 'hidden' (display:none) liberado → o bloco volta a participar do
+            // layout; opacity-0 → opacity-100 mantém o fade-in suave.
+            box.classList.remove('hidden', 'opacity-0', 'pointer-events-none');
             box.classList.add('opacity-100', 'pointer-events-auto');
-            btnSave.innerHTML = cfIsNew 
+            btnSave.innerHTML = cfIsNew
                 ? '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg><span>Salvar</span>'
                 : '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg><span>Salvar alterações</span>';
         } else {
-            box.classList.add('opacity-0', 'pointer-events-none');
+            // 'hidden' remove o bloco do layout para que cf-view-dados alcance
+            // a margem inferior do cf-content-panel quando não há alterações.
+            box.classList.add('hidden', 'opacity-0', 'pointer-events-none');
             box.classList.remove('opacity-100', 'pointer-events-auto');
         }
     }
