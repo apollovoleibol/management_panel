@@ -176,7 +176,7 @@
       .table-agendamentos td:nth-of-type(5):before { content: "Status"; }
       .table-atletas td:nth-of-type(1):before { content: "Nome/Resp"; }
       .table-atletas td:nth-of-type(2):before { content: "Contato"; }
-      .table-atletas td:nth-of-type(3):before { content: "Plano"; }
+      .table-atletas td:nth-of-type(3):before { content: "Equipe / Plano"; }
       .table-atletas td:nth-of-type(4):before { content: "Status"; }
     }
 
@@ -488,26 +488,6 @@
             <div class="liquid-card-kpi w-full h-full" onclick="this.classList.toggle('show-chart')">
               <div class="kpi-front absolute inset-0 p-5 md:p-6 flex flex-col justify-between">
                 <div class="flex justify-between items-start z-10">
-                  <span class="text-[11px] md:text-xs uppercase tracking-widest font-bold text-gray-500 dark:text-gray-400">Total Registros</span>
-                  <div class="w-10 h-10 rounded-full icon-glass flex items-center justify-center text-apollo-navy dark:text-white">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                  </div>
-                </div>
-                <div class="flex items-end gap-2 z-10 mt-auto">
-                  <span id="kpi-total" class="text-5xl md:text-6xl font-normal text-gray-900 dark:text-white leading-none tracking-tight">0</span>
-                </div>
-                <div id="spark-total" class="absolute bottom-4 right-4 w-[45%] h-12 pointer-events-none opacity-100 z-0"></div>
-              </div>
-              <div class="kpi-back absolute inset-0 p-4 flex flex-col items-center justify-center bg-white/70 dark:bg-black/50 backdrop-blur-md rounded-[24px]">
-                <h4 class="text-[10px] uppercase font-bold text-gray-800 dark:text-gray-300 mb-1 tracking-widest">Evolução (Semanas)</h4>
-                <div class="w-full h-full flex-1 relative"><canvas id="chart-total"></canvas></div>
-              </div>
-            </div>
-          </div>
-          <div class="[perspective:800px] h-36 md:h-40">
-            <div class="liquid-card-kpi w-full h-full" onclick="this.classList.toggle('show-chart')">
-              <div class="kpi-front absolute inset-0 p-5 md:p-6 flex flex-col justify-between">
-                <div class="flex justify-between items-start z-10">
                   <span class="text-[11px] md:text-xs uppercase tracking-widest font-bold text-[#15803d] dark:text-[#4ade80]">Agendados</span>
                   <div class="w-10 h-10 rounded-full icon-glass flex items-center justify-center text-[#15803d] dark:text-[#4ade80]">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
@@ -541,6 +521,26 @@
               <div class="kpi-back absolute inset-0 p-4 flex flex-col items-center justify-center bg-white/70 dark:bg-black/50 backdrop-blur-md rounded-[24px]">
                 <h4 class="text-[10px] uppercase font-bold text-gray-800 dark:text-gray-300 mb-1 tracking-widest">Reagendamentos Semanais</h4>
                 <div class="w-full h-full flex-1 relative"><canvas id="chart-reagendados"></canvas></div>
+              </div>
+            </div>
+          </div>
+          <div class="[perspective:800px] h-36 md:h-40">
+            <div class="liquid-card-kpi w-full h-full" onclick="this.classList.toggle('show-chart')">
+              <div class="kpi-front absolute inset-0 p-5 md:p-6 flex flex-col justify-between">
+                <div class="flex justify-between items-start z-10">
+                  <span class="text-[11px] md:text-xs uppercase tracking-widest font-bold text-[#b45309] dark:text-[#fbbf24]">Ausentes</span>
+                  <div class="w-10 h-10 rounded-full icon-glass flex items-center justify-center text-[#b45309] dark:text-[#fbbf24]">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8 12h8"/></svg>
+                  </div>
+                </div>
+                <div class="flex items-end gap-2 z-10 mt-auto">
+                  <span id="kpi-ausentes" class="text-5xl md:text-6xl font-normal text-gray-900 dark:text-white leading-none tracking-tight">0</span>
+                </div>
+                <div id="spark-ausentes" class="absolute bottom-4 right-4 w-[45%] h-12 pointer-events-none opacity-100 z-0"></div>
+              </div>
+              <div class="kpi-back absolute inset-0 p-4 flex flex-col items-center justify-center bg-white/70 dark:bg-black/50 backdrop-blur-md rounded-[24px]">
+                <h4 class="text-[10px] uppercase font-bold text-gray-800 dark:text-gray-300 mb-1 tracking-widest">Ausências Semanais</h4>
+                <div class="w-full h-full flex-1 relative"><canvas id="chart-ausentes"></canvas></div>
               </div>
             </div>
           </div>
@@ -674,7 +674,7 @@
                 <tr>
                   <th class="px-5 py-4 text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Atleta / Responsável</th>
                   <th class="px-5 py-4 text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Contato</th>
-                  <th class="px-5 py-4 text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Plano / Categoria</th>
+                  <th class="px-5 py-4 text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Equipe / Plano</th>
                   <th class="px-5 py-4 text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
                 </tr>
               </thead>
@@ -714,17 +714,17 @@
                 <button id="cf-subtab-datas" onclick="cfSetSubTab('datas')" class="flex-1 pb-3 text-sm font-bold text-gray-500 border-b-2 border-transparent hover:text-gray-700 dark:hover:text-gray-300 transition-all">Datas Indisponíveis</button>
             </div>
             
-            <div id="cf-view-dados" class="flex-1 overflow-y-auto flex flex-col gap-6 pr-2 min-h-0">
-                <!-- Toggle: Disponível para agendamento -->
-                <div class="flex items-center justify-between p-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10">
-                    <div>
-                        <p class="text-[13px] font-bold text-gray-800 dark:text-gray-100">Disponível para agendamento</p>
-                        <p class="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5">Quando ativo, o chatbot oferece esta equipe nas conversas de auto-agendamento.</p>
-                    </div>
+            <div id="cf-view-dados" class="flex-1 overflow-y-auto flex flex-col gap-6 pr-2 min-h-0 max-w-2xl">
+                <!-- Toggle: Disponível para agendamento (toggle à esquerda, texto à direita) -->
+                <div class="flex items-center gap-3 p-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10">
                     <label class="cf-toggle">
                         <input type="checkbox" id="cf-available-booking" onchange="cfMarkDirty()">
                         <span class="cf-toggle-track"></span>
                     </label>
+                    <div>
+                        <p class="text-[13px] font-bold text-gray-800 dark:text-gray-100">Disponível para agendamento</p>
+                        <p class="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5">Quando ativo, o chatbot oferece esta equipe nas conversas de auto-agendamento.</p>
+                    </div>
                 </div>
 
                 <div>
@@ -747,7 +747,7 @@
                         <div class="flex items-center gap-2">
                             <input type="number" min="0" max="120" id="cf-age-min" oninput="cfHandleAgeMinChange()" placeholder="Mín." class="glass-input flex-1 h-[46px] px-3 rounded-[14px] text-sm text-center">
                             <span class="text-gray-400 font-bold">—</span>
-                            <input type="number" min="0" max="120" id="cf-age-max" oninput="cfMarkDirty()" placeholder="Máx." class="glass-input flex-1 h-[46px] px-3 rounded-[14px] text-sm text-center">
+                            <input type="number" min="0" max="120" id="cf-age-max" oninput="cfHandleAgeMaxChange()" placeholder="Máx." class="glass-input flex-1 h-[46px] px-3 rounded-[14px] text-sm text-center">
                         </div>
                         <p class="text-[10px] text-gray-400 mt-1">Se a idade mínima for 18+, o campo máximo fica inativo.</p>
                     </div>
@@ -1002,11 +1002,11 @@
           <div id="containerRespAtleta" class="p-4 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 space-y-4 hidden">
             <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Dados do Responsável (atleta menor de idade)</p>
             <div>
-              <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">Nome do Responsável</label>
+              <label id="labelRespNome" class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">Nome do Responsável</label>
               <input type="text" id="formAtletaResp" class="glass-input w-full h-[46px] px-4 rounded-[14px] font-sans">
             </div>
             <div>
-              <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">WhatsApp do Responsável</label>
+              <label id="labelRespWpp" class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">WhatsApp do Responsável</label>
               <input type="text" id="formAtletaRespWpp" placeholder="(XX) XXXXX-XXXX" class="glass-input w-full h-[46px] px-4 rounded-[14px] font-sans">
             </div>
           </div>
@@ -1636,10 +1636,11 @@
     function atualizarKPIs(dados) {
       const tConf = dados.filter(d => String(d.status).toLowerCase() === 'agendado').length;
       const tReag = dados.filter(d => Number(d.qtd_reagendamentos) > 0).length;
+      const tAus  = dados.filter(d => String(d.status).toLowerCase() === 'ausente').length;
       const tCanc = dados.filter(d => String(d.status).toLowerCase() === 'cancelado').length;
-      document.getElementById('kpi-total').textContent = dados.length;
       document.getElementById('kpi-confirmados').textContent = tConf;
       document.getElementById('kpi-reagendados').textContent = tReag;
+      document.getElementById('kpi-ausentes').textContent = tAus;
       document.getElementById('kpi-cancelados').textContent = tCanc;
       const calcW = (filterFn) => {
         const w = [0,0,0,0]; const now = new Date();
@@ -1650,19 +1651,18 @@
           if (diffDays <= 7) w[3]++; else if (diffDays <= 14) w[2]++; else if (diffDays <= 21) w[1]++; else if (diffDays <= 28) w[0]++;
         }); return w;
       };
-      const wTotal = calcW(() => true);
       const wConf  = calcW(d => String(d.status).toLowerCase() === 'agendado');
       const wReag  = calcW(d => Number(d.qtd_reagendamentos) > 0);
+      const wAus   = calcW(d => String(d.status).toLowerCase() === 'ausente');
       const wCanc  = calcW(d => String(d.status).toLowerCase() === 'cancelado');
-      const isDark = document.documentElement.classList.contains('dark');
-      document.getElementById('spark-total').innerHTML       = generateSparkline(wTotal, isDark ? '#ffffff' : '#0F1332', 'spk-tot');
       document.getElementById('spark-confirmados').innerHTML = generateSparkline(wConf, '#16a34a', 'spk-conf');
       document.getElementById('spark-reagendados').innerHTML = generateSparkline(wReag, '#8b5cf6', 'spk-reag');
+      document.getElementById('spark-ausentes').innerHTML    = generateSparkline(wAus,  '#f59e0b', 'spk-aus');
       document.getElementById('spark-cancelados').innerHTML  = generateSparkline(wCanc, '#EE4036', 'spk-canc');
-      renderChartsBack(wTotal, wConf, wReag, wCanc);
+      renderChartsBack(wConf, wReag, wAus, wCanc);
     }
 
-    function renderChartsBack(dTot, dConf, dReag, dCanc) {
+    function renderChartsBack(dConf, dReag, dAus, dCanc) {
       const isDark = document.documentElement.classList.contains('dark');
       const gColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
       const tColor = isDark ? 'rgba(255,255,255,0.6)' : 'rgba(0,0,0,0.6)';
@@ -1676,10 +1676,10 @@
         const ctx = document.getElementById(id);
         if (ctx) chartsInstance[id] = new Chart(ctx, { type: 'line', data: { labels: ['Sem 1','Sem 2','Sem 3','Sem 4'], datasets: [{ data, borderColor: color, backgroundColor: color, borderWidth: 2, tension: 0.4, pointRadius: 3 }] }, options: opts });
       };
-      create('chart-total', dTot, isDark ? '#ffffff' : '#0F1332');
       create('chart-confirmados', dConf, '#16a34a');
       create('chart-reagendados', dReag, '#8b5cf6');
-      create('chart-cancelados', dCanc, '#EE4036');
+      create('chart-ausentes',    dAus,  '#f59e0b');
+      create('chart-cancelados',  dCanc, '#EE4036');
     }
 
     function formatarWhatsApp(numero) {
@@ -1833,7 +1833,18 @@
       appLog(`Abrindo edição manual para Agendamento: ${selectedRowData.nome}`, 'info');
       document.getElementById('modal-actions').classList.remove('open'); document.getElementById('formAgendamento').reset();
       document.getElementById('formId').value = selectedRowData.id || ''; document.getElementById('modal-form-title').innerText = 'Editar Agendamento';
-      document.getElementById('formEquipe').value = selectedRowData.equipe || ''; syncFormFields();
+      const eqSel = document.getElementById('formEquipe');
+      const eqVal = selectedRowData.equipe || '';
+      // Preserva a equipe original gravada em target_team mesmo quando o texto
+      // não bate exatamente com nenhuma <option> hardcoded (ex.: rótulo no banco
+      // ficou diferente do listado). Mantém a opção oculta para que o valor
+      // continue salvo se o admin só editar a data/hora.
+      if (eqVal && !Array.from(eqSel.options).some(o => o.value === eqVal)) {
+        const opt = document.createElement('option');
+        opt.value = eqVal; opt.textContent = eqVal; opt.hidden = true;
+        eqSel.appendChild(opt);
+      }
+      eqSel.value = eqVal; syncFormFields();
       document.getElementById('formNome').value = selectedRowData.nome || '';
       if (document.getElementById('formNomeMenor')) document.getElementById('formNomeMenor').value = selectedRowData.nome_menor || '';
       document.getElementById('formWpp').value = formatarWhatsApp(selectedRowData.whatsapp || '');
@@ -2041,12 +2052,20 @@
         tr.className = 'table-row animate__animated animate__fadeIn animate__faster';
         tr.onclick = () => openEditAtletaModal(atl);
         
-        const isMinor = typeof atl.parent_name === 'string' && atl.parent_name.trim() !== '';
+        const team = atl.team_id ? (cfTeams.find(t => t.id === atl.team_id) || null) : null;
+        const teamIsMinor = team && team.age_min !== '' && team.age_min !== null && team.age_min !== undefined && Number(team.age_min) < 18;
+        const hasParent = typeof atl.parent_name === 'string' && atl.parent_name.trim() !== '';
+        // Atleta menor de idade quando a equipe é de base/escolinha (faixa < 18)
+        // ou, como fallback p/ dados legados, quando há nome do responsável.
+        const isMinor = teamIsMinor || hasParent;
+
         const nomeAtleta = atl.full_name || '—';
         const nomeResp = atl.parent_name || '—';
-        const wppDisplay = formatarTelAtleta(atl.phone || '');
+        // Menores: usa WhatsApp do responsável; adultos: o do próprio atleta.
+        const rawTel = String((isMinor ? (atl.parent_phone || atl.phone) : atl.phone) || '').replace(/\D/g,'');
+        const wppDisplay = formatarTelAtleta(rawTel);
         const planoDisplay = atl.payment_plan || 'Sem plano';
-        const teamName = atl.team_id ? ((cfTeams.find(t => t.id === atl.team_id) || {}).name || '') : '';
+        const teamName = team ? team.name : '';
         const catDisplay = teamName || atl.position || 'Não definida';
         const isActive = atl.is_active !== false;
 
@@ -2058,7 +2077,6 @@
           ? `<span class="status-badge status-agendado">Ativo</span>`
           : `<span class="status-badge status-cancelado">Inativo</span>`;
 
-        const rawTel = String(atl.phone || '').replace(/\D/g,'');
         const waNum = rawTel ? (rawTel.startsWith('55') ? rawTel : '55' + rawTel) : '';
         const contatarBtn = waNum
           ? `<a href="https://wa.me/${waNum}" target="_blank" rel="noopener" onclick="event.stopPropagation();" class="inline-flex items-center justify-center gap-1.5 bg-[#25D366] text-white px-2 py-1 rounded-[8px] text-[10px] font-bold uppercase tracking-widest hover:bg-[#1ebd5a] transition-all shadow-sm shrink-0">CONTATAR</a>`
@@ -2141,19 +2159,33 @@
         if (prevPlan && plans.includes(prevPlan)) planSel.value = prevPlan;
       }
 
-      // Equipe de base/escolinha → mostra responsável; WhatsApp do atleta opcional
+      // Equipe de base/escolinha → mostra responsável (obrigatório); WhatsApp do atleta opcional
       const isMinor = isTeamMinor(team);
       const respBox = document.getElementById('containerRespAtleta');
       const wppLabel = document.getElementById('labelAtletaWpp');
       const wppInp = document.getElementById('formAtletaWpp');
+      const respNome = document.getElementById('formAtletaResp');
+      const respWpp  = document.getElementById('formAtletaRespWpp');
+      const labelRespNome = document.getElementById('labelRespNome');
+      const labelRespWpp  = document.getElementById('labelRespWpp');
       if (isMinor) {
         respBox.classList.remove('hidden');
         wppLabel.innerText = 'WhatsApp (Atleta)';
         wppInp.required = false;
+        // Responsável obrigatório para equipes menores de 18 anos
+        respNome.required = true;
+        respWpp.required = true;
+        if (labelRespNome) labelRespNome.innerText = 'Nome do Responsável *';
+        if (labelRespWpp)  labelRespWpp.innerText  = 'WhatsApp do Responsável *';
       } else {
         respBox.classList.add('hidden');
         wppLabel.innerText = 'WhatsApp (Atleta) *';
         wppInp.required = !!team; // só obriga quando uma equipe está escolhida
+        // Responsável não é obrigatório quando equipe é adulta
+        respNome.required = false;
+        respWpp.required = false;
+        if (labelRespNome) labelRespNome.innerText = 'Nome do Responsável';
+        if (labelRespWpp)  labelRespWpp.innerText  = 'WhatsApp do Responsável';
       }
     }
 
@@ -2513,10 +2545,36 @@
     }
 
     // Renderiza os pills de mensalidade; marca os já selecionados na equipe ativa.
+    // Conta quantos dias da semana têm horário configurado para a equipe ativa.
+    function cfCountScheduleDays() {
+        const team = cfIsNew ? cfTempTeam : cfTeams.find(t => t.id === cfActiveId);
+        if (!team || !team.schedules) return 0;
+        return Object.values(team.schedules).filter(s => s && s.start).length;
+    }
+
+    // Decide se um plano canônico deve ser exibido para a configuração atual.
+    //  - Se idade mínima >= 18 → planos com matrícula somem (matrícula só p/ base).
+    //  - Frequência (1x/2x/3x) extraída do início do texto deve ser <= nº de dias
+    //    selecionados em Horários de Treino. Se nenhum dia foi escolhido ainda,
+    //    todas as opções continuam visíveis.
+    function cfPlanIsAllowed(plan) {
+        const minVal = parseInt(document.getElementById('cf-age-min').value, 10);
+        const isAdult = !isNaN(minVal) && minVal >= 18;
+        if (isAdult && /matrícula/i.test(plan)) return false;
+
+        const freqMatch = plan.match(/^(\d+)x/i);
+        const freq = freqMatch ? parseInt(freqMatch[1], 10) : 0;
+        const days = cfCountScheduleDays();
+        if (days > 0 && freq > 0 && freq > days) return false;
+
+        return true;
+    }
+
     function renderCFPlans(selectedPlans) {
         const container = document.getElementById('cf-plans-container');
         container.innerHTML = '';
         CANONICAL_PAYMENT_PLANS.forEach(plan => {
+            if (!cfPlanIsAllowed(plan)) return;
             const isSel = selectedPlans.includes(plan);
             const el = document.createElement('div');
             el.className = 'cf-plan-pill' + (isSel ? ' selected' : '');
@@ -2528,6 +2586,15 @@
             };
             container.appendChild(el);
         });
+    }
+
+    // Re-renderiza os pills preservando o que estiver marcado, descartando
+    // só o que tiver sido filtrado pelas regras atuais.
+    function cfRefreshPlans() {
+        const planContainer = document.getElementById('cf-plans-container');
+        if (!planContainer) return;
+        const currentlySelected = cfCollectSelectedPlans();
+        renderCFPlans(currentlySelected);
     }
 
     // Coleta os planos atualmente marcados nos pills.
@@ -2552,6 +2619,12 @@
 
     function cfHandleAgeMinChange() {
         cfApplyAgeMaxState();
+        cfRefreshPlans();
+        cfMarkDirty();
+    }
+
+    function cfHandleAgeMaxChange() {
+        cfRefreshPlans();
         cfMarkDirty();
     }
 
@@ -2648,6 +2721,8 @@
         const deleteBtn = document.getElementById('cf-time-delete-btn');
         if (deleteBtn) deleteBtn.classList.toggle('hidden', !(team && team.schedules && team.schedules[cfSelectedDay]));
         renderCFDays(team);
+        // Re-filtra as mensalidades — frequência permitida muda conforme nº de dias.
+        cfRefreshPlans();
     }
 
     function renderCFCalendar() {
@@ -2991,6 +3066,7 @@
             if (deleteBtn) deleteBtn.classList.add('hidden');
             cfMarkDirty();
             renderCFDays(team);
+            cfRefreshPlans();
         }
     }
 
