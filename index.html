@@ -1024,6 +1024,18 @@
               <option value="">Selecione uma equipe primeiro...</option>
             </select>
           </div>
+
+          <!-- ▼▼▼ NOVOS CAMPOS: Endereço e Banco de Pagamento (logo abaixo de "Plano / Mensalidade *") ▼▼▼ -->
+          <div>
+            <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">Endereço</label>
+            <input type="text" id="formAtletaEndereco" class="glass-input w-full h-[46px] px-4 rounded-[14px] font-sans" placeholder="Rua, número, bairro, CEP">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">Banco de Pagamento</label>
+            <input type="text" id="formAtletaBanco" class="glass-input w-full h-[46px] px-4 rounded-[14px] font-sans" placeholder="Ex: Nubank">
+          </div>
+          <!-- ▲▲▲ FIM DOS NOVOS CAMPOS ▲▲▲ -->
+
           <div>
             <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">Status</label>
             <select id="formAtletaStatus" class="glass-input w-full h-[46px] px-4 rounded-[14px] font-sans">
@@ -2236,6 +2248,12 @@
         }
         planSel.value = atl.payment_plan;
       }
+
+      // ▼▼▼ Preenchimento dos novos campos: Endereço e Banco de Pagamento ▼▼▼
+      document.getElementById('formAtletaEndereco').value = atl.address || '';
+      document.getElementById('formAtletaBanco').value = atl.payment_bank || '';
+      // ▲▲▲ FIM ▲▲▲
+
       document.getElementById('formAtletaStatus').value = atl.is_active !== false ? 'ativo' : 'inativo';
 
       document.getElementById('btnExcluirAtleta').classList.remove('hidden');
@@ -2276,6 +2294,8 @@
         rg: document.getElementById('formAtletaRg').value || null,
         phone: phoneRaw || null,
         payment_plan: document.getElementById('formAtletaPlano').value,
+        address: document.getElementById('formAtletaEndereco').value || null,
+        payment_bank: document.getElementById('formAtletaBanco').value || null,
         is_active: document.getElementById('formAtletaStatus').value === 'ativo'
       };
 
@@ -2837,16 +2857,12 @@
         const box = document.getElementById('cf-actions');
         const btnSave = document.getElementById('cf-btn-save');
         if(show) {
-            // 'hidden' (display:none) liberado → o bloco volta a participar do
-            // layout; opacity-0 → opacity-100 mantém o fade-in suave.
             box.classList.remove('hidden', 'opacity-0', 'pointer-events-none');
             box.classList.add('opacity-100', 'pointer-events-auto');
             btnSave.innerHTML = cfIsNew
                 ? '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg><span>Salvar</span>'
                 : '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg><span>Salvar alterações</span>';
         } else {
-            // 'hidden' remove o bloco do layout para que cf-view-dados alcance
-            // a margem inferior do cf-content-panel quando não há alterações.
             box.classList.add('hidden', 'opacity-0', 'pointer-events-none');
             box.classList.remove('opacity-100', 'pointer-events-auto');
         }
