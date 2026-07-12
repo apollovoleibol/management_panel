@@ -914,7 +914,12 @@
           <div id="containerStatus" class="hidden">
             <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">Status</label>
             <select id="formStatus" class="glass-input w-full h-[46px] px-4 rounded-[14px] font-sans">
+              <option value="Pendente">Pendente</option>
               <option value="Agendado">Agendado</option>
+              <option value="Em avaliação">Em avaliação</option>
+              <option value="Em cadastro">Em cadastro</option>
+              <option value="Tecnofit">Tecnofit</option>
+              <option value="Ausente">Ausente</option>
               <option value="Cancelado">Cancelado</option>
             </select>
           </div>
@@ -1874,8 +1879,9 @@
       
       document.getElementById('containerStatus').classList.remove('hidden'); document.getElementById('btnExcluirModal').classList.remove('hidden');
       const cStat = selectedRowData.status || 'Agendado'; const fStat = document.getElementById('formStatus');
-      fStat.innerHTML = '<option value="Agendado">Agendado</option><option value="Cancelado">Cancelado</option>';
-      if (cStat !== 'Agendado' && cStat !== 'Cancelado') fStat.innerHTML += `<option value="${cStat}" hidden>${cStat}</option>`;
+      fStat.innerHTML = '<option value="Pendente">Pendente</option><option value="Agendado">Agendado</option><option value="Em avaliação">Em avaliação</option><option value="Em cadastro">Em cadastro</option><option value="Tecnofit">Tecnofit</option><option value="Ausente">Ausente</option><option value="Cancelado">Cancelado</option>';
+      // Se o status atual vier de um valor fora do enum conhecido (ex.: divergência entre painel, bot e app), preserva-o como opção extra em vez de perdê-lo ao salvar.
+      if (!Array.from(fStat.options).some(o => o.value === cStat)) fStat.innerHTML += `<option value="${cStat}" hidden>${cStat}</option>`;
       fStat.value = cStat; document.getElementById('modal-form').classList.add('open'); isFormDirty = false;
     }
 
@@ -1921,7 +1927,11 @@
       const btn = document.getElementById('btnSalvarModal'); btn.innerHTML = 'Salvando...'; btn.disabled = true;
       const pts = dStr.split(' '); const dPt = pts[0].split('/'); const tPt = pts[1] || '00:00'; const iso = `${dPt[2]}-${dPt[1]}-${dPt[0]}T${tPt}:00`;
       let dbStat = selectedRowData ? selectedRowData.raw_status : 'PENDING';
-      if (id) { const fs = document.getElementById('formStatus').value; if(fs==='Agendado') dbStat='CONFIRMED'; else if(fs==='Cancelado') dbStat='CANCELLED'; }
+      if (id) {
+        const fs = document.getElementById('formStatus').value;
+        const STATUS_UI_TO_DB = { 'Pendente':'PENDING', 'Agendado':'CONFIRMED', 'Em avaliação':'IN_EVALUATION', 'Em cadastro':'IN_REGISTRATION', 'Tecnofit':'TECNOFIT', 'Ausente':'MISSED', 'Cancelado':'CANCELLED' };
+        dbStat = STATUS_UI_TO_DB[fs] || fs;
+      }
       const pay = { name: nome, minor_name: nMenor, whatsapp_phone: wpp, scheduled_at: iso, target_team: eq, target_location: TEAM_CONFIG[eq] ? TEAM_CONFIG[eq].local : 'Ginásio Apollo' };
       if (id) pay.status = dbStat;
       salvarNoSupabase(id, pay);
