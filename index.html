@@ -799,8 +799,17 @@
                     <p class="text-xs text-gray-400 mb-2">Selecione quais planos esta equipe oferece. No cadastro de atletas, somente os planos marcados aqui ficam disponíveis no dropdown.</p>
                     <div id="cf-plans-container" class="flex flex-wrap gap-2"></div>
                 </div>
+
+                <div id="cf-danger-zone" class="hidden mt-2 p-4 rounded-xl border border-red-200 dark:border-red-500/20 bg-red-50/50 dark:bg-red-500/5">
+                    <p class="text-sm font-bold text-[#EE4036] mb-1">Zona de risco</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">Excluir esta equipe remove também seus horários e datas de indisponibilidade. Essa ação não pode ser desfeita.</p>
+                    <button type="button" onclick="cfDeleteTeam()" id="cf-btn-delete-team" class="flex items-center justify-center gap-2 bg-white dark:bg-transparent hover:bg-red-50 dark:hover:bg-red-500/10 text-[#EE4036] border border-[#EE4036]/40 px-4 py-2.5 rounded-xl text-sm font-bold transition-all">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                        Excluir equipe
+                    </button>
+                </div>
             </div>
-            
+
             <div id="cf-view-datas" class="hidden flex-1 flex flex-col min-h-0">
                 <div class="flex justify-between items-center mb-4 shrink-0">
                     <button onclick="cfChangeMonth(-1)" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-200 dark:hover:bg-white/10 font-bold">&lt;</button>
@@ -2572,6 +2581,8 @@
 
         renderCFDays(team);
         if(cfSubTab === 'datas') renderCFCalendar();
+
+        document.getElementById('cf-danger-zone').classList.toggle('hidden', cfIsNew);
     }
 
     // Renderiza os pills de mensalidade; marca os já selecionados na equipe ativa.
@@ -2999,6 +3010,71 @@
         renderCFContent();
         btn.innerHTML = origHTML; btn.disabled = false;
     }
+
+    // Exclui uma equipe do Chat Feeder e tudo que depende exclusivamente dela
+    // (horários já ficam no próprio registro da equipe; restam as datas de
+    // indisponibilidade). Bloqueia a exclusão se houver atletas vinculados,
+    // pois apagar cadastros de atleta é um dado que não queremos perder aqui.
+    async function cfDeleteTeam() {
+        if (cfIsNew) return;
+        const team = cfTeams.find(t => t.id === cfActiveId);
+        if (!team) return;
+
+        if (!confirm(`Excluir a equipe "${team.name}"? Isso removerá também seus horários e datas de indisponibilidade. Essa ação não pode ser desfeita.`)) {
+            appLog('Exclusão de equipe cancelada pelo usuário.', 'info');
+            return;
+        }
+
+        const btn = document.getElementById('cf-btn-delete-team');
+        const origHTML = btn.innerHTML;
+        btn.innerHTML = '<div class="loader w-5 h-5 border-2 border-t-[#EE4036] m-0"></div>'; btn.disabled = true;
+
+        try {
+            appLog(`Verificando atletas vinculados à equipe: ${team.name}`, 'info');
+            const resCheck = await fetch(`${SUPABASE_URL}/rest/v1/athletes?team_id=eq.${team.id}&select=id`, {
+                headers: getSupabaseHeaders()
+            });
+            const rawCheck = await resCheck.text();
+            let athletesLinked; try { athletesLinked = JSON.parse(rawCheck); } catch(e) { throw new Error('Resposta inválida ao verificar atletas'); }
+            if (!resCheck.ok) throw new Error(JSON.stringify(athletesLinked));
+
+            if (Array.isArray(athletesLinked) && athletesLinked.length > 0) {
+                alert(`Não é possível excluir: há ${athletesLinked.length} atleta(s) vinculado(s) a esta equipe. Realoque ou remova esses atletas antes de excluir a equipe.`);
+                appLog(`Exclusão bloqueada: ${athletesLinked.length} atleta(s) vinculado(s).`, 'info');
+                btn.innerHTML = origHTML; btn.disabled = false;
+                return;
+            }
+
+            const resUnavail = await fetch(`${SUPABASE_URL}/rest/v1/team_unavailable_dates?team_id=eq.${team.id}`, {
+                method: 'DELETE', headers: getSupabaseHeaders()
+            });
+            if (!resUnavail.ok) { const t = await resUnavail.text(); throw new Error(t || ('HTTP ' + resUnavail.status)); }
+
+            const resTeam = await fetch(`${SUPABASE_URL}/rest/v1/teams?id=eq.${team.id}`, {
+                method: 'DELETE', headers: getSupabaseHeaders()
+            });
+            if (!resTeam.ok) { const t = await resTeam.text(); throw new Error(t || ('HTTP ' + resTeam.status)); }
+
+            appLog(`Equipe excluída: ${team.name}`, 'ok');
+            cfTeams = cfTeams.filter(t => t.id !== team.id);
+            cfActiveId = null; cfDirty = false; cfSelectedDay = null;
+            document.getElementById('cf-time-panel').classList.add('hidden');
+            renderCFTabs();
+
+            if (cfTeams.length > 0) {
+                cfSelectTeam(cfTeams[0].id);
+            } else {
+                cfIsNew = false; cfTempTeam = null;
+                document.getElementById('cf-danger-zone').classList.add('hidden');
+                cfToggleActions(false);
+            }
+        } catch(e) {
+            appLog('Erro ao excluir equipe', 'err', e.message);
+            alert('Erro ao excluir: ' + e.message);
+            btn.innerHTML = origHTML; btn.disabled = false;
+        }
+    }
+
     /* ============================================
        CHAT FEEDER: FUNÇÕES AUXILIARES
     ============================================ */
