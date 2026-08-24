@@ -878,18 +878,6 @@
             <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1">Equipe / Local</label>
             <select id="formEquipe" required class="glass-input w-full h-[46px] px-4 rounded-[14px] text-[13px] leading-tight font-sans">
               <option value="">Selecione uma opção...</option>
-              <option value="Escolinha A - terças e quintas, 14h - 15h">Escolinha A - terças e quintas, 14h - 15h</option>
-              <option value="Escolinha B - sábados, 13h30 - 14h30">Escolinha B - sábados, 13h30 - 14h30</option>
-              <option value="Escolinha C - terças e sextas, 18h - 19h">Escolinha C - terças e sextas, 18h - 19h</option>
-              <option value="Pré-equipe - terças e quintas, 14h - 15h">Pré-equipe - terças e quintas, 14h - 15h</option>
-              <option value="Equipe Feminino - terças, quintas e sextas (15h - 16h30)">Equipe Feminino - terças, quintas e sextas (15h - 16h30)</option>
-              <option value="Equipe Masculino - terças e quintas (16h30-18h)">Equipe Masculino - terças e quintas (16h30-18h)</option>
-              <option value="Equipe Armstrong - segundas e quartas (19h - 20h) e sábados (9h - 10h15)">Equipe Armstrong - segundas e quartas (19h - 20h) e sábados (9h - 10h15)</option>
-              <option value="Equipe Aldrin - sábados, 10h - 12h">Equipe Aldrin - sábados, 10h - 12h</option>
-              <option value="Equipe Collins - sextas, 20h - 22h">Equipe Collins - sextas, 20h - 22h</option>
-              <option value="Equipe Borman - sábados, 10h30 - 12h30">Equipe Borman - sábados, 10h30 - 12h30</option>
-              <option value="Equipe Johnson - sábados, 12h30 - 14h30">Equipe Johnson - sábados, 12h30 - 14h30</option>
-              <option value="Equipe Hooper - quartas, 20h - 22h">Equipe Hooper - quartas, 20h - 22h</option>
             </select>
           </div>
           <div>
@@ -1470,7 +1458,7 @@
         // na coluna "Plano / Categoria" da tabela de atletas já no primeiro render.
         loadTrainingLocations()
           .then(() => loadCFTeams())
-          .then(() => carregarAtletasDoSupabase());
+          .then(() => { popularSelectFormEquipe(); return carregarAtletasDoSupabase(); });
       } catch (e) { tratarErro('Erro na inicialização: ' + String(e)); }
     }
 
@@ -1483,20 +1471,59 @@
     let isFormDirty = false;
     let currentCalDate = new Date();
     const monthNames = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
-    const TEAM_CONFIG = {
-      "Escolinha A - terças e quintas, 14h - 15h": { minors: true, local: "Ginásio Apollo", days: [2,4], time: "14:00" },
-      "Escolinha B - sábados, 13h30 - 14h30": { minors: true, local: "Ginásio Apollo", days: [6], time: "13:30" },
-      "Escolinha C - terças e sextas, 18h - 19h": { minors: true, local: "Ginásio Apollo", days: [2,5], time: "18:00" },
-      "Pré-equipe - terças e quintas, 14h - 15h": { minors: true, local: "Ginásio Apollo", days: [2,4], time: "14:00" },
-      "Equipe Feminino - terças, quintas e sextas (15h - 16h30)": { minors: true, local: "Ginásio Apollo", days: [2,4,5], time: "15:00" },
-      "Equipe Masculino - terças e quintas (16h30-18h)": { minors: true, local: "Ginásio Apollo", days: [2,4], time: "16:30" },
-      "Equipe Armstrong - segundas e quartas (19h - 20h) e sábados (9h - 10h15)": { minors: false, local: "Ginásio PUC", days: [1,3,6], timeMap: {1:"19:00",3:"19:00",6:"09:00"} },
-      "Equipe Aldrin - sábados, 10h - 12h": { minors: false, local: "Ginásio PUC", days: [6], time: "10:00" },
-      "Equipe Collins - sextas, 20h - 22h": { minors: false, local: "Ginásio PUC", days: [5], time: "20:00" },
-      "Equipe Borman - sábados, 10h30 - 12h30": { minors: false, local: "Ginásio Apollo", days: [6], time: "10:30" },
-      "Equipe Johnson - sábados, 12h30 - 14h30": { minors: false, local: "Ginásio Apollo", days: [6], time: "12:30" },
-      "Equipe Hooper - quartas, 20h - 22h": { minors: false, local: "Ginásio PUC", days: [3], time: "20:00" },
-    };
+    // Lista fixa de equipes REMOVIDA (ficava desatualizada e gravava o nome da
+    // equipe já colado com o horário, causando duplicidade no filtro de
+    // Agendamentos). Agora os dados de cada equipe (local, dias/horários,
+    // se exige responsável) vêm ao vivo de `cfTeams` — a mesma fonte que já
+    // alimenta a aba Chatbot Feeder — via getTeamLiveConfig() abaixo.
+
+    // Mesma regra de negócio usada no chatbot (TURMAS_MENORES em Código.js):
+    // turmas de base pedem o nome do RESPONSÁVEL em vez do nome do atleta.
+    const TURMAS_MENORES_PADRAO = [
+      'escolinha a', 'escolinha b', 'escolinha c',
+      'pré-equipe', 'pre-equipe',
+      'equipe feminino', 'equipe masculino'
+    ];
+    function equipeRequerResponsavel(nomeEquipe) {
+      const norm = String(nomeEquipe || '').toLowerCase().trim();
+      return TURMAS_MENORES_PADRAO.some(t => norm.includes(t) || t.includes(norm.replace('equipe ', '').trim()));
+    }
+
+    // Monta, a partir da equipe já carregada em cfTeams (ver loadCFTeams),
+    // um objeto no mesmo formato que o antigo TEAM_CONFIG usava: minors,
+    // local, days (dias da semana com treino) e timeMap (horário por dia).
+    function getTeamLiveConfig(nomeEquipe) {
+      const alvo = normalizarNomeEquipe(nomeEquipe).toLowerCase();
+      if (!alvo || typeof cfTeams === 'undefined') return null;
+      const team = cfTeams.find(t => (t.name || '').toLowerCase() === alvo);
+      if (!team) return null;
+      const days = Object.keys(team.schedules || {}).map(Number).filter(n => !isNaN(n));
+      const timeMap = {};
+      days.forEach(d => { timeMap[d] = (team.schedules[d] && team.schedules[d].start) || '00:00'; });
+      return {
+        minors: equipeRequerResponsavel(team.name),
+        local: team.local || 'Ginásio Apollo',
+        days: days.length ? days : [0,1,2,3,4,5,6],
+        timeMap
+      };
+    }
+
+    // Preenche o <select> de equipes do formulário de agendamento manual com
+    // as equipes ativas carregadas em cfTeams (nome limpo, sem horário colado).
+    function popularSelectFormEquipe() {
+      const select = document.getElementById('formEquipe');
+      if (!select || typeof cfTeams === 'undefined') return;
+      const valorAtual = select.value;
+      Array.from(select.options).forEach(o => { if (o.value !== '') o.remove(); });
+      [...cfTeams].sort((a, b) => (a.name || '').localeCompare(b.name || '')).forEach(t => {
+        const opt = document.createElement('option');
+        opt.value = t.name; opt.textContent = t.name;
+        select.appendChild(opt);
+      });
+      if (valorAtual && Array.from(select.options).some(o => o.value === valorAtual)) {
+        select.value = valorAtual;
+      }
+    }
 
     /* ============================================
        SUPABASE: AGENDAMENTOS
@@ -1649,8 +1676,16 @@
       renderizarTabela(dadosOriginais);
     }
 
+    // Alguns agendamentos antigos/manuais salvam a equipe com o horário colado no
+    // nome (ex.: "Equipe Collins - sextas, 20h - 22h"), enquanto os do chatbot
+    // salvam só o nome limpo ("Equipe Collins"). Normaliza cortando tudo a partir
+    // do primeiro " - " para tratar as duas formas como a mesma equipe no filtro.
+    function normalizarNomeEquipe(nome) {
+      return String(nome || '').split(' - ')[0].trim();
+    }
+
     function popularFiltroEquipes(dados) {
-      const equipes = [...new Set(dados.map(d => d.equipe).filter(Boolean))].sort();
+      const equipes = [...new Set(dados.map(d => normalizarNomeEquipe(d.equipe)).filter(Boolean))].sort();
       const select = document.getElementById('filterEquipe');
       equipes.forEach(eq => {
         if (!select.querySelector(`option[value="${eq}"]`)) {
@@ -1817,7 +1852,7 @@
       const filtrados = dadosOriginais.filter(d => {
         const matchNome = String(d.nome||'').toLowerCase().includes(termo) || String(d.whatsapp||'').toLowerCase().includes(termo) || String(d.nome_menor||'').toLowerCase().includes(termo);
         const matchStatus = status === '' || String(d.status||'').toLowerCase() === status;
-        const matchEquipe = equipe === '' || d.equipe === equipe;
+        const matchEquipe = equipe === '' || normalizarNomeEquipe(d.equipe) === equipe;
         return matchNome && matchStatus && matchEquipe;
       });
       renderizarTabela(filtrados);
@@ -1847,6 +1882,7 @@
 
     function openAddModal() {
       appLog('Abrindo modal Novo Agendamento', 'info');
+      popularSelectFormEquipe();
       selectedRowData = null; document.getElementById('formAgendamento').reset(); document.getElementById('formId').value = '';
       document.getElementById('modal-form-title').innerText = 'Novo Agendamento'; document.getElementById('containerStatus').classList.add('hidden');
       document.getElementById('wppError').classList.add('hidden'); document.getElementById('formWpp').classList.remove('error');
@@ -1859,15 +1895,22 @@
       appLog(`Abrindo edição manual para Agendamento: ${selectedRowData.nome}`, 'info');
       document.getElementById('modal-actions').classList.remove('open'); document.getElementById('formAgendamento').reset();
       document.getElementById('formId').value = selectedRowData.id || ''; document.getElementById('modal-form-title').innerText = 'Editar Agendamento';
+      popularSelectFormEquipe();
       const eqSel = document.getElementById('formEquipe');
-      const eqVal = selectedRowData.equipe || '';
-      // Preserva a equipe original gravada em target_team mesmo quando o texto
-      // não bate exatamente com nenhuma <option> hardcoded (ex.: rótulo no banco
-      // ficou diferente do listado). Mantém a opção oculta para que o valor
-      // continue salvo se o admin só editar a data/hora.
-      if (eqVal && !Array.from(eqSel.options).some(o => o.value === eqVal)) {
+      const eqValOriginal = selectedRowData.equipe || '';
+      // Registros antigos podem ter o nome da equipe salvo com o horário colado
+      // (ex.: "Equipe Collins - sextas, 20h - 22h"). Normaliza para casar com a
+      // equipe real já cadastrada — assim, ao editar e salvar, o nome "sujo" é
+      // corrigido automaticamente no banco.
+      const eqValNormalizado = normalizarNomeEquipe(eqValOriginal);
+      let eqVal = eqValOriginal;
+      if (eqValNormalizado && Array.from(eqSel.options).some(o => o.value === eqValNormalizado)) {
+        eqVal = eqValNormalizado;
+      } else if (eqValOriginal && !Array.from(eqSel.options).some(o => o.value === eqValOriginal)) {
+        // Equipe não encontrada na lista atual (ex.: renomeada/excluída) — preserva
+        // o texto original como opção oculta para não perder o valor ao salvar.
         const opt = document.createElement('option');
-        opt.value = eqVal; opt.textContent = eqVal; opt.hidden = true;
+        opt.value = eqValOriginal; opt.textContent = eqValOriginal; opt.hidden = true;
         eqSel.appendChild(opt);
       }
       eqSel.value = eqVal; syncFormFields();
@@ -1895,7 +1938,7 @@
     }
 
     function syncFormFields() {
-      const eq = document.getElementById('formEquipe').value; const conf = TEAM_CONFIG[eq];
+      const eq = document.getElementById('formEquipe').value; const conf = getTeamLiveConfig(eq);
       const lbl = document.getElementById('labelNomePrincipal'); const box = document.getElementById('containerNomeMenor');
       if (conf && conf.minors) { lbl.innerText = 'Nome do Responsável'; box.classList.remove('hidden'); }
       else { lbl.innerText = 'Nome do Atleta'; box.classList.add('hidden'); document.getElementById('formNomeMenor').value = ''; }
@@ -1909,7 +1952,7 @@
       document.getElementById('cal-month-year').innerText = monthNames[m] + ' ' + y;
       const fDay = new Date(y, m, 1).getDay(); const dMonth = new Date(y, m+1, 0).getDate();
       const calDays = document.getElementById('cal-days'); calDays.innerHTML = '';
-      const eq = document.getElementById('formEquipe').value; const conf = TEAM_CONFIG[eq]; const aDays = conf ? conf.days : [0,1,2,3,4,5,6];
+      const eq = document.getElementById('formEquipe').value; const conf = getTeamLiveConfig(eq); const aDays = conf ? conf.days : [0,1,2,3,4,5,6];
       for (let i = 0; i < fDay; i++) calDays.innerHTML += '<div></div>';
       for (let i = 1; i <= dMonth; i++) {
         const d = new Date(y, m, i); const dW = d.getDay(); const isV = aDays.includes(dW) && d >= new Date(new Date().setHours(0,0,0,0));
@@ -1920,9 +1963,9 @@
     }
 
     function selectDate(d, m, y, dw) {
-      const eq = document.getElementById('formEquipe').value; const conf = TEAM_CONFIG[eq];
+      const eq = document.getElementById('formEquipe').value; const conf = getTeamLiveConfig(eq);
       if (conf && !conf.days.includes(dw)) return;
-      let t = '00:00'; if (conf) { if (conf.time) t = conf.time; else if (conf.timeMap && conf.timeMap[dw]) t = conf.timeMap[dw]; }
+      let t = '00:00'; if (conf && conf.timeMap && conf.timeMap[dw]) t = conf.timeMap[dw];
       document.getElementById('formData').value = String(d).padStart(2,'0')+'/'+String(m+1).padStart(2,'0')+'/'+y+' '+t;
       document.getElementById('custom-calendar').classList.remove('open'); isFormDirty = true;
     }
@@ -1941,7 +1984,8 @@
         const STATUS_UI_TO_DB = { 'Pendente':'PENDING', 'Agendado':'CONFIRMED', 'Em avaliação':'IN_EVALUATION', 'Em cadastro':'IN_REGISTRATION', 'Tecnofit':'TECNOFIT', 'Ausente':'MISSED', 'Cancelado':'CANCELLED' };
         dbStat = STATUS_UI_TO_DB[fs] || fs;
       }
-      const pay = { name: nome, minor_name: nMenor, whatsapp_phone: wpp, scheduled_at: iso, target_team: eq, target_location: TEAM_CONFIG[eq] ? TEAM_CONFIG[eq].local : 'Ginásio Apollo' };
+      const eqConf = getTeamLiveConfig(eq);
+      const pay = { name: nome, minor_name: nMenor, whatsapp_phone: wpp, scheduled_at: iso, target_team: eq, target_location: eqConf ? eqConf.local : 'Ginásio Apollo' };
       if (id) pay.status = dbStat;
       salvarNoSupabase(id, pay);
     }
