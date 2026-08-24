@@ -1501,6 +1501,7 @@
       const timeMap = {};
       days.forEach(d => { timeMap[d] = (team.schedules[d] && team.schedules[d].start) || '00:00'; });
       return {
+        id: team.id,
         minors: equipeRequerResponsavel(team.name),
         local: team.local || 'Ginásio Apollo',
         days: days.length ? days : [0,1,2,3,4,5,6],
@@ -1985,7 +1986,10 @@
         dbStat = STATUS_UI_TO_DB[fs] || fs;
       }
       const eqConf = getTeamLiveConfig(eq);
-      const pay = { name: nome, minor_name: nMenor, whatsapp_phone: wpp, scheduled_at: iso, target_team: eq, target_location: eqConf ? eqConf.local : 'Ginásio Apollo' };
+      // team_id é necessário para o atleta conseguir concluir o cadastro depois
+      // pelo chatbot (a tabela athletes exige essa equipe vinculada). Sem isso,
+      // agendamentos criados manualmente aqui bloqueavam o cadastro final.
+      const pay = { name: nome, minor_name: nMenor, whatsapp_phone: wpp, scheduled_at: iso, target_team: eq, target_location: eqConf ? eqConf.local : 'Ginásio Apollo', team_id: eqConf ? eqConf.id : null };
       if (id) pay.status = dbStat;
       salvarNoSupabase(id, pay);
     }
