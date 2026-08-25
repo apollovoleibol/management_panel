@@ -588,9 +588,10 @@
             </select>
           </div>
           <button type="button" id="btnToggleArquivados" onclick="toggleVisaoArquivados()"
-                  class="glass-input h-[46px] w-[46px] shrink-0 rounded-[14px] flex items-center justify-center text-gray-500 dark:text-gray-300 transition-colors"
+                  class="glass-input h-[46px] w-[46px] shrink-0 rounded-[14px] flex items-center justify-center gap-2 text-gray-500 dark:text-gray-300 transition-all"
                   title="Ver agendamentos arquivados">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v8m0 0l-3-3m3 3l3-3M4 8h16M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"></path></svg>
+            <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v8m-4-4l4 4 4-4M4 13h16M5 13v4a2 2 0 002 2h10a2 2 0 002-2v-4"></path></svg>
+            <span id="txtToggleArquivados" class="hidden text-[13px] font-bold uppercase tracking-wide whitespace-nowrap">Apenas Arquivados</span>
           </button>
         </div>
 
@@ -1894,8 +1895,18 @@
     function toggleVisaoArquivados() {
       visaoArquivados = !visaoArquivados;
       const btn = document.getElementById('btnToggleArquivados');
-      btn.classList.toggle('bg-[#EE4036]', visaoArquivados);
-      btn.classList.toggle('text-white', visaoArquivados);
+      const txt = document.getElementById('txtToggleArquivados');
+      // Remove a classe glass-input quando ativo para o vermelho não competir
+      // com o fundo translúcido padrão (evita conflito de especificidade CSS).
+      if (visaoArquivados) {
+        btn.classList.remove('glass-input', 'w-[46px]', 'text-gray-500', 'dark:text-gray-300');
+        btn.classList.add('bg-[#EE4036]', 'border', 'border-[#EE4036]', 'text-white', 'px-4');
+        txt.classList.remove('hidden');
+      } else {
+        btn.classList.remove('bg-[#EE4036]', 'border', 'border-[#EE4036]', 'text-white', 'px-4');
+        btn.classList.add('glass-input', 'w-[46px]', 'text-gray-500', 'dark:text-gray-300');
+        txt.classList.add('hidden');
+      }
       btn.title = visaoArquivados ? 'Ver agendamentos ativos' : 'Ver agendamentos arquivados';
       appLog('Alternando visão de arquivados: ' + visaoArquivados, 'info');
       aplicarFiltros();
