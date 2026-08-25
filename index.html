@@ -2478,6 +2478,12 @@
         try { data = JSON.parse(rawText); } catch(e) { throw new Error('HTML inesperado: ' + rawText.substring(0,100)); }
         
         if (!res.ok) throw new Error(JSON.stringify(data));
+        // PostgREST retorna 200 com array vazio (não um erro) quando a permissão
+        // (RLS) bloqueia silenciosamente a atualização — sem essa checagem, o
+        // app dizia "salvo com sucesso" mesmo sem nada ter sido alterado no banco.
+        if (id && Array.isArray(data) && data.length === 0) {
+          throw new Error('Nenhum atleta foi atualizado. Você pode não ter permissão para editar este atleta — fale com a administração.');
+        }
         appLog('Atleta salvo com sucesso', 'ok');
         closeAtletaModal();
         carregarAtletasDoSupabase();
