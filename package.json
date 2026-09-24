@@ -1,0 +1,10 @@
+{
+  "private": true,
+  "scripts": {
+    "test": "node --test payment-packages.test.cjs",
+    "test:browser": "node --test payment-packages.browser.test.cjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.63.0"
+  }
+}
