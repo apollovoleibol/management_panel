@@ -1461,6 +1461,16 @@
           exibirLoginErro('Perfil sem permissão de acesso ao painel.');
           await supabaseClient.auth.signOut(); return null;
         }
+        // A v2 usa o papel legado "customer" também para responsáveis e outros
+        // perfis. Só contas já autorizadas na v1 podem abrir este painel antigo.
+        if (p.role === 'customer') {
+          const { data: legacyAccess, error: legacyError } =
+            await supabaseClient.rpc('v2_can_use_legacy_panel');
+          if (legacyError || legacyAccess !== true) {
+            exibirLoginErro('Esta conta não tem acesso ao painel antigo. Use a área indicada no Painel de Gestão v2.');
+            await supabaseClient.auth.signOut(); return null;
+          }
+        }
         return p;
       } catch (e) {
         appLog('[Auth] carregarPerfilUsuario erro: ' + e.message, 'err');
